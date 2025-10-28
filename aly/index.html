@@ -1713,9 +1713,12 @@
                         </div>
                     </div>
 
-                  <div class="contact-section">
-  <form name="contact" method="POST" data-netlify="true" class="contact-form"  id="contactForm">
+<div class="contact-section">
+  <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="contact-form" id="contactForm">
     <input type="hidden" name="form-name" value="contact">
+    <p class="hidden">
+      <label>Don’t fill this out if you're human: <input name="bot-field"></label>
+    </p>
 
     <div class="form-group">
       <label for="name">Your Name *</label>
@@ -1747,8 +1750,7 @@
     <button type="submit" class="submit-btn">Send Message</button>
   </form>
 </div>
-
-                <div class="social-links">
+              <div class="social-links">
                     <a href="https://github.com/Ahmedshah56" target="_blank" class="social-link" title="GitHub">📁</a>
                     <a href="https://www.linkedin.com/in/ahmed-shah-web-developer-designer?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank"     class="social-link" title="LinkedIn">[in]</a>
                     <a href="#" class="social-link" title="Twitter">🐦</a>
@@ -1857,6 +1859,7 @@
 </body>
 
 </html>
+
 
 
 
