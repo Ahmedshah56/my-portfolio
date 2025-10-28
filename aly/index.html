@@ -1714,34 +1714,27 @@
                         </div>
                     </div>
 
-                    <form class="contact-form" id="contactForm">
-                        <div class="form-group">
-                            <label for="name">Your Name *</label>
-                            <input type="text" id="name" name="name" required placeholder="John Doe"  required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Your Email *</label>
-                            <input type="email" id="email" name="email" required placeholder="john@example.com" required>
-                        </div>
-                        <div class="form-group"  name="contact" method="POST" data-netlify="true">
-                            <label for="subject">Subject *</label>
-                            <select id="subject" name="subject" required>
-                                <option value="">Select a subject</option>
-                                <option value="web">Web Development</option>
-                                <option value="mobile">Web App Development</option>
-                                <option value="consultation"> Consultation</option>
-                                <option value="consultation">Graphic Designing</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="message">Your Message *</label>
-                            <textarea id="message" name="message" required
-                                placeholder="Tell me about your project..."></textarea>
-                        </div>
-                        <button type="submit" class="submit-btn">Send Message</button>
-                    </form>
-                </div>
+                  <form name="contact" method="POST" data-netlify="true">
+  <div class="form-group">
+    <label for="subject">Subject *</label>
+    <select id="subject" name="subject" required>
+      <option value="">Select a subject</option>
+      <option value="web">Web Development</option>
+      <option value="mobile">Web App Development</option>
+      <option value="consultation">Consultation</option>
+      <option value="graphic">Graphic Designing</option>
+      <option value="other">Other</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="message">Your Message *</label>
+    <textarea id="message" name="message" required placeholder="Tell me about your project..."></textarea>
+  </div>
+
+  <button type="submit" class="submit-btn">Send Message</button>
+</form>
+
 
                 <div class="social-links">
                     <a href="https://github.com/Ahmedshah56" target="_blank" class="social-link" title="GitHub">📁</a>
@@ -1852,4 +1845,5 @@
 </body>
 
 </html>
+
 
