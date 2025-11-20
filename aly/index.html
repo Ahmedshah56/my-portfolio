@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,7 +30,6 @@
             overflow-x: hidden;
         }
 
-        /* Animated Background */
         .animated-bg {
             position: fixed;
             top: 0;
@@ -68,18 +66,14 @@
         }
 
         @keyframes float {
-
-            0%,
-            100% {
+            0%, 100% {
                 transform: translate(0, 0);
             }
-
             50% {
                 transform: translate(30px, 30px);
             }
         }
 
-        /* Navigation */
         nav {
             position: fixed;
             top: 0;
@@ -157,7 +151,6 @@
             cursor: pointer;
         }
 
-        /* Hero Section */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -183,7 +176,6 @@
                 opacity: 0;
                 transform: translateX(-50px);
             }
-
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -203,12 +195,9 @@
         }
 
         @keyframes pulse {
-
-            0%,
-            100% {
+            0%, 100% {
                 box-shadow: 0 0 10px rgba(0, 217, 255, 0.3);
             }
-
             50% {
                 box-shadow: 0 0 25px rgba(0, 217, 255, 0.6);
             }
@@ -303,7 +292,6 @@
             transform: translateY(-3px);
         }
 
-        /* Hero Image */
         .hero-image-container {
             position: relative;
             animation: slideInRight 0.8s ease-out;
@@ -314,7 +302,6 @@
                 opacity: 0;
                 transform: translateX(50px);
             }
-
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -343,7 +330,6 @@
             from {
                 transform: rotate(0deg);
             }
-
             to {
                 transform: rotate(360deg);
             }
@@ -358,14 +344,15 @@
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             position: relative;
             z-index: 1;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 8rem;
         }
 
-        /* About Section */
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
         .about {
             padding: 6rem 2rem;
             background: rgba(0, 0, 0, 0.2);
@@ -385,7 +372,6 @@
             max-width: 350px;
             height: 450px;
             border-radius: 20px;
-            object-fit: cover;
             border: 3px solid var(--primary);
             box-shadow: 0 20px 60px rgba(0, 217, 255, 0.3);
             background: linear-gradient(135deg, var(--primary), var(--secondary));
@@ -440,7 +426,6 @@
             margin: 0;
         }
 
-        /* Common Section Styles */
         section {
             padding: 6rem 2rem;
         }
@@ -470,7 +455,6 @@
             font-size: 1.2rem;
         }
 
-        /* Services Section */
         .services {
             background: rgba(0, 0, 0, 0.2);
         }
@@ -513,7 +497,6 @@
             line-height: 1.7;
         }
 
-        /* Skills Section */
         .skills-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -561,7 +544,6 @@
             color: var(--text);
         }
 
-        /* Portfolio Section */
         .portfolio {
             background: rgba(0, 0, 0, 0.2);
         }
@@ -702,7 +684,6 @@
             color: var(--primary);
         }
 
-        /* Testimonials Section */
         .testimonials {
             background: rgba(0, 0, 0, 0.2);
         }
@@ -769,7 +750,6 @@
             font-style: italic;
         }
 
-        /* Experience Section */
         .experience {
             background: rgba(0, 0, 0, 0.2);
         }
@@ -860,7 +840,6 @@
             box-shadow: 0 0 20px var(--primary);
         }
 
-        /* Contact Section */
         .contact-container {
             max-width: 1000px;
             margin: 0 auto;
@@ -990,11 +969,11 @@
         }
 
         .social-links {
-             display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 15px; /* space between icons */
-  margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
         }
 
         .social-link {
@@ -1019,7 +998,6 @@
             box-shadow: 0 10px 30px rgba(0, 217, 255, 0.4);
         }
 
-        /* Footer */
         footer {
             padding: 3rem 2rem;
             text-align: center;
@@ -1051,7 +1029,6 @@
             color: var(--primary);
         }
 
-        /* Success Message */
         .success-message {
             position: fixed;
             top: 100px;
@@ -1070,7 +1047,10 @@
             transform: translateX(0);
         }
 
-        /* Responsive Design */
+        .hidden {
+            display: none;
+        }
+
         @media (max-width: 608px) {
             .hero-container {
                 grid-template-columns: 1fr;
@@ -1083,14 +1063,13 @@
             }
 
             .hero-image-wrapper {
-                width: 100px;
-                height: 100px;
+                width: 250px;
+                height: 250px;
             }
 
             .profile-image {
-                width: 100px;
-                height: 100px;
-                font-size: 6rem;
+                width: 250px;
+                height: 250px;
             }
 
             .hero-stats {
@@ -1199,14 +1178,13 @@
             }
 
             .hero-image-wrapper {
-                width: 100px;
-                height: 100px;
+                width: 200px;
+                height: 200px;
             }
 
             .profile-image {
-                width: 100px;
-                height: 100px;
-                font-size: 5rem;
+                width: 200px;
+                height: 200px;
             }
 
             .footer-links {
@@ -1274,7 +1252,7 @@
                         <span>View My Work</span>
                         <span>→</span>
                     </a>
-                    <a href="#contact" class="btn btn-secondary">
+                    <a href="https://wa.me/923154901455?text=Hi%20Ahmed!%20I'm%20interested%20in%20hiring%20you%20for%20a%20project." target="_blank" class="btn btn-secondary">
                         <span>Hire Me</span>
                         <span>💼</span>
                     </a>
@@ -1284,7 +1262,7 @@
             <div class="hero-image-container">
                 <div class="hero-image-wrapper">
                     <div class="image-border"></div>
-                    <div class="profile-image"><img src="./img/picofme (1).png"></div>
+                    <div class="profile-image"><img src="./img/picofme (1).png" alt="Ahmed Shah"></div>
                 </div>
             </div>
         </div>
@@ -1592,7 +1570,7 @@
                     <div class="timeline-dot"></div>
                     <div class="timeline-content">
                         <span class="timeline-date">2025 - Present</span>
-                        <h3> Full Stack Developer</h3>
+                        <h3>Full Stack Developer</h3>
                         <h4>Tech Solutions Inc.</h4>
                         <p>Leading development of enterprise-scale web applications. Managing team of 5 developers,
                             implementing CI/CD pipelines, and architecting cloud-native solutions on AWS.</p>
@@ -1606,7 +1584,6 @@
                         <h4>(Freelance)</h4>
                         <p>Specialized in creating marketing materials — trade show banners, flyers, social media
                             graphics, and brand identity kits for businesses in multiple industries.
-
                             💡 Highlight tools: Photoshop, Illustrator, Canva</p>
                     </div>
                 </div>
@@ -1618,7 +1595,6 @@
                         <h4>freelanceing</h4>
                         <p>Developed modern, responsive websites using HTML, CSS, JavaScript, and WordPress. Focused on
                             speed optimization, SEO, and mobile-friendly design.
-
                             💡 Mention technologies:
                             HTML5, CSS3, JavaScript, React, Bootstrap, WordPress</p>
                     </div>
@@ -1643,7 +1619,7 @@
                         </div>
                     </div>
                     <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
-                    <p class="testimonial-text">"John delivered an exceptional e-commerce platform that exceeded our
+                    <p class="testimonial-text">"Ahmed delivered an exceptional e-commerce platform that exceeded our
                         expectations. His attention to detail and technical expertise is outstanding. Highly
                         recommended!"</p>
                 </div>
@@ -1656,7 +1632,7 @@
                         </div>
                     </div>
                     <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
-                    <p class="testimonial-text">"Working with John was a game-changer for our business. He transformed
+                    <p class="testimonial-text">"Working with Ahmed was a game-changer for our business. He transformed
                         our outdated system into a modern, scalable application. Professional and reliable!"</p>
                 </div>
                 <div class="testimonial-card">
@@ -1668,13 +1644,14 @@
                         </div>
                     </div>
                     <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
-                    <p class="testimonial-text">"John's ability to understand requirements and deliver solutions quickly
+                    <p class="testimonial-text">"Ahmed's ability to understand requirements and deliver solutions quickly
                         is impressive. The SaaS platform he built has helped us scale our business significantly."</p>
                 </div>
             </div>
         </div>
     </section>
-      <section class="contact" id="contact">
+
+    <section class="contact" id="contact">
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Get In Touch</h2>
@@ -1687,7 +1664,7 @@
                             <div class="contact-icon">📧</div>
                             <div class="contact-details">
                                 <h4>Email</h4>
-                                <a href="mailto:john.smith@example.com">syedahmedshah590a@gmail.com</a>
+                                <a href="mailto:syedahmedshah590a@gmail.com">syedahmedshah590a@gmail.com</a>
                             </div>
                         </div>
                         <div class="contact-item">
@@ -1701,61 +1678,65 @@
                             <div class="contact-icon">📍</div>
                             <div class="contact-details">
                                 <h4>Location</h4>
-                                <p> Pakistan</p>
+                                <p>Pakistan</p>
                             </div>
                         </div>
                         <div class="contact-item">
                             <div class="contact-icon">⏰</div>
                             <div class="contact-details">
                                 <h4>Availability</h4>
-                                <p>Mon - Fri: 24 hours </p>
+                                <p>Mon - Fri: 24 hours</p>
                             </div>
                         </div>
                     </div>
+                    <div class="contact-section">
+                        <form name="contact" method="POST" data-netlify="true" class="contact-form" id="contactForm">
+                            <input type="hidden" name="form-name" value="contact">
+                            <p class="hidden">
+                                <label>Don't fill this out if you're human: <input name="bot-field"></label>
+                            </p>
 
-<div class="contact-section">
-  <form name="contact" method="POST" data-netlify="true"  class="contact-form" id="contactForm">
-    <input type="hidden" name="form-name" value="contact">
-    <p class="hidden">
-      <label>Don’t fill this out if you're human: <input name="bot-field"></label>
-    </p>
+                            <div class="form-group">
+                                <label for="name">Your Name *</label>
+                                <input type="text" id="name" name="name" required placeholder="John Doe">
+                            </div>
 
-    <div class="form-group">
-      <label for="name">Your Name *</label>
-      <input type="text" id="name" name="name" required placeholder="John Doe">
-    </div>
+                            <div class="form-group">
+                                <label for="email">Your Email *</label>
+                                <input type="email" id="email" name="email" required placeholder="john@example.com">
+                            </div>
 
-    <div class="form-group">
-      <label for="email">Your Email *</label>
-      <input type="email" id="email" name="email" required placeholder="john@example.com">
-    </div>
+                            <div class="form-group">
+                                <label for="subject">Subject *</label>
+                                <select id="subject" name="subject" required>
+                                    <option value="">Select a subject</option>
+                                    <option value="web">Web Development</option>
+                                    <option value="mobile">Web App Development</option>
+                                    <option value="consultation">Consultation</option>
+                                    <option value="graphic">Graphic Designing</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
 
-    <div class="form-group">
-      <label for="subject">Subject *</label>
-      <select id="subject" name="subject" required>
-        <option value="">Select a subject</option>
-        <option value="web">Web Development</option>
-        <option value="mobile">Web App Development</option>
-        <option value="consultation">Consultation</option>
-        <option value="graphic">Graphic Designing</option>
-        <option value="other">Other</option>
-      </select>
-    </div>
+                            <div class="form-group">
+                                <label for="message">Your Message *</label>
+                                <textarea id="message" name="message" required
+                                    placeholder="Tell me about your project..."></textarea>
+                            </div>
 
-    <div class="form-group">
-      <label for="message">Your Message *</label>
-      <textarea id="message" name="message" required placeholder="Tell me about your project..."></textarea>
-    </div>
-
-    <button type="submit" class="submit-btn">Send Message</button>
-  </form>
-</div>
-              <div class="social-links">
-                    <a href="https://github.com/Ahmedshah56" target="_blank" class="social-link" title="GitHub">📁</a>
-                    <a href="https://www.linkedin.com/in/ahmed-shah-web-developer-designer?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank"     class="social-link" title="LinkedIn">[in]</a>
+                            <button type="submit" class="submit-btn">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="social-links">
+                    <a href="https://github.com/Ahmedshah56" target="_blank" class="social-link"
+                        title="GitHub">📁</a>
+                    <a href="https://www.linkedin.com/in/ahmed-shah-web-developer-designer?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
+                        target="_blank" class="social-link" title="LinkedIn">[in]</a>
                     <a href="#" class="social-link" title="Twitter">🐦</a>
                     <a href="#" class="social-link" title="Instagram">📸</a>
-                    <a href="https://www.behance.net/ahmedshah45" target="_blank" class="social-link" title="behance">🎨</a>
+                    <a href="https://www.behance.net/ahmedshah45" target="_blank" class="social-link"
+                        title="behance">🎨</a>
                 </div>
             </div>
         </div>
@@ -1770,12 +1751,11 @@
                 <a href="#portfolio">Portfolio</a>
                 <a href="#contact">Contact</a>
             </div>
-            <p>©2025 Syed Ahmed ALi Shah . All rights reserved. Built with passion and code ❤️</p>
+            <p>©2025 Syed Ahmed Ali Shah. All rights reserved. Built with passion and code ❤️</p>
         </div>
     </footer>
 
     <script>
-        // Mobile menu toggle
         const menuToggle = document.getElementById('menuToggle');
         const navLinks = document.getElementById('navLinks');
 
@@ -1783,14 +1763,12 @@
             navLinks.classList.toggle('active');
         });
 
-        // Close menu when clicking links
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', () => {
                 navLinks.classList.remove('active');
             });
         });
 
-        // Navbar scroll effect
         const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => {
             if (window.scrollY > 100) {
@@ -1800,7 +1778,6 @@
             }
         });
 
-        // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -1814,60 +1791,4 @@
             });
         });
 
-        // Portfolio filter
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        const projectCards = document.querySelectorAll('.project-card');
-
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                // Remove active class from all buttons
-                filterBtns.forEach(b => b.classList.remove('active'));
-                // Add active class to clicked button
-                btn.classList.add('active');
-
-                const filter = btn.getAttribute('data-filter');
-
-                projectCards.forEach(card => {
-                    if (filter === 'all' || card.getAttribute('data-category') === filter) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-            });
-        });
-
-        // Contact form submission
-        const contactForm = document.getElementById('contactForm');
-        const successMessage = document.getElementById('successMessage');
-
-        contactForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            // Show success message
-            successMessage.classList.add('show');
-
-            // Reset form
-            contactForm.reset();
-
-            // Hide success message after 3 seconds
-            setTimeout(() => {
-                successMessage.classList.remove('show');
-            }, 3000);
-        });
-    </script>
-</body>
-
-</html>
-
-
-
-
-
-
-
-
-
-
-
-
+        const filterBtns = document.queryS
