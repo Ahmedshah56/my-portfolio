@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ahmed Shah - Full Stack Developer Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -20,6 +21,7 @@
             --card: rgba(30, 41, 59, 0.8);
             --text: #f8fafc;
             --text-muted: #94a3b8;
+            --whatsapp: #25D366;
         }
 
         body {
@@ -66,19 +68,15 @@
         }
 
         @keyframes float {
-            0%, 100% {
-                transform: translate(0, 0);
-            }
-            50% {
-                transform: translate(30px, 30px);
-            }
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, 30px); }
         }
 
         nav {
             position: fixed;
             top: 0;
             width: 100%;
-            background: rgba(15, 23, 42, 0.9);
+            background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(0, 217, 255, 0.2);
             z-index: 1000;
@@ -172,18 +170,14 @@
         }
 
         @keyframes slideInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
         .hero-badge {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
             padding: 0.5rem 1.5rem;
             background: rgba(0, 217, 255, 0.1);
             border: 1px solid var(--primary);
@@ -195,12 +189,8 @@
         }
 
         @keyframes pulse {
-            0%, 100% {
-                box-shadow: 0 0 10px rgba(0, 217, 255, 0.3);
-            }
-            50% {
-                box-shadow: 0 0 25px rgba(0, 217, 255, 0.6);
-            }
+            0%, 100% { box-shadow: 0 0 10px rgba(0, 217, 255, 0.3); }
+            50% { box-shadow: 0 0 25px rgba(0, 217, 255, 0.6); }
         }
 
         .hero h1 {
@@ -257,17 +247,17 @@
         }
 
         .btn {
-            padding: 1rem 2.5rem;
+            padding: 1rem 2rem;
             border: none;
             border-radius: 50px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.8rem;
         }
 
         .btn-primary {
@@ -281,15 +271,16 @@
             box-shadow: 0 15px 40px rgba(0, 217, 255, 0.5);
         }
 
-        .btn-secondary {
-            background: transparent;
-            color: var(--primary);
-            border: 2px solid var(--primary);
+        .btn-whatsapp {
+            background: var(--whatsapp);
+            color: white;
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3);
         }
 
-        .btn-secondary:hover {
-            background: rgba(0, 217, 255, 0.1);
+        .btn-whatsapp:hover {
+            background: #128C7E;
             transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(37, 211, 102, 0.5);
         }
 
         .hero-image-container {
@@ -298,14 +289,8 @@
         }
 
         @keyframes slideInRight {
-            from {
-                opacity: 0;
-                transform: translateX(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
         .hero-image-wrapper {
@@ -327,12 +312,8 @@
         }
 
         @keyframes rotate {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         .profile-image {
@@ -344,13 +325,12 @@
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             position: relative;
             z-index: 1;
-        }
-
-        .profile-image img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8rem;
+            color: white;
         }
 
         .about {
@@ -372,13 +352,15 @@
             max-width: 350px;
             height: 450px;
             border-radius: 20px;
+            object-fit: cover;
             border: 3px solid var(--primary);
             box-shadow: 0 20px 60px rgba(0, 217, 255, 0.3);
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 6rem;
+            font-size: 8rem;
+            color: white;
         }
 
         .about-content h2 {
@@ -483,6 +465,7 @@
 
         .service-icon {
             font-size: 3.5rem;
+            color: var(--primary);
             margin-bottom: 1.5rem;
         }
 
@@ -520,6 +503,7 @@
 
         .skill-icon {
             font-size: 3rem;
+            color: var(--primary);
             margin-bottom: 1.5rem;
         }
 
@@ -588,6 +572,10 @@
             transition: all 0.4s;
         }
 
+        .project-card.hidden {
+            display: none;
+        }
+
         .project-card:hover {
             transform: translateY(-15px);
             border-color: var(--secondary);
@@ -604,6 +592,18 @@
             font-size: 4rem;
             position: relative;
             overflow: hidden;
+            color: white;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .project-image i {
+            font-size: 5rem;
+            opacity: 0.9;
         }
 
         .project-overlay {
@@ -635,11 +635,15 @@
             cursor: pointer;
             transition: all 0.3s;
             text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .overlay-btn:hover {
             transform: scale(1.1);
             background: var(--primary);
+            color: white;
         }
 
         .project-content {
@@ -726,6 +730,7 @@
             justify-content: center;
             font-size: 1.8rem;
             border: 2px solid var(--primary);
+            color: white;
         }
 
         .testimonial-info h4 {
@@ -876,7 +881,7 @@
         }
 
         .contact-icon {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             color: var(--primary);
             min-width: 50px;
             height: 50px;
@@ -977,15 +982,15 @@
         }
 
         .social-link {
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             background: var(--card);
             border: 1px solid rgba(0, 217, 255, 0.2);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             color: var(--primary);
             text-decoration: none;
             transition: all 0.3s;
@@ -998,12 +1003,11 @@
             box-shadow: 0 10px 30px rgba(0, 217, 255, 0.4);
         }
 
+        /* Beautiful Footer */
         footer {
-            padding: 3rem 2rem;
-            text-align: center;
-            background: var(--darker);
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, var(--darker) 100%);
             border-top: 1px solid rgba(0, 217, 255, 0.2);
-            color: var(--text-muted);
+            padding: 4rem 2rem 2rem;
         }
 
         .footer-content {
@@ -1011,21 +1015,129 @@
             margin: 0 auto;
         }
 
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
+        .footer-main {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+            padding-bottom: 3rem;
+            border-bottom: 1px solid rgba(0, 217, 255, 0.1);
+        }
+
+        .footer-about h3 {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .footer-about p {
+            color: var(--text-muted);
+            line-height: 1.8;
             margin-bottom: 1.5rem;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .footer-social a {
+            width: 45px;
+            height: 45px;
+            background: rgba(0, 217, 255, 0.1);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .footer-social a:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 217, 255, 0.4);
+        }
+
+        .footer-section h4 {
+            color: var(--text);
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-section h4::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .footer-links-list {
+            list-style: none;
+        }
+
+        .footer-links-list li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links-list a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .footer-links-list a:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .footer-contact-item {
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            color: var(--text-muted);
+        }
+
+        .footer-contact-item i {
+            color: var(--primary);
+            margin-top: 0.2rem;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 2rem;
             flex-wrap: wrap;
         }
 
-        .footer-links a {
+        .footer-bottom-links a {
             color: var(--text-muted);
             text-decoration: none;
             transition: color 0.3s;
         }
 
-        .footer-links a:hover {
+        .footer-bottom-links a:hover {
             color: var(--primary);
         }
 
@@ -1051,7 +1163,7 @@
             display: none;
         }
 
-        @media (max-width: 608px) {
+        @media (max-width: 968px) {
             .hero-container {
                 grid-template-columns: 1fr;
                 text-align: center;
@@ -1062,11 +1174,7 @@
                 order: 1;
             }
 
-            .hero-image-wrapper {
-                width: 250px;
-                height: 250px;
-            }
-
+            .hero-image-wrapper,
             .profile-image {
                 width: 250px;
                 height: 250px;
@@ -1138,16 +1246,20 @@
                 grid-template-columns: 1fr;
             }
 
-            .skills-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .services-grid {
-                grid-template-columns: 1fr;
-            }
-
+            .skills-grid,
+            .services-grid,
             .testimonials-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .footer-main {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
             }
         }
 
@@ -1162,6 +1274,7 @@
 
             .btn {
                 width: 100%;
+                justify-content: center;
             }
 
             .hero-stats {
@@ -1177,19 +1290,10 @@
                 padding: 1.5rem;
             }
 
-            .hero-image-wrapper {
-                width: 200px;
-                height: 200px;
-            }
-
+            .hero-image-wrapper,
             .profile-image {
                 width: 200px;
                 height: 200px;
-            }
-
-            .footer-links {
-                flex-direction: column;
-                gap: 1rem;
             }
         }
     </style>
@@ -1202,12 +1306,12 @@
     </div>
 
     <div class="success-message" id="successMessage">
-        ✓ Message sent successfully! I'll get back to you within 24 hours.
+        <i class="fas fa-check-circle"></i> Message sent successfully! I'll get back to you within 24 hours.
     </div>
 
     <nav id="navbar">
         <div class="nav-container">
-            <div class="logo">&lt;Developer/&gt;</div>
+            <div class="logo">&lt;AS/&gt;</div>
             <ul class="nav-links" id="navLinks">
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
@@ -1218,14 +1322,17 @@
                 <li><a href="#testimonials">Testimonials</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
-            <button class="menu-toggle" id="menuToggle">☰</button>
+            <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
         </div>
     </nav>
 
     <section class="hero" id="home">
         <div class="hero-container">
             <div class="hero-content">
-                <div class="hero-badge">✨ Available for Hire</div>
+                <div class="hero-badge">
+                    <i class="fas fa-star"></i>
+                    Available for Hire
+                </div>
                 <h1>Hi, I'm Ahmed Shah</h1>
                 <p class="hero-subtitle">Full Stack Developer & Digital Innovator</p>
                 <p class="hero-description">I craft scalable web applications that drive business growth. Specializing
@@ -1249,12 +1356,12 @@
 
                 <div class="cta-buttons">
                     <a href="#portfolio" class="btn btn-primary">
+                        <i class="fas fa-briefcase"></i>
                         <span>View My Work</span>
-                        <span>→</span>
                     </a>
-                    <a href="https://wa.me/923154901455?text=Hi%20Ahmed!%20I'm%20interested%20in%20hiring%20you%20for%20a%20project." target="_blank" class="btn btn-secondary">
-                        <span>Hire Me</span>
-                        <span>📞</span>
+                    <a href="https://wa.me/923154901455?text=Hi%20Ahmed!%20I'm%20interested%20in%20hiring%20you%20for%20a%20project." target="_blank" class="btn btn-whatsapp">
+                        <i class="fab fa-whatsapp"></i>
+                        <span>Hire Me on WhatsApp</span>
                     </a>
                 </div>
             </div>
@@ -1262,7 +1369,9 @@
             <div class="hero-image-container">
                 <div class="hero-image-wrapper">
                     <div class="image-border"></div>
-                    <div class="profile-image"><img src="./img/picofme (1).png" alt="Ahmed Shah"></div>
+                    <div class="profile-image"><img src="./img/picofme (1).png" alt="Ahmed Shah">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1270,7 +1379,9 @@
 
     <section class="about" id="about">
         <div class="about-container">
-          <img src="./img/profile.jpeg" alt="Ahmed Shah">
+            <div class="about-image">
+                <i class="fas fa-code"></i>
+            </div>
             <div class="about-content">
                 <h2>About Me</h2>
                 <p>I'm a passionate Full Stack Developer with over 5 years of experience building modern web
@@ -1281,28 +1392,28 @@
 
                 <div class="about-highlights">
                     <div class="highlight-item">
-                        <div class="highlight-icon">🎓</div>
+                        <div class="highlight-icon"><i class="fas fa-graduation-cap"></i></div>
                         <div class="highlight-text">
                             <h4>Education</h4>
                             <p>B.S. Computer Science</p>
                         </div>
                     </div>
                     <div class="highlight-item">
-                        <div class="highlight-icon">💼</div>
+                        <div class="highlight-icon"><i class="fas fa-briefcase"></i></div>
                         <div class="highlight-text">
                             <h4>Experience</h4>
                             <p>5+ Years Professional</p>
                         </div>
                     </div>
                     <div class="highlight-item">
-                        <div class="highlight-icon">🏆</div>
+                        <div class="highlight-icon"><i class="fas fa-trophy"></i></div>
                         <div class="highlight-text">
                             <h4>Achievements</h4>
                             <p>AWS Certified Developer</p>
                         </div>
                     </div>
                     <div class="highlight-item">
-                        <div class="highlight-icon">🌍</div>
+                        <div class="highlight-icon"><i class="fas fa-globe"></i></div>
                         <div class="highlight-text">
                             <h4>Location</h4>
                             <p>Available Worldwide</p>
@@ -1321,33 +1432,34 @@
             </div>
             <div class="services-grid">
                 <div class="service-card">
-                    <div class="service-icon">🌐</div>
+                    <div class="service-icon"><i class="fas fa-laptop-code"></i></div>
                     <h3>Web Development</h3>
                     <p>Custom web applications built with modern technologies like React, Vue, and Node.js for optimal
                         performance and user experience.</p>
                 </div>
                 <div class="service-card">
-                    <div class="service-icon">📱</div>
+                    <div class="service-icon"><i class="fas fa-mobile-alt"></i></div>
                     <h3>Web App Development</h3>
                     <p>Responsive mobile-first applications that work seamlessly across all devices and platforms.</p>
                 </div>
                 <div class="service-card">
-                    <div class="service-icon">⚙️</div>
+                    <div class="service-icon"><i class="fas fa-server"></i></div>
                     <h3>Backend Solutions</h3>
                     <p>Robust server-side architecture with RESTful APIs, databases, and cloud infrastructure.</p>
                 </div>
                 <div class="service-card">
-                    <div class="service-icon">🎨</div>
-                    <h3>UI/UX Design</h3>
-                    <p>Beautiful, intuitive interfaces that enhance user engagement and drive conversions.</p>
+                    <div class="service-icon"><i class="fas fa-palette"></i></div>
+                   <h3>Graphic Design</h3>
+<p>Creative and impactful designs that elevate your brand and capture audience attention.</p>
+
                 </div>
                 <div class="service-card">
-                    <div class="service-icon">☁️</div>
+                    <div class="service-icon"><i class="fas fa-cloud"></i></div>
                     <h3>Cloud Deployment</h3>
                     <p>Scalable cloud infrastructure setup and management on AWS, Azure, or Google Cloud.</p>
                 </div>
                 <div class="service-card">
-                    <div class="service-icon">🔧</div>
+                    <div class="service-icon"><i class="fas fa-tools"></i></div>
                     <h3>Maintenance & Support</h3>
                     <p>Ongoing support, updates, and optimization to keep your applications running smoothly.</p>
                 </div>
@@ -1363,7 +1475,7 @@
             </div>
             <div class="skills-grid">
                 <div class="skill-card">
-                    <div class="skill-icon">💻</div>
+                    <div class="skill-icon"><i class="fab fa-react"></i></div>
                     <h3>Frontend Development</h3>
                     <div class="skill-tags">
                         <span class="skill-tag">React.js</span>
@@ -1378,7 +1490,7 @@
                     </div>
                 </div>
                 <div class="skill-card">
-                    <div class="skill-icon">⚙️</div>
+                    <div class="skill-icon"><i class="fab fa-node-js"></i></div>
                     <h3>Backend Development</h3>
                     <div class="skill-tags">
                         <span class="skill-tag">Node.js</span>
@@ -1392,7 +1504,7 @@
                     </div>
                 </div>
                 <div class="skill-card">
-                    <div class="skill-icon">🗄️</div>
+                    <div class="skill-icon"><i class="fas fa-database"></i></div>
                     <h3>Database & Cloud</h3>
                     <div class="skill-tags">
                         <span class="skill-tag">MongoDB</span>
@@ -1425,133 +1537,133 @@
 
             <div class="portfolio-grid">
                 <div class="project-card" data-category="saas">
-                    <div class="project-image">
-                        🚀
+                    <div class="project-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <i class="fas fa-tasks"></i>
                         <div class="project-overlay">
-                            <a href="#" class="overlay-btn">Live Demo</a>
-                            <a href="#" class="overlay-btn">GitHub</a>
+                            <a href="#" class="overlay-btn"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                            <a href="https://github.com/Ahmedshah56" target="_blank" class="overlay-btn"><i class="fab fa-github"></i> GitHub</a>
                         </div>
                     </div>
                     <div class="project-content">
-                        <span class="project-category">SaaS Platform</span>
+                        <span class="project-category"><i class="fas fa-rocket"></i> SaaS Platform</span>
                         <h3>Project Management Tool</h3>
                         <p>Comprehensive project management platform with team collaboration, real-time updates, task
                             tracking, and advanced analytics dashboard.</p>
                         <div class="tech-stack">
-                            <span class="tech-badge">React</span>
-                            <span class="tech-badge">Node.js</span>
-                            <span class="tech-badge">MongoDB</span>
-                            <span class="tech-badge">Socket.io</span>
+                            <span class="tech-badge"><i class="fab fa-react"></i> React</span>
+                            <span class="tech-badge"><i class="fab fa-node-js"></i> Node.js</span>
+                            <span class="tech-badge"><i class="fas fa-database"></i> MongoDB</span>
+                            <span class="tech-badge"><i class="fas fa-bolt"></i> Socket.io</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="project-card" data-category="ecommerce">
-                    <div class="project-image">
-                        🛒
+                    <div class="project-image" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <i class="fas fa-shopping-cart"></i>
                         <div class="project-overlay">
-                            <a href="#" class="overlay-btn">Live Demo</a>
-                            <a href="#" class="overlay-btn">GitHub</a>
+                            <a href="#" class="overlay-btn"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                            <a href="https://github.com/Ahmedshah56" target="_blank" class="overlay-btn"><i class="fab fa-github"></i> GitHub</a>
                         </div>
                     </div>
                     <div class="project-content">
-                        <span class="project-category">E-Commerce</span>
+                        <span class="project-category"><i class="fas fa-shopping-bag"></i> E-Commerce</span>
                         <h3>Fashion Retail Store</h3>
                         <p>Full-featured online store with secure payment processing, inventory management, order
                             tracking, and comprehensive admin dashboard.</p>
                         <div class="tech-stack">
-                            <span class="tech-badge">Next.js</span>
-                            <span class="tech-badge">Stripe</span>
-                            <span class="tech-badge">PostgreSQL</span>
-                            <span class="tech-badge">AWS</span>
+                            <span class="tech-badge"><i class="fab fa-react"></i> Next.js</span>
+                            <span class="tech-badge"><i class="fab fa-stripe"></i> Stripe</span>
+                            <span class="tech-badge"><i class="fas fa-database"></i> PostgreSQL</span>
+                            <span class="tech-badge"><i class="fab fa-aws"></i> AWS</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="project-card" data-category="web">
-                    <div class="project-image">
-                        📊
+                    <div class="project-image" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <i class="fas fa-chart-line"></i>
                         <div class="project-overlay">
-                            <a href="#" class="overlay-btn">Live Demo</a>
-                            <a href="#" class="overlay-btn">GitHub</a>
+                            <a href="#" class="overlay-btn"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                            <a href="https://github.com/Ahmedshah56" target="_blank" class="overlay-btn"><i class="fab fa-github"></i> GitHub</a>
                         </div>
                     </div>
                     <div class="project-content">
-                        <span class="project-category">Web App</span>
+                        <span class="project-category"><i class="fas fa-desktop"></i> Web App</span>
                         <h3>Analytics Dashboard</h3>
                         <p>Real-time analytics platform with beautiful data visualizations, custom reports, and
                             predictive insights using machine learning.</p>
                         <div class="tech-stack">
-                            <span class="tech-badge">React</span>
-                            <span class="tech-badge">D3.js</span>
-                            <span class="tech-badge">Python</span>
-                            <span class="tech-badge">MongoDB</span>
+                            <span class="tech-badge"><i class="fab fa-react"></i> React</span>
+                            <span class="tech-badge"><i class="fas fa-chart-bar"></i> D3.js</span>
+                            <span class="tech-badge"><i class="fab fa-python"></i> Python</span>
+                            <span class="tech-badge"><i class="fas fa-database"></i> MongoDB</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="project-card" data-category="saas">
-                    <div class="project-image">
-                        💬
+                    <div class="project-image" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                        <i class="fas fa-headset"></i>
                         <div class="project-overlay">
-                            <a href="#" class="overlay-btn">Live Demo</a>
-                            <a href="#" class="overlay-btn">GitHub</a>
+                            <a href="#" class="overlay-btn"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                            <a href="https://github.com/Ahmedshah56" target="_blank" class="overlay-btn"><i class="fab fa-github"></i> GitHub</a>
                         </div>
                     </div>
                     <div class="project-content">
-                        <span class="project-category">SaaS</span>
+                        <span class="project-category"><i class="fas fa-rocket"></i> SaaS</span>
                         <h3>Customer Support System</h3>
                         <p>AI-powered customer support platform with live chat, intelligent ticket routing, knowledge
                             base, and sentiment analysis.</p>
                         <div class="tech-stack">
-                            <span class="tech-badge">Vue.js</span>
-                            <span class="tech-badge">Python</span>
-                            <span class="tech-badge">WebSocket</span>
-                            <span class="tech-badge">Redis</span>
+                            <span class="tech-badge"><i class="fab fa-vuejs"></i> Vue.js</span>
+                            <span class="tech-badge"><i class="fab fa-python"></i> Python</span>
+                            <span class="tech-badge"><i class="fas fa-bolt"></i> WebSocket</span>
+                            <span class="tech-badge"><i class="fas fa-database"></i> Redis</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="project-card" data-category="web">
-                    <div class="project-image">
-                        🎨
+                    <div class="project-image" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                        <i class="fas fa-paint-brush"></i>
                         <div class="project-overlay">
-                            <a href="#" class="overlay-btn">Live Demo</a>
-                            <a href="#" class="overlay-btn">GitHub</a>
+                            <a href="#" class="overlay-btn"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                            <a href="https://github.com/Ahmedshah56" target="_blank" class="overlay-btn"><i class="fab fa-github"></i> GitHub</a>
                         </div>
                     </div>
                     <div class="project-content">
-                        <span class="project-category">Web App</span>
+                        <span class="project-category"><i class="fas fa-desktop"></i> Web App</span>
                         <h3>Portfolio Builder</h3>
                         <p>Drag-and-drop portfolio builder for creatives with customizable templates, media management,
                             and one-click deployment.</p>
                         <div class="tech-stack">
-                            <span class="tech-badge">React</span>
-                            <span class="tech-badge">Node.js</span>
-                            <span class="tech-badge">AWS S3</span>
-                            <span class="tech-badge">Docker</span>
+                            <span class="tech-badge"><i class="fab fa-react"></i> React</span>
+                            <span class="tech-badge"><i class="fab fa-node-js"></i> Node.js</span>
+                            <span class="tech-badge"><i class="fab fa-aws"></i> AWS S3</span>
+                            <span class="tech-badge"><i class="fab fa-docker"></i> Docker</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="project-card" data-category="ecommerce">
-                    <div class="project-image">
-                        🍔
+                    <div class="project-image" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);">
+                        <i class="fas fa-utensils"></i>
                         <div class="project-overlay">
-                            <a href="#" class="overlay-btn">Live Demo</a>
-                            <a href="#" class="overlay-btn">GitHub</a>
+                            <a href="#" class="overlay-btn"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                            <a href="https://github.com/Ahmedshah56" target="_blank" class="overlay-btn"><i class="fab fa-github"></i> GitHub</a>
                         </div>
                     </div>
                     <div class="project-content">
-                        <span class="project-category">E-Commerce</span>
+                        <span class="project-category"><i class="fas fa-shopping-bag"></i> E-Commerce</span>
                         <h3>Food Delivery Platform</h3>
                         <p>Complete food ordering system with real-time GPS tracking, payment gateway integration, and
                             restaurant management portal.</p>
                         <div class="tech-stack">
-                            <span class="tech-badge">React Native</span>
-                            <span class="tech-badge">Node.js</span>
-                            <span class="tech-badge">MongoDB</span>
-                            <span class="tech-badge">Maps API</span>
+                            <span class="tech-badge"><i class="fab fa-react"></i> React Native</span>
+                            <span class="tech-badge"><i class="fab fa-node-js"></i> Node.js</span>
+                            <span class="tech-badge"><i class="fas fa-database"></i> MongoDB</span>
+                            <span class="tech-badge"><i class="fas fa-map-marked-alt"></i> Maps API</span>
                         </div>
                     </div>
                 </div>
@@ -1584,7 +1696,7 @@
                         <h4>(Freelance)</h4>
                         <p>Specialized in creating marketing materials — trade show banners, flyers, social media
                             graphics, and brand identity kits for businesses in multiple industries.
-                            💡 Highlight tools: Photoshop, Illustrator, Canva</p>
+                            Tools: Photoshop, Illustrator, Canva</p>
                     </div>
                 </div>
                 <div class="timeline-item">
@@ -1592,11 +1704,10 @@
                     <div class="timeline-content">
                         <span class="timeline-date">2019 - 2020</span>
                         <h3>Front-End Web Developer</h3>
-                        <h4>freelanceing</h4>
+                        <h4>Freelancing</h4>
                         <p>Developed modern, responsive websites using HTML, CSS, JavaScript, and WordPress. Focused on
                             speed optimization, SEO, and mobile-friendly design.
-                            💡 Mention technologies:
-                            HTML5, CSS3, JavaScript, React, Bootstrap, WordPress</p>
+                            Technologies: HTML5, CSS3, JavaScript, React, Bootstrap, WordPress</p>
                     </div>
                 </div>
             </div>
@@ -1612,38 +1723,56 @@
             <div class="testimonials-grid">
                 <div class="testimonial-card">
                     <div class="testimonial-header">
-                        <div class="testimonial-avatar">👩‍💼</div>
+                        <div class="testimonial-avatar"><i class="fas fa-user"></i></div>
                         <div class="testimonial-info">
                             <h4>Sarah Johnson</h4>
                             <p>CEO, TechStart</p>
                         </div>
                     </div>
-                    <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
                     <p class="testimonial-text">"Ahmed delivered an exceptional e-commerce platform that exceeded our
                         expectations. His attention to detail and technical expertise is outstanding. Highly
                         recommended!"</p>
                 </div>
                 <div class="testimonial-card">
                     <div class="testimonial-header">
-                        <div class="testimonial-avatar">👨‍💼</div>
+                        <div class="testimonial-avatar"><i class="fas fa-user"></i></div>
                         <div class="testimonial-info">
                             <h4>Michael Chen</h4>
                             <p>Founder, Digital Solutions</p>
                         </div>
                     </div>
-                    <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
                     <p class="testimonial-text">"Working with Ahmed was a game-changer for our business. He transformed
                         our outdated system into a modern, scalable application. Professional and reliable!"</p>
                 </div>
                 <div class="testimonial-card">
                     <div class="testimonial-header">
-                        <div class="testimonial-avatar">👩‍💻</div>
+                        <div class="testimonial-avatar"><i class="fas fa-user"></i></div>
                         <div class="testimonial-info">
                             <h4>Emily Rodriguez</h4>
                             <p>Product Manager, InnovateCo</p>
                         </div>
                     </div>
-                    <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
                     <p class="testimonial-text">"Ahmed's ability to understand requirements and deliver solutions quickly
                         is impressive. The SaaS platform he built has helped us scale our business significantly."</p>
                 </div>
@@ -1661,41 +1790,36 @@
                 <div class="contact-grid">
                     <div class="contact-info">
                         <div class="contact-item">
-                            <div class="contact-icon">📧</div>
+                            <div class="contact-icon"><i class="fas fa-envelope"></i></div>
                             <div class="contact-details">
                                 <h4>Email</h4>
                                 <a href="mailto:syedahmedshah590a@gmail.com">syedahmedshah590a@gmail.com</a>
                             </div>
                         </div>
                         <div class="contact-item">
-                            <div class="contact-icon">📱</div>
+                            <div class="contact-icon"><i class="fab fa-whatsapp"></i></div>
                             <div class="contact-details">
-                                <h4>Phone</h4>
-                                <a href="https://wa.me/923154901455">92+ 3154901455</a>
+                                <h4>WhatsApp</h4>
+                                <a href="https://wa.me/923154901455">+92 315 4901455</a>
                             </div>
                         </div>
                         <div class="contact-item">
-                            <div class="contact-icon">📍</div>
+                            <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
                             <div class="contact-details">
                                 <h4>Location</h4>
                                 <p>Pakistan</p>
                             </div>
                         </div>
                         <div class="contact-item">
-                            <div class="contact-icon">⏰</div>
+                            <div class="contact-icon"><i class="fas fa-clock"></i></div>
                             <div class="contact-details">
                                 <h4>Availability</h4>
-                                <p>Mon - Fri: 24 hours</p>
+                                <p>24/7 Available</p>
                             </div>
                         </div>
                     </div>
                     <div class="contact-section">
-                        <form name="contact" method="POST" data-netlify="true" class="contact-form" id="contactForm">
-                            <input type="hidden" name="form-name" value="contact">
-                            <p class="hidden">
-                                <label>Don't fill this out if you're human: <input name="bot-field"></label>
-                            </p>
-
+                        <div class="contact-form">
                             <div class="form-group">
                                 <label for="name">Your Name *</label>
                                 <input type="text" id="name" name="name" required placeholder="John Doe">
@@ -1724,32 +1848,102 @@
                                     placeholder="Tell me about your project..."></textarea>
                             </div>
 
-                            <button type="submit" class="submit-btn">Send Message</button>
-                        </form>
+                            <button type="button" onclick="submitForm()" class="submit-btn">
+                                <i class="fas fa-paper-plane"></i> Send Message
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <div class="social-links">
-                    <a href="https://github.com/Ahmedshah56" target="_blank" class="social-link"
-                        title="GitHub">📁</a>
-                    <a href="https://www.linkedin.com/in/ahmed-shah-web-developer-designer?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
-                        target="_blank" class="social-link" title="LinkedIn">[in]</a>
-                    <a href="#" class="social-link" title="Twitter">🐦</a>
-                    <a href="#" class="social-link" title="Instagram">📸</a>
-                    <a href="https://www.behance.net/ahmedshah45" target="_blank" class="social-link"
-                        title="behance">🎨</a>
-                </div>
-            </div>
+                
         </div>
     </section>
 
     <footer>
         <div class="footer-content">
-           
-            <p>©2025 Syed Ahmed Ali Shah. All rights reserved. Built with passion and code ❤️</p>
+            <div class="footer-main">
+                <div class="footer-about">
+                    <h3>&lt;Ahmed Shah/&gt;</h3>
+                    <p>A passionate Full Stack Developer dedicated to creating innovative web solutions that drive business growth. Let's build something amazing together!</p>
+                    <div class="footer-social">
+                        <a href="https://github.com/Ahmedshah56"  title="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/ahmed-shah-web-developer-designer"  title="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="https://www.facebook.com/share/17mHGjDjHF/" title="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://x.com/Syed_says10?t=ZkAIUsSYbt1GXtCEzJFigQ&s=09" title="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://www.instagram.com/ahmedshah.zn?igsh=MWgyd3VlejJmNzJpeQ=="  title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://www.behance.net/ahmedshah45"  title="Behance">
+                            <i class="fab fa-behance"></i>
+                        </a>
+                        <a href="https://wa.me/923154901455"  title="WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="https://dribbble.com/ahmedshah"  title="Dribbble">
+                            <i class="fab fa-dribbble"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links-list">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">About Me</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#portfolio">Portfolio</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Services</h4>
+                    <ul class="footer-links-list">
+                        <li><a href="#services">Web Development</a></li>
+                        <li><a href="#services">App Development</a></li>
+                        <li><a href="#services">UI/UX Design</a></li>
+                        <li><a href="#services">Cloud Solutions</a></li>
+                        <li><a href="#services">Consulting</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <div class="footer-contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>syedahmedshah590a@gmail.com</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <i class="fab fa-whatsapp"></i>
+                        <span>+92 315 4901455</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Pakistan</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 Ahmed Shah. All rights reserved. Built with <i class="fas fa-heart" style="color: #f43f5e;"></i> and Code</p>
+                <div class="footer-bottom-links">
+                    <a href="#privacy">Privacy Policy</a>
+                    <a href="#terms">Terms of Service</a>
+                    <a href="#sitemap">Sitemap</a>
+                </div>
+            </div>
         </div>
     </footer>
 
     <script>
+        // Menu Toggle
         const menuToggle = document.getElementById('menuToggle');
         const navLinks = document.getElementById('navLinks');
 
@@ -1757,12 +1951,14 @@
             navLinks.classList.toggle('active');
         });
 
+        // Close menu when clicking on a link
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', () => {
                 navLinks.classList.remove('active');
             });
         });
 
+        // Navbar scroll effect
         const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => {
             if (window.scrollY > 100) {
@@ -1772,6 +1968,7 @@
             }
         });
 
+        // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -1785,6 +1982,82 @@
             });
         });
 
-        const filterBtns = document.queryS
+        // Portfolio filter functionality
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const projectCards = document.querySelectorAll('.project-card');
 
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterBtns.forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                btn.classList.add('active');
 
+                const filterValue = btn.getAttribute('data-filter');
+
+                projectCards.forEach(card => {
+                    if (filterValue === 'all') {
+                        card.classList.remove('hidden');
+                    } else {
+                        if (card.getAttribute('data-category') === filterValue) {
+                            card.classList.remove('hidden');
+                        } else {
+                            card.classList.add('hidden');
+                        }
+                    }
+                });
+            });
+        });
+
+        // Form submission
+        function submitForm() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+
+            if (name && email && subject && message) {
+                // Show success message
+                const successMsg = document.getElementById('successMessage');
+                successMsg.classList.add('show');
+
+                // Clear form
+                document.getElementById('name').value = '';
+                document.getElementById('email').value = '';
+                document.getElementById('subject').value = '';
+                document.getElementById('message').value = '';
+
+                // Hide success message after 5 seconds
+                setTimeout(() => {
+                    successMsg.classList.remove('show');
+                }, 5000);
+            } else {
+                alert('Please fill in all required fields');
+            }
+        }
+
+        // Add animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards
+        document.querySelectorAll('.service-card, .skill-card, .project-card, .testimonial-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
