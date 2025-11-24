@@ -1422,6 +1422,15 @@
                 font-size: 0.75rem;
             }
         }
+        .project-real-image {
+    width: 80px;        /* resize as you want */
+    height: 80px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;     /* center */
+    margin-top: 20px;
+}
+
     </style>
 </head>
 
@@ -1475,7 +1484,7 @@
                         <span class="stat-label">Happy Clients</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-number">5+</span>
+                        <span class="stat-number">3+</span>
                         <span class="stat-label">Years Experience</span>
                     </div>
                 </div>
@@ -1510,7 +1519,7 @@
             </div>
             <div class="about-content">
                 <h2>About Me</h2>
-                <p>I'm a passionate Full Stack Developer with over 5 years of experience building modern web
+                <p>I'm a passionate Full Stack Developer with over 3 years of experience building modern web
                     applications. I specialize in creating robust, scalable solutions that solve real business problems.
                 </p>
                 <p>My journey in tech started with a curiosity about how things work, and today I'm helping businesses
@@ -1660,15 +1669,15 @@
                 <button class="filter-btn" data-filter="saas">SaaS</button>
             </div>
 
-            <div class="portfolio-grid">
-                <div class="project-card" data-category="saas">
-                    <div class="project-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                        <i class="fas fa-tasks"></i>
-                        <div class="project-overlay">
-                            <a href="#" class="overlay-btn"><i class="fas fa-external-link-alt"></i> Live Demo</a>
-                            <a href="https://github.com/Ahmedshah56" target="_blank" class="overlay-btn"><i class="fab fa-github"></i> GitHub</a>
-                        </div>
-                    </div>
+            <div class="project-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+    <img src="images/project1.png" alt="Project Image" class="project-real-image">
+
+    <div class="project-overlay">
+        <a href="#" class="overlay-btn"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+        <a href="https://github.com/Ahmedshah56" target="_blank" class="overlay-btn"><i class="fab fa-github"></i> GitHub</a>
+    </div>
+</div>
+
                     <div class="project-content">
                         <span class="project-category"><i class="fas fa-rocket"></i> SaaS Platform</span>
                         <h3>Project Management Tool</h3>
