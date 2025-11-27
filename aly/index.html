@@ -1432,6 +1432,7 @@
                 font-size: 0.75rem;
             }
         }
+/* ABOUT SECTION */
 .about {
     padding: 60px 20px;
     display: flex;
@@ -1439,9 +1440,10 @@
     align-items: center;
 }
 
+/* MAIN CONTAINER */
 .about-container {
     width: 100%;
-    max-width: 900px; /* perfect width */
+    max-width: 900px;
     display: flex;
     align-items: center;
     gap: 40px;
@@ -1450,15 +1452,28 @@
     border-radius: 20px;
 }
 
-/* Image Box */
-.about-image img {
-    width: 354px;   /* exact image width */
-    height: 438px;  /* exact image height */
-    object-fit: cover;
-    border-radius: 20px;
+/* IMAGE CONTAINER (Gradient Box) */
+.about-image {
+    width: 100%;
+    max-width: 350px;          /* Based on your image size */
+    margin: 0 auto;
+    padding: 8px;              /* Glow border padding */
+    border-radius: 22px;
+    background: linear-gradient(135deg, #00c6ff, #7d2ae8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-/* Text */
+/* IMAGE */
+.about-image img {
+    width: 100%;               /* FULL responsive */
+    height: auto;              /* Fix mobile stretching */
+    border-radius: 18px;
+    display: block;
+}
+
+/* TEXT CONTENT */
 .about-content {
     flex: 1;
 }
@@ -1466,6 +1481,7 @@
 .about-content h2 {
     font-size: 32px;
     margin-bottom: 15px;
+    color: #ffffff;
 }
 
 .about-content p {
@@ -1475,7 +1491,7 @@
     color: #cbd5e1;
 }
 
-/* Highlights */
+/* HIGHLIGHTS SECTION */
 .about-highlights {
     margin-top: 40px;
     display: grid;
@@ -1498,19 +1514,30 @@
     color: #4cc9f0;
 }
 
-/* Mobile Responsive */
+.highlight-item h4 {
+    color: #ffffff;
+    margin-bottom: 5px;
+}
+
+/* MOBILE RESPONSIVE */
 @media (max-width: 768px) {
+
     .about-container {
         flex-direction: column;
         text-align: center;
+        padding: 20px;
+        gap: 20px;
     }
 
-    .about-image img {
-        width: 260px;
-        height: auto;
+    .about-image {
+        max-width: 280px;      /* Smaller size on mobile */
+        padding: 6px;
+    }
+
+    .about-content h2 {
+        font-size: 26px;
     }
 }
-
 
 
     </style>
@@ -2288,6 +2315,7 @@
     </script>
 </body>
 </html>
+
 
 
 
