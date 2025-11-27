@@ -1433,57 +1433,84 @@
             }
         }
 .about {
-    padding: 4rem 1rem;
+    padding: 60px 20px;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 }
 
 .about-container {
-    width: 700px;                  /* FIXED CONTAINER SIZE */
-    background: rgba(255, 255, 255, 0.03);
-    padding: 2rem;
-    border-radius: 20px;
+    width: 100%;
+    max-width: 900px; /* perfect width */
     display: flex;
     align-items: center;
-    gap: 2rem;
-}
-
-.about-image img {
-    width: 250px;                  /* FIXED IMAGE SIZE */
-    height: 250px;
+    gap: 40px;
+    background: rgba(255,255,255,0.05);
+    padding: 30px;
     border-radius: 20px;
-    object-fit: cover;
 }
 
+/* Image Box */
+.about-image img {
+    width: 354px;   /* exact image width */
+    height: 438px;  /* exact image height */
+    object-fit: cover;
+    border-radius: 20px;
+}
+
+/* Text */
 .about-content {
-    max-width: 380px;              /* TEXT BOX FIXED SIZE */
+    flex: 1;
 }
 
 .about-content h2 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
+    font-size: 32px;
+    margin-bottom: 15px;
 }
 
 .about-content p {
-    color: #94a3b8;
-    font-size: 1rem;
+    font-size: 16px;
     line-height: 1.6;
-    margin-bottom: 1rem;
+    margin-bottom: 12px;
+    color: #cbd5e1;
 }
 
-/* Mobile Fix */
+/* Highlights */
+.about-highlights {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 25px;
+    width: 100%;
+    max-width: 900px;
+}
+
+.highlight-item {
+    background: rgba(255,255,255,0.05);
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.highlight-item i {
+    font-size: 30px;
+    margin-bottom: 10px;
+    color: #4cc9f0;
+}
+
+/* Mobile Responsive */
 @media (max-width: 768px) {
     .about-container {
-        width: 70%;
         flex-direction: column;
         text-align: center;
     }
 
     .about-image img {
-        width: 180px;
-        height: 180px;
+        width: 260px;
+        height: auto;
     }
 }
+
 
 
     </style>
@@ -1588,42 +1615,45 @@
         </div>
 
     </div>
-</section>
 
+    <!-- Highlights Section -->
+    <div class="about-highlights">
 
-                <div class="about-highlights">
-                    <div class="highlight-item">
-                        <div class="highlight-icon"><i class="fas fa-graduation-cap"></i></div>
-                        <div class="highlight-text">
-                            <h4>Education</h4>
-                            <p>B.S. Computer Science</p>
-                        </div>
-                    </div>
-                    <div class="highlight-item">
-                        <div class="highlight-icon"><i class="fas fa-briefcase"></i></div>
-                        <div class="highlight-text">
-                            <h4>Experience</h4>
-                            <p>3+ Years Professional</p>
-                        </div>
-                    </div>
-                    <div class="highlight-item">
-                        <div class="highlight-icon"><i class="fas fa-trophy"></i></div>
-                        <div class="highlight-text">
-                            <h4>Achievements</h4>
-                            <p>AWS Certified Developer</p>
-                        </div>
-                    </div>
-                    <div class="highlight-item">
-                        <div class="highlight-icon"><i class="fas fa-globe"></i></div>
-                        <div class="highlight-text">
-                            <h4>Location</h4>
-                            <p>Available Worldwide</p>
-                        </div>
-                    </div>
-                </div>
+        <div class="highlight-item">
+            <div class="highlight-icon"><i class="fas fa-graduation-cap"></i></div>
+            <div class="highlight-text">
+                <h4>Education</h4>
+                <p>B.S. Computer Science</p>
             </div>
         </div>
-    </section>
+
+        <div class="highlight-item">
+            <div class="highlight-icon"><i class="fas fa-briefcase"></i></div>
+            <div class="highlight-text">
+                <h4>Experience</h4>
+                <p>3+ Years Professional</p>
+            </div>
+        </div>
+
+        <div class="highlight-item">
+            <div class="highlight-icon"><i class="fas fa-trophy"></i></div>
+            <div class="highlight-text">
+                <h4>Achievements</h4>
+                <p>AWS Certified Developer</p>
+            </div>
+        </div>
+
+        <div class="highlight-item">
+            <div class="highlight-icon"><i class="fas fa-globe"></i></div>
+            <div class="highlight-text">
+                <h4>Location</h4>
+                <p>Available Worldwide</p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
 
     <section class="services" id="services">
         <div class="container">
