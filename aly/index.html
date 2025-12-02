@@ -1432,7 +1432,6 @@
                 font-size: 0.75rem;
             }
         }
-/* ABOUT SECTION */
 .about {
     padding: 60px 20px;
     display: flex;
@@ -1440,10 +1439,9 @@
     align-items: center;
 }
 
-/* MAIN CONTAINER */
 .about-container {
     width: 100%;
-    max-width: 900px;
+    max-width: 900px; /* perfect width */
     display: flex;
     align-items: center;
     gap: 40px;
@@ -1452,27 +1450,15 @@
     border-radius: 20px;
 }
 
-/* IMAGE CONTAINER (Gradient Box) */
-.about-image {
-     /* Based on your image size */
-    margin: 0 auto;
-    padding: 8px;              /* Glow border padding */
-    border-radius: 22px;
-    background: linear-gradient(135deg, #00c6ff, #7d2ae8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* IMAGE */
+/* Image Box */
 .about-image img {
-    width: 100%;               /* FULL responsive */
-    height: auto;              /* Fix mobile stretching */
-    border-radius: 18px;
-    display: block;
+    width: 354px;   /* exact image width */
+    height: 438px;  /* exact image height */
+    object-fit: cover;
+    border-radius: 20px;
 }
 
-/* TEXT CONTENT */
+/* Text */
 .about-content {
     flex: 1;
 }
@@ -1480,7 +1466,6 @@
 .about-content h2 {
     font-size: 32px;
     margin-bottom: 15px;
-    color: #ffffff;
 }
 
 .about-content p {
@@ -1490,7 +1475,7 @@
     color: #cbd5e1;
 }
 
-/* HIGHLIGHTS SECTION */
+/* Highlights */
 .about-highlights {
     margin-top: 40px;
     display: grid;
@@ -1513,30 +1498,19 @@
     color: #4cc9f0;
 }
 
-.highlight-item h4 {
-    color: #ffffff;
-    margin-bottom: 5px;
-}
-
-/* MOBILE RESPONSIVE */
+/* Mobile Responsive */
 @media (max-width: 768px) {
-
     .about-container {
         flex-direction: column;
         text-align: center;
-        padding: 20px;
-        gap: 20px;
     }
 
-    .about-image {
-        max-width: 280px;      /* Smaller size on mobile */
-        padding: 6px;
-    }
-
-    .about-content h2 {
-        font-size: 26px;
+    .about-image img {
+        width: 260px;
+        height: auto;
     }
 }
+
 
 
     </style>
@@ -1933,11 +1907,11 @@
                     <div class="timeline-dot"></div>
                     <div class="timeline-content">
                         <span class="timeline-date">2025 - Present</span>
-                       <h3>Full Stack Developer</h3>
-<p>Experienced in creating complete web solutions for clients—covering UI/UX design, front-end, 
-back-end, and server deployment. Delivering fast, secure, and high-performing applications 
-tailored to client needs.</p>
-
+                        <h3>Full Stack Developer</h3>
+                        <h4>Freelance / Independent Developer</h4>
+                        <p>Building modern, scalable web applications with clean architecture and efficient workflows. 
+Experienced in front-end and back-end development, API integration, and cloud deployment.</p>
+                    </div>
                 </div>
                 <div class="timeline-item">
                     <div class="timeline-dot"></div>
@@ -2314,10 +2288,6 @@ tailored to client needs.</p>
     </script>
 </body>
 </html>
-
-
-
-
 
 
 
