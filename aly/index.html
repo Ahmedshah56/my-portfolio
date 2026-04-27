@@ -465,17 +465,56 @@ footer{background:var(--void);border-top:1px solid var(--border);padding:4rem 3r
   .exp-grid,.contact-grid{grid-template-columns:1fr;gap:3rem}
   .stats-row{grid-template-columns:repeat(2,1fr)}
   .foot-grid{grid-template-columns:1fr 1fr}
-  .hero-photo-wrap{display:none}
-  .hero-title{font-size:clamp(3rem,12vw,6rem)}
+  .hero-title{font-size:clamp(2.8rem,10vw,5.5rem)}
   .nav-links{display:none}
   .menu-btn{display:block}
+
+  /* On mobile: switch photo from fixed-right to inline centered block */
+  .hero-photo-wrap{
+    position:relative !important;
+    right:auto !important; top:auto !important;
+    transform:none !important;
+    display:flex !important;
+    justify-content:center;
+    margin:2rem auto 0;
+    width:100%;
+    opacity:1 !important; /* override GSAP initial opacity:0 on load */
+  }
+  .photo-clip{
+    width:min(220px,55vw);
+  }
+  /* Badge shifts to bottom-right of photo on mobile */
+  .photo-badge{
+    bottom:-15px;left:auto;right:-10px;
+    padding:.7rem 1rem;
+  }
+  .badge-val{font-size:1.5rem}
+
+  /* Hero text becomes full-width centered column on mobile */
+  #hero-text{
+    align-items:center;
+    text-align:center;
+    padding:0 5vw;
+    flex-direction:column;
+    justify-content:flex-start;
+    padding-top:clamp(5rem,15vw,8rem);
+    height:auto;
+    min-height:100vh;
+  }
+  .hero-eyebrow{justify-content:center}
+  .hero-sub{text-align:center;margin-left:auto;margin-right:auto}
+  .hero-btns{justify-content:center}
 }
+
 @media(max-width:640px){
   .section-wrap{padding:5rem 1.5rem}
   #nav .nav-inner{padding:0 1.5rem}
   .port-grid,.srv-grid{grid-template-columns:1fr}
   .foot-grid{grid-template-columns:1fr}
-  .hero-btns{flex-direction:column}
+  .hero-btns{flex-direction:column;align-items:center}
+  .photo-clip{width:min(180px,50vw)}
+  .hero-title{font-size:clamp(2.5rem,13vw,4.5rem)}
+  .sec-big-title{font-size:clamp(2rem,9vw,3.5rem)}
 }
 </style>
 </head>
@@ -922,11 +961,13 @@ function initScene(){
     const total=rect.top+window.scrollY-wH;
     scrollProg=Math.max(0,Math.min(1,window.scrollY/total));
 
-    // show/hide fixed hero elements
+    // show/hide fixed hero elements (only on desktop where they are position:fixed)
     const heroAlpha=Math.max(0,1-scrollProg*8);
     document.getElementById('hero-text').style.opacity=heroAlpha;
     document.getElementById('hero-text').style.pointerEvents=heroAlpha<.1?'none':'auto';
-    document.getElementById('heroPhoto').style.opacity=heroAlpha;
+    if(window.innerWidth>1024){
+      document.getElementById('heroPhoto').style.opacity=heroAlpha;
+    }
     document.getElementById('scrollInd').style.opacity=heroAlpha;
 
     // section overlays
@@ -1005,11 +1046,16 @@ function initScene(){
 
   // ── GSAP HERO ENTRANCE ──
   gsap.registerPlugin(ScrollTrigger);
+  const isMobile=window.innerWidth<=1024;
   gsap.to('.hero-eyebrow',{opacity:1,y:0,duration:1,delay:.3,ease:'power3.out'});
   gsap.to('.hero-title',{opacity:1,y:0,duration:1.3,delay:.5,ease:'power4.out'});
-  gsap.to('.hero-sub',{opacity:1,y:0,duration:1,delay:.8,ease:'power3.out'});
-  gsap.to('.hero-btns',{opacity:1,y:0,duration:.9,delay:1,ease:'power3.out'});
-  gsap.to('#heroPhoto',{opacity:1,x:0,duration:1.3,delay:.7,ease:'power3.out'});
+  if(isMobile){
+    gsap.fromTo('#heroPhoto',{opacity:0,y:40},{opacity:1,y:0,duration:1.1,delay:.7,ease:'power3.out'});
+  } else {
+    gsap.fromTo('#heroPhoto',{opacity:0,x:60},{opacity:1,x:0,duration:1.3,delay:.7,ease:'power3.out'});
+  }
+  gsap.to('.hero-sub',{opacity:1,y:0,duration:1,delay:.9,ease:'power3.out'});
+  gsap.to('.hero-btns',{opacity:1,y:0,duration:.9,delay:1.1,ease:'power3.out'});
   gsap.to('#scrollInd',{opacity:1,duration:1,delay:1.4,ease:'power2.out'});
 
   // Scroll reveals for HTML content
