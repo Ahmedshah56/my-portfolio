@@ -1,1938 +1,1667 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ahmed Shah - Full Stack Developer</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
-
-    <!-- THREE.JS + GSAP CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        :root {
-            --primary: #00FF87;
-            --secondary: #00D9FF;
-            --dark: #0A0F1C;
-            --darker: #050810;
-            --card-bg: #141824;
-            --text: #FFFFFF;
-            --text-muted: #8B92A8;
-            --accent: #FF3366;
-        }
-
-        html { scroll-behavior: smooth; }
-
-        body {
-            font-family: 'Syne', sans-serif;
-            background: var(--darker);
-            color: var(--text);
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
-
-        /* ===== THREE.JS CANVAS ===== */
-        #three-canvas {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        /* Gradient overlay on top of canvas */
-        #canvas-overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background:
-                radial-gradient(ellipse at 20% 20%, rgba(0,255,135,0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 80%, rgba(0,217,255,0.08) 0%, transparent 50%);
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        .content-wrapper {
-            position: relative;
-            z-index: 2;
-        }
-
-        /* ===== NAV ===== */
-        nav {
-            position: fixed;
-            top: 0; width: 100%;
-            background: rgba(5,8,16,0.75);
-            backdrop-filter: blur(24px);
-            border-bottom: 1px solid rgba(0,255,135,0.1);
-            z-index: 1000;
-            padding: 1.2rem 0;
-            transition: all 0.4s;
-        }
-
-        nav.scrolled {
-            background: rgba(5,8,16,0.95);
-            box-shadow: 0 4px 40px rgba(0,255,135,0.1);
-        }
-
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-family: 'Space Mono', monospace;
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            letter-spacing: -1px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 3rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            transition: color 0.3s;
-            position: relative;
-        }
-
-        .nav-links a:hover { color: var(--primary); }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px; left: 0;
-            width: 0; height: 2px;
-            background: var(--primary);
-            transition: width 0.3s;
-        }
-
-        .nav-links a:hover::after { width: 100%; }
-
-        .hire-btn {
-            padding: 0.75rem 1.8rem;
-            background: transparent;
-            color: var(--primary);
-            border: 2px solid var(--primary);
-            border-radius: 4px;
-            font-weight: 700;
-            font-family: 'Space Mono', monospace;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 0.85rem;
-            letter-spacing: 1px;
-        }
-
-        .hire-btn:hover {
-            background: var(--primary);
-            color: var(--dark);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,255,135,0.35);
-        }
-
-        .menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.8rem;
-            color: var(--primary);
-            cursor: pointer;
-        }
-
-        /* ===== HERO ===== */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding: 8rem 2rem 4rem;
-            position: relative;
-        }
-
-        .hero-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .hero-content { opacity: 0; }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1.5rem;
-            background: rgba(0,255,135,0.07);
-            border: 1px solid rgba(0,255,135,0.4);
-            border-radius: 4px;
-            color: var(--primary);
-            font-size: 0.8rem;
-            margin-bottom: 1.5rem;
-            font-family: 'Space Mono', monospace;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        .hero-badge .dot {
-            width: 8px; height: 8px;
-            background: var(--primary);
-            border-radius: 50%;
-            animation: blink 1.5s infinite;
-        }
-
-        @keyframes blink {
-            0%,100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-
-        .hero h1 {
-            font-size: clamp(2.8rem, 6vw, 5rem);
-            font-weight: 900;
-            margin-bottom: 0.5rem;
-            line-height: 1.05;
-            letter-spacing: -2px;
-        }
-
-        .hero h1 .name { color: var(--primary); }
-        .hero h1 .role {
-            font-weight: 400;
-            font-size: clamp(1.2rem, 3vw, 1.8rem);
-            color: var(--text-muted);
-            display: block;
-            letter-spacing: 0px;
-            margin-top: 0.5rem;
-        }
-
-        .hero-description {
-            font-size: 1rem;
-            color: var(--text-muted);
-            margin: 1.5rem 0 2.5rem;
-            line-height: 1.8;
-            max-width: 520px;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 0.9rem 2.2rem;
-            border: none;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.7rem;
-            font-family: 'Space Mono', monospace;
-            letter-spacing: 0.5px;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: var(--dark);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(0,255,135,0.4);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            border: 2px solid rgba(255,255,255,0.2);
-            color: var(--text);
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        /* 3D Hero Visual */
-        .hero-image {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-        }
-
-        /* The 3D canvas for hero model */
-        #hero-3d {
-            width: 380px;
-            height: 380px;
-            border-radius: 20px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .hero-3d-ring {
-            position: absolute;
-            width: 420px; height: 420px;
-            border: 1px solid rgba(0,255,135,0.2);
-            border-radius: 50%;
-            animation: spin 20s linear infinite;
-        }
-
-        .hero-3d-ring:nth-child(2) {
-            width: 480px; height: 480px;
-            border-color: rgba(0,217,255,0.15);
-            animation-duration: 30s;
-            animation-direction: reverse;
-        }
-
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        .satisfaction-badge {
-            position: absolute;
-            bottom: -20px;
-            left: -20px;
-            background: rgba(10,15,28,0.95);
-            backdrop-filter: blur(10px);
-            padding: 1rem 1.2rem;
-            border-radius: 10px;
-            border: 1px solid rgba(0,255,135,0.3);
-            z-index: 3;
-        }
-
-        .satisfaction-badge h4 {
-            color: var(--text);
-            font-size: 0.85rem;
-            margin-bottom: 0.3rem;
-        }
-
-        .satisfaction-badge p {
-            color: var(--primary);
-            font-size: 0.78rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-family: 'Space Mono', monospace;
-        }
-
-        /* ===== SECTIONS ===== */
-        section {
-            padding: 7rem 2rem;
-            position: relative;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .section-label {
-            color: var(--primary);
-            font-weight: 700;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            margin-bottom: 1rem;
-            font-family: 'Space Mono', monospace;
-        }
-
-        .section-title {
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            font-weight: 900;
-            margin-bottom: 1rem;
-            letter-spacing: -1.5px;
-        }
-
-        .section-title span { color: var(--primary); }
-
-        .section-subtitle {
-            color: var(--text-muted);
-            font-size: 1rem;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* Divider line */
-        .section-divider {
-            width: 60px;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            margin: 1.5rem auto;
-        }
-
-        /* ===== SERVICE CARDS ===== */
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .service-card {
-            background: var(--card-bg);
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 16px;
-            padding: 2.5rem;
-            transition: all 0.4s;
-            position: relative;
-            overflow: hidden;
-            opacity: 0;
-            transform: translateY(40px);
-        }
-
-        .service-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 2px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            transform: scaleX(0);
-            transition: transform 0.4s;
-        }
-
-        .service-card:hover::before { transform: scaleX(1); }
-
-        .service-card:hover {
-            transform: translateY(-8px) !important;
-            border-color: rgba(0,255,135,0.2);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(0,255,135,0.1);
-        }
-
-        .service-icon {
-            width: 60px; height: 60px;
-            background: rgba(0,255,135,0.08);
-            border: 1px solid rgba(0,255,135,0.2);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.6rem;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            transition: transform 0.3s;
-        }
-
-        .service-card:hover .service-icon { transform: scale(1.1) rotate(5deg); }
-
-        .service-card h3 { font-size: 1.3rem; margin-bottom: 0.8rem; font-weight: 800; }
-
-        .service-card p { color: var(--text-muted); line-height: 1.7; margin-bottom: 1.5rem; font-size: 0.95rem; }
-
-        .service-link {
-            color: var(--primary);
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.85rem;
-            text-decoration: none;
-            font-family: 'Space Mono', monospace;
-            letter-spacing: 1px;
-            transition: gap 0.3s;
-        }
-
-        .service-link:hover { gap: 1rem; }
-
-        /* ===== EXPERTISE ===== */
-        .expertise { background: rgba(10,15,28,0.6); }
-
-        .expertise-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 5rem;
-            align-items: center;
-        }
-
-        .expertise-text {
-            color: var(--text-muted);
-            font-size: 1rem;
-            line-height: 1.9;
-            margin-bottom: 2rem;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2,1fr);
-            gap: 1.5rem;
-        }
-
-        .stat-card {
-            background: var(--card-bg);
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 16px;
-            padding: 2rem;
-            text-align: center;
-            transition: all 0.4s;
-            opacity: 0;
-            transform: scale(0.9);
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px) scale(1) !important;
-            border-color: rgba(0,255,135,0.3);
-        }
-
-        .stat-number {
-            font-size: 2.8rem;
-            font-weight: 900;
-            color: var(--primary);
-            font-family: 'Space Mono', monospace;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label { color: var(--text-muted); font-size: 0.9rem; }
-
-        .expertise-features { display: grid; gap: 1.2rem; }
-
-        .feature-item {
-            background: var(--card-bg);
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 12px;
-            padding: 1.2rem 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 1.2rem;
-            transition: all 0.3s;
-            opacity: 0;
-            transform: translateX(40px);
-        }
-
-        .feature-item:hover {
-            border-color: rgba(0,255,135,0.3);
-            transform: translateX(8px) !important;
-        }
-
-        .feature-icon {
-            width: 50px; height: 50px;
-            background: linear-gradient(135deg, rgba(0,255,135,0.15), rgba(0,217,255,0.15));
-            border: 1px solid rgba(0,255,135,0.2);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-            color: var(--primary);
-            flex-shrink: 0;
-        }
-
-        .feature-text h4 { font-size: 1rem; margin-bottom: 0.2rem; font-weight: 700; }
-        .feature-text p { color: var(--text-muted); font-size: 0.85rem; }
-
-        /* ===== PORTFOLIO ===== */
-        .portfolio-filters {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 3rem;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            padding: 0.6rem 1.6rem;
-            background: transparent;
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 4px;
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 600;
-            font-family: 'Space Mono', monospace;
-            font-size: 0.8rem;
-            letter-spacing: 1px;
-        }
-
-        .filter-btn:hover, .filter-btn.active {
-            background: var(--primary);
-            color: var(--dark);
-            border-color: var(--primary);
-        }
-
-        .portfolio-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: 1.5rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .project-card {
-            background: var(--card-bg);
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 16px;
-            overflow: hidden;
-            transition: all 0.4s;
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        .project-card.hidden { display: none; }
-
-        .project-card:hover {
-            transform: translateY(-8px) !important;
-            border-color: rgba(0,255,135,0.2);
-            box-shadow: 0 25px 70px rgba(0,0,0,0.5);
-        }
-
-        .project-image {
-            width: 100%;
-            height: 220px;
-            position: relative;
-            overflow: hidden;
-            background: rgba(20,24,36,1);
-        }
-
-        .project-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s;
-        }
-
-        .project-card:hover .project-image img { transform: scale(1.08); }
-
-        .project-overlay {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(5,8,16,0.9);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .project-card:hover .project-overlay { opacity: 1; }
-
-        .overlay-btn {
-            padding: 0.65rem 1.3rem;
-            background: var(--primary);
-            color: var(--dark);
-            border: none;
-            border-radius: 4px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.85rem;
-            font-family: 'Space Mono', monospace;
-        }
-
-        .overlay-btn:hover { transform: scale(1.05); }
-
-        .project-content { padding: 1.5rem; }
-
-        .project-category {
-            display: inline-block;
-            padding: 0.35rem 0.9rem;
-            background: rgba(0,255,135,0.07);
-            border: 1px solid rgba(0,255,135,0.2);
-            border-radius: 4px;
-            font-size: 0.78rem;
-            color: var(--primary);
-            margin-bottom: 0.8rem;
-            font-weight: 700;
-            font-family: 'Space Mono', monospace;
-            letter-spacing: 0.5px;
-        }
-
-        .project-content h3 {
-            color: var(--text);
-            margin-bottom: 0.6rem;
-            font-size: 1.15rem;
-            font-weight: 800;
-        }
-
-        .project-content p {
-            color: var(--text-muted);
-            line-height: 1.6;
-            margin-bottom: 1rem;
-            font-size: 0.9rem;
-        }
-
-        .tech-stack { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-
-        .tech-badge {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 0.3rem 0.8rem;
-            border-radius: 4px;
-            font-size: 0.78rem;
-            color: var(--text-muted);
-            font-family: 'Space Mono', monospace;
-            transition: all 0.3s;
-        }
-
-        .tech-badge:hover {
-            background: rgba(0,255,135,0.1);
-            border-color: rgba(0,255,135,0.3);
-            color: var(--primary);
-        }
-
-        /* ===== CONTACT ===== */
-        .contact { background: rgba(10,15,28,0.6); }
-
-        .contact-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-        }
-
-        .contact-info h3 { font-size: 2rem; margin-bottom: 1rem; font-weight: 900; letter-spacing: -1px; }
-        .contact-info h3 span { color: var(--primary); }
-        .contact-info > p { color: var(--text-muted); margin-bottom: 2rem; line-height: 1.8; font-size: 0.95rem; }
-
-        .contact-details { display: flex; flex-direction: column; gap: 1rem; }
-
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem 1.2rem;
-            background: var(--card-bg);
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 12px;
-            transition: all 0.3s;
-        }
-
-        .contact-item:hover {
-            border-color: rgba(0,255,135,0.3);
-            transform: translateX(8px);
-        }
-
-        .contact-icon {
-            width: 50px; height: 50px;
-            background: rgba(0,255,135,0.1);
-            border: 1px solid rgba(0,255,135,0.2);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            color: var(--primary);
-            flex-shrink: 0;
-        }
-
-        .contact-text h4 { color: var(--text); margin-bottom: 0.2rem; font-size: 0.9rem; }
-        .contact-text p { color: var(--text-muted); margin: 0; font-size: 0.9rem; }
-
-        .contact-form {
-            background: var(--card-bg);
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 16px;
-            padding: 2.5rem;
-        }
-
-        .form-group { margin-bottom: 1.3rem; }
-
-        .form-group label {
-            display: block;
-            color: var(--text-muted);
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-family: 'Space Mono', monospace;
-        }
-
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 0.9rem 1rem;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 8px;
-            color: var(--text);
-            font-size: 0.95rem;
-            transition: all 0.3s;
-            font-family: 'Syne', sans-serif;
-        }
-
-        .form-group input:focus, .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            background: rgba(0,255,135,0.03);
-            box-shadow: 0 0 0 3px rgba(0,255,135,0.08);
-        }
-
-        .form-group textarea { resize: vertical; min-height: 140px; }
-
-        .submit-btn {
-            width: 100%;
-            padding: 1.1rem;
-            background: var(--primary);
-            color: var(--dark);
-            border: none;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.8rem;
-            font-family: 'Space Mono', monospace;
-            letter-spacing: 1px;
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(0,255,135,0.4);
-        }
-
-        /* ===== FOOTER ===== */
-        footer {
-            background: var(--darker);
-            border-top: 1px solid rgba(255,255,255,0.06);
-            padding: 4rem 2rem 2rem;
-        }
-
-        .footer-content { max-width: 1400px; margin: 0 auto; }
-
-        .footer-main {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 3rem;
-            margin-bottom: 3rem;
-            padding-bottom: 3rem;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-        }
-
-        .footer-about h3 {
-            font-size: 1.6rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-            font-family: 'Space Mono', monospace;
-        }
-
-        .footer-about p { color: var(--text-muted); line-height: 1.8; margin-bottom: 1.5rem; font-size: 0.9rem; }
-
-        .footer-social { display: flex; gap: 0.8rem; flex-wrap: wrap; }
-
-        .footer-social a {
-            width: 42px; height: 42px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            font-size: 1rem;
-            transition: all 0.3s;
-        }
-
-        .footer-social a:hover {
-            background: var(--primary);
-            color: var(--dark);
-            border-color: var(--primary);
-            transform: translateY(-4px);
-        }
-
-        .footer-section h4 {
-            color: var(--text);
-            font-size: 0.9rem;
-            margin-bottom: 1.5rem;
-            font-family: 'Space Mono', monospace;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .footer-links { list-style: none; }
-
-        .footer-links li { margin-bottom: 0.7rem; }
-
-        .footer-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            transition: all 0.3s;
-            display: inline-block;
-            font-size: 0.9rem;
-        }
-
-        .footer-links a:hover { color: var(--primary); transform: translateX(5px); }
-
-        .footer-bottom {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-        }
-
-        /* ===== SUCCESS MSG ===== */
-        .success-message {
-            position: fixed;
-            top: 100px; right: 20px;
-            background: var(--card-bg);
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            padding: 1rem 1.5rem;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            transform: translateX(400px);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 2000;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            font-weight: 600;
-            font-family: 'Space Mono', monospace;
-            font-size: 0.85rem;
-        }
-
-        .success-message.show { transform: translateX(0); }
-
-        /* ===== SCROLL PROGRESS ===== */
-        #scroll-progress {
-            position: fixed;
-            top: 0; left: 0;
-            width: 0%;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            z-index: 9999;
-            transition: width 0.1s linear;
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 968px) {
-            .hero-container, .contact-container, .expertise-content {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-
-            .hero-image { order: -1; }
-            .cta-buttons { justify-content: center; }
-
-            #hero-3d { width: 280px; height: 280px; }
-            .hero-3d-ring { display: none; }
-
-            .nav-links {
-                position: fixed;
-                top: 70px; left: -100%;
-                width: 100%;
-                height: calc(100vh - 70px);
-                background: rgba(5,8,16,0.98);
-                backdrop-filter: blur(20px);
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                gap: 2rem;
-                transition: left 0.4s;
-            }
-
-            .nav-links.active { left: 0; }
-            .menu-toggle { display: block; }
-            .footer-main { grid-template-columns: 1fr; }
-            .portfolio-grid { grid-template-columns: 1fr; }
-            .stats-grid { grid-template-columns: 1fr 1fr; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ahmed Shah — Full Stack Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --gold:#C9A84C;
+  --gold-light:#F0D080;
+  --gold-dim:rgba(201,168,76,0.15);
+  --emerald:#00E5A0;
+  --cyan:#00C8FF;
+  --void:#040508;
+  --deep:#070B12;
+  --surface:#0C1018;
+  --card:#111520;
+  --border:rgba(201,168,76,0.12);
+  --text:#F0EDE8;
+  --muted:#7A7D8A;
+  --font-display:'Cormorant Garamond',serif;
+  --font-body:'Outfit',sans-serif;
+  --font-mono:'DM Mono',monospace;
+}
+
+html{scroll-behavior:smooth}
+
+body{
+  font-family:var(--font-body);
+  background:var(--void);
+  color:var(--text);
+  overflow-x:hidden;
+  cursor:none;
+}
+
+/* ── CUSTOM CURSOR ── */
+#cursor{
+  position:fixed;width:12px;height:12px;
+  background:var(--gold);border-radius:50%;
+  pointer-events:none;z-index:99999;
+  transform:translate(-50%,-50%);
+  transition:transform 0.1s,width 0.3s,height 0.3s,background 0.3s;
+  mix-blend-mode:difference;
+}
+#cursor-ring{
+  position:fixed;width:40px;height:40px;
+  border:1px solid rgba(201,168,76,0.5);
+  border-radius:50%;pointer-events:none;z-index:99998;
+  transform:translate(-50%,-50%);
+  transition:transform 0.15s ease-out,width 0.3s,height 0.3s,border-color 0.3s;
+}
+body:has(a:hover) #cursor,
+body:has(button:hover) #cursor{
+  width:20px;height:20px;background:var(--emerald);
+}
+body:has(a:hover) #cursor-ring,
+body:has(button:hover) #cursor-ring{
+  width:60px;height:60px;border-color:var(--emerald);
+}
+
+/* ── THREE.JS BG ── */
+#bg-canvas{
+  position:fixed;top:0;left:0;
+  width:100%;height:100%;
+  z-index:0;pointer-events:none;
+}
+
+/* ── NOISE GRAIN ── */
+#grain{
+  position:fixed;top:0;left:0;
+  width:100%;height:100%;
+  z-index:1;pointer-events:none;opacity:0.03;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ── VIGNETTE ── */
+#vignette{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  background:radial-gradient(ellipse at center, transparent 40%, rgba(4,5,8,0.7) 100%);
+  z-index:1;pointer-events:none;
+}
+
+/* ── SCROLL PROGRESS ── */
+#progress{
+  position:fixed;top:0;left:0;height:2px;width:0;
+  background:linear-gradient(90deg,var(--gold),var(--emerald),var(--cyan));
+  z-index:9999;transition:width 0.05s linear;
+}
+
+.content{position:relative;z-index:2}
+
+/* ══════════════════════════════════════
+   NAV
+══════════════════════════════════════ */
+nav{
+  position:fixed;top:0;width:100%;
+  padding:1.5rem 0;
+  z-index:1000;
+  transition:all 0.5s cubic-bezier(0.4,0,0.2,1);
+}
+nav.stuck{
+  background:rgba(4,5,8,0.92);
+  backdrop-filter:blur(30px);
+  border-bottom:1px solid var(--border);
+  padding:1rem 0;
+}
+.nav-inner{
+  max-width:1400px;margin:0 auto;
+  padding:0 3rem;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.logo{
+  font-family:var(--font-display);
+  font-size:1.6rem;font-weight:700;
+  color:var(--gold);letter-spacing:1px;
+  text-decoration:none;
+}
+.logo em{font-style:italic;font-weight:300;color:var(--text)}
+.nav-links{
+  display:flex;gap:2.5rem;list-style:none;
+}
+.nav-links a{
+  font-family:var(--font-mono);
+  font-size:0.75rem;letter-spacing:2px;
+  text-transform:uppercase;color:var(--muted);
+  text-decoration:none;transition:color 0.3s;
+  position:relative;
+}
+.nav-links a::after{
+  content:'';position:absolute;bottom:-4px;left:0;
+  width:0;height:1px;background:var(--gold);
+  transition:width 0.3s;
+}
+.nav-links a:hover{color:var(--gold)}
+.nav-links a:hover::after{width:100%}
+.nav-cta{
+  font-family:var(--font-mono);font-size:0.7rem;
+  letter-spacing:2px;text-transform:uppercase;
+  padding:0.75rem 1.8rem;
+  border:1px solid var(--gold);
+  background:transparent;color:var(--gold);
+  cursor:none;transition:all 0.4s;
+  position:relative;overflow:hidden;
+}
+.nav-cta::before{
+  content:'';position:absolute;
+  top:0;left:-100%;width:100%;height:100%;
+  background:var(--gold);transition:left 0.4s cubic-bezier(0.4,0,0.2,1);
+  z-index:-1;
+}
+.nav-cta:hover{color:var(--void)}
+.nav-cta:hover::before{left:0}
+.menu-btn{display:none;background:none;border:none;color:var(--gold);font-size:1.5rem;cursor:none}
+
+/* ══════════════════════════════════════
+   HERO
+══════════════════════════════════════ */
+.hero{
+  min-height:100vh;
+  display:flex;align-items:center;
+  padding:0 3rem;
+  position:relative;overflow:hidden;
+}
+.hero-grid{
+  max-width:1400px;margin:0 auto;width:100%;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6rem;align-items:center;
+  padding-top:6rem;
+}
+
+.hero-left{opacity:0;transform:translateY(60px)}
+
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:0.8rem;
+  font-family:var(--font-mono);font-size:0.7rem;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--gold);margin-bottom:2rem;
+}
+.eyebrow-line{width:40px;height:1px;background:var(--gold)}
+.status-dot{
+  width:7px;height:7px;background:#00E5A0;
+  border-radius:50%;box-shadow:0 0 8px #00E5A0;
+  animation:pulse-dot 2s infinite;
+}
+@keyframes pulse-dot{
+  0%,100%{box-shadow:0 0 8px #00E5A0}
+  50%{box-shadow:0 0 20px #00E5A0,0 0 40px rgba(0,229,160,0.3)}
+}
+
+.hero-name{
+  font-family:var(--font-display);
+  font-size:clamp(4rem,7vw,7rem);
+  font-weight:700;line-height:0.95;
+  letter-spacing:-1px;margin-bottom:1rem;
+}
+.hero-name .first{display:block;color:var(--text)}
+.hero-name .last{
+  display:block;
+  background:linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-size:200% 200%;animation:shimmer 4s ease-in-out infinite;
+}
+@keyframes shimmer{
+  0%,100%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+}
+
+.hero-role{
+  font-family:var(--font-display);
+  font-size:clamp(1.3rem,2.5vw,2rem);
+  font-weight:300;font-style:italic;
+  color:var(--muted);margin-bottom:2rem;
+}
+
+.hero-desc{
+  font-size:1rem;color:rgba(240,237,232,0.6);
+  line-height:1.9;max-width:480px;margin-bottom:3rem;
+  font-weight:300;
+}
+
+.hero-btns{display:flex;gap:1.2rem;flex-wrap:wrap}
+
+.btn-gold{
+  font-family:var(--font-mono);font-size:0.72rem;
+  letter-spacing:2px;text-transform:uppercase;
+  padding:1rem 2.5rem;
+  background:linear-gradient(135deg,var(--gold),var(--gold-light));
+  color:var(--void);border:none;cursor:none;
+  font-weight:500;text-decoration:none;
+  display:inline-flex;align-items:center;gap:0.8rem;
+  transition:all 0.4s;
+  box-shadow:0 8px 30px rgba(201,168,76,0.25);
+}
+.btn-gold:hover{
+  transform:translateY(-3px);
+  box-shadow:0 16px 50px rgba(201,168,76,0.4);
+}
+.btn-ghost{
+  font-family:var(--font-mono);font-size:0.72rem;
+  letter-spacing:2px;text-transform:uppercase;
+  padding:1rem 2.5rem;
+  background:transparent;
+  border:1px solid rgba(240,237,232,0.2);
+  color:var(--text);cursor:none;
+  text-decoration:none;
+  display:inline-flex;align-items:center;gap:0.8rem;
+  transition:all 0.4s;
+}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+
+/* Hero photo area */
+.hero-right{
+  position:relative;display:flex;
+  justify-content:center;align-items:center;
+  opacity:0;transform:translateX(60px);
+}
+
+/* 3D canvas behind photo */
+#hero-scene{
+  position:absolute;
+  width:500px;height:500px;
+  pointer-events:none;
+}
+
+.photo-frame{
+  position:relative;z-index:2;
+  width:340px;height:420px;
+}
+
+.photo-hexagon{
+  width:100%;height:100%;
+  clip-path:polygon(25% 0%, 75% 0%, 100% 25%, 100% 75%, 75% 100%, 25% 100%, 0% 75%, 0% 25%);
+  overflow:hidden;position:relative;
+}
+.photo-hexagon img{
+  width:100%;height:100%;object-fit:cover;
+  object-position:top center;
+  filter:saturate(0.85) contrast(1.05);
+  transition:filter 0.5s;
+}
+.photo-hexagon:hover img{filter:saturate(1) contrast(1.1)}
+
+/* Gold border around photo */
+.photo-border{
+  position:absolute;inset:-3px;
+  clip-path:polygon(25% 0%, 75% 0%, 100% 25%, 100% 75%, 75% 100%, 25% 100%, 0% 75%, 0% 25%);
+  background:linear-gradient(135deg,var(--gold),transparent,var(--gold));
+  z-index:1;pointer-events:none;
+  animation:border-rotate 6s linear infinite;
+}
+@keyframes border-rotate{
+  from{background:linear-gradient(0deg,var(--gold) 0%,transparent 50%,var(--gold) 100%)}
+  to{background:linear-gradient(360deg,var(--gold) 0%,transparent 50%,var(--gold) 100%)}
+}
+
+.hero-badge{
+  position:absolute;bottom:-20px;right:-30px;z-index:5;
+  background:var(--card);
+  border:1px solid var(--border);
+  backdrop-filter:blur(20px);
+  padding:1.2rem 1.5rem;
+  min-width:180px;
+}
+.badge-value{
+  font-family:var(--font-display);
+  font-size:2.2rem;font-weight:700;
+  color:var(--gold);line-height:1;
+  margin-bottom:0.3rem;
+}
+.badge-label{
+  font-family:var(--font-mono);
+  font-size:0.65rem;letter-spacing:2px;
+  text-transform:uppercase;color:var(--muted);
+}
+
+/* Floating tags */
+.hero-tags{
+  position:absolute;left:-60px;top:50%;
+  transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:0.8rem;
+  z-index:5;
+}
+.tag{
+  font-family:var(--font-mono);font-size:0.65rem;
+  letter-spacing:1.5px;text-transform:uppercase;
+  padding:0.5rem 1rem;
+  border:1px solid var(--border);
+  background:rgba(7,11,18,0.8);
+  color:var(--gold);backdrop-filter:blur(10px);
+  white-space:nowrap;
+  animation:tag-float 4s ease-in-out infinite;
+}
+.tag:nth-child(2){animation-delay:0.7s}
+.tag:nth-child(3){animation-delay:1.4s}
+@keyframes tag-float{
+  0%,100%{transform:translateX(0)}
+  50%{transform:translateX(8px)}
+}
+
+/* Scroll hint */
+.scroll-hint{
+  position:absolute;bottom:3rem;left:50%;
+  transform:translateX(-50%);
+  display:flex;flex-direction:column;
+  align-items:center;gap:0.8rem;
+  opacity:0.5;
+}
+.scroll-hint span{
+  font-family:var(--font-mono);
+  font-size:0.65rem;letter-spacing:3px;
+  text-transform:uppercase;color:var(--muted);
+}
+.scroll-arrow{
+  width:1px;height:50px;
+  background:linear-gradient(to bottom,var(--gold),transparent);
+  position:relative;overflow:hidden;
+}
+.scroll-arrow::after{
+  content:'';position:absolute;
+  top:-100%;left:0;width:100%;height:100%;
+  background:linear-gradient(to bottom,transparent,var(--gold-light),transparent);
+  animation:scroll-slide 2s ease-in-out infinite;
+}
+@keyframes scroll-slide{to{top:200%}}
+
+/* ══════════════════════════════════════
+   SECTION BASE
+══════════════════════════════════════ */
+section{padding:8rem 3rem;position:relative}
+
+.sec-header{text-align:center;margin-bottom:5rem}
+
+.sec-number{
+  font-family:var(--font-mono);
+  font-size:0.65rem;letter-spacing:4px;
+  color:var(--gold);text-transform:uppercase;
+  margin-bottom:0.5rem;opacity:0.7;
+}
+.sec-title{
+  font-family:var(--font-display);
+  font-size:clamp(2.5rem,5vw,4.5rem);
+  font-weight:300;line-height:1;letter-spacing:-1px;
+  margin-bottom:0.5rem;
+}
+.sec-title em{font-style:italic;color:var(--gold)}
+.sec-sub{
+  font-size:0.9rem;color:var(--muted);
+  max-width:550px;margin:1rem auto 0;
+  font-weight:300;line-height:1.7;
+}
+.gold-line{
+  width:60px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  margin:1.5rem auto;
+}
+
+/* ══════════════════════════════════════
+   SERVICES
+══════════════════════════════════════ */
+.services-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:1.5px;
+  max-width:1400px;margin:0 auto;
+  border:1px solid var(--border);
+}
+.srv-card{
+  background:var(--card);
+  padding:3rem 2.5rem;
+  border-right:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  position:relative;overflow:hidden;
+  transition:background 0.4s;
+  opacity:0;transform:translateY(30px);
+}
+.srv-card::before{
+  content:'';position:absolute;
+  top:0;left:0;width:100%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  transform:scaleX(0);transition:transform 0.5s;
+}
+.srv-card:hover{background:#141825}
+.srv-card:hover::before{transform:scaleX(1)}
+
+/* Large ghost number */
+.srv-num{
+  position:absolute;top:1.5rem;right:1.5rem;
+  font-family:var(--font-display);
+  font-size:5rem;font-weight:700;
+  color:var(--border);line-height:1;
+  transition:color 0.4s;pointer-events:none;
+}
+.srv-card:hover .srv-num{color:rgba(201,168,76,0.1)}
+
+.srv-icon{
+  width:56px;height:56px;
+  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;color:var(--gold);
+  margin-bottom:2rem;
+  transition:border-color 0.4s,box-shadow 0.4s;
+}
+.srv-card:hover .srv-icon{
+  border-color:var(--gold);
+  box-shadow:0 0 20px rgba(201,168,76,0.2);
+}
+.srv-card h3{
+  font-family:var(--font-display);
+  font-size:1.5rem;font-weight:600;
+  margin-bottom:1rem;transition:color 0.3s;
+}
+.srv-card:hover h3{color:var(--gold)}
+.srv-card p{
+  color:var(--muted);font-size:0.88rem;
+  line-height:1.8;margin-bottom:1.5rem;font-weight:300;
+}
+.srv-link{
+  font-family:var(--font-mono);font-size:0.65rem;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--gold);text-decoration:none;
+  display:inline-flex;align-items:center;gap:0.6rem;
+  opacity:0.7;transition:opacity 0.3s,gap 0.3s;
+}
+.srv-link:hover{opacity:1;gap:1rem}
+
+/* ══════════════════════════════════════
+   EXPERTISE
+══════════════════════════════════════ */
+.expertise{background:var(--deep)}
+.exp-grid{
+  max-width:1400px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:6rem;align-items:start;
+}
+.exp-text{
+  font-size:1rem;color:rgba(240,237,232,0.55);
+  line-height:2;font-weight:300;margin-bottom:3rem;
+}
+.exp-text strong{color:var(--text);font-weight:500}
+
+.stats-row{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:0;border:1px solid var(--border);
+}
+.stat{
+  padding:2rem 1.5rem;text-align:center;
+  border-right:1px solid var(--border);
+  position:relative;overflow:hidden;
+  opacity:0;
+}
+.stat::after{
+  content:'';position:absolute;
+  bottom:0;left:0;width:100%;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  transform:scaleX(0);transition:transform 0.4s;
+}
+.stat:hover::after{transform:scaleX(1)}
+.stat-n{
+  font-family:var(--font-display);
+  font-size:2.5rem;font-weight:700;
+  color:var(--gold);margin-bottom:0.3rem;
+}
+.stat-l{
+  font-family:var(--font-mono);
+  font-size:0.65rem;letter-spacing:2px;
+  text-transform:uppercase;color:var(--muted);
+}
+
+.feat-list{display:flex;flex-direction:column;gap:1px}
+
+.feat{
+  display:flex;align-items:center;gap:1.5rem;
+  padding:1.5rem;
+  background:var(--card);
+  border:1px solid transparent;
+  transition:all 0.4s;
+  opacity:0;transform:translateX(30px);
+}
+.feat:hover{
+  border-color:var(--border);
+  background:#141825;
+  transform:translateX(5px) !important;
+}
+.feat-ico{
+  width:44px;height:44px;flex-shrink:0;
+  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;color:var(--gold);
+  transition:all 0.4s;
+}
+.feat:hover .feat-ico{
+  background:var(--gold-dim);
+  border-color:var(--gold);
+}
+.feat h4{font-size:0.95rem;font-weight:600;margin-bottom:0.2rem}
+.feat p{color:var(--muted);font-size:0.82rem;font-weight:300}
+
+/* ══════════════════════════════════════
+   PORTFOLIO
+══════════════════════════════════════ */
+.filters{
+  display:flex;justify-content:center;
+  gap:0;margin-bottom:4rem;
+  border:1px solid var(--border);
+  max-width:500px;margin-left:auto;margin-right:auto;
+  margin-bottom:4rem;
+}
+.f-btn{
+  flex:1;padding:0.8rem 1rem;
+  background:transparent;
+  border:none;border-right:1px solid var(--border);
+  color:var(--muted);cursor:none;
+  font-family:var(--font-mono);
+  font-size:0.65rem;letter-spacing:2px;
+  text-transform:uppercase;transition:all 0.3s;
+}
+.f-btn:last-child{border-right:none}
+.f-btn:hover,.f-btn.active{
+  background:var(--gold-dim);color:var(--gold);
+}
+.f-btn.active{color:var(--gold)}
+
+.port-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(360px,1fr));
+  gap:1px;
+  max-width:1400px;margin:0 auto;
+  background:var(--border);
+}
+.proj{
+  background:var(--card);
+  overflow:hidden;position:relative;
+  transition:all 0.4s;
+  opacity:0;transform:scale(0.95);
+}
+.proj.hidden{display:none}
+.proj:hover{background:#141825;z-index:2}
+.proj:hover{box-shadow:0 30px 80px rgba(0,0,0,0.8)}
+
+.proj-img{
+  width:100%;height:220px;
+  overflow:hidden;position:relative;
+  background:var(--surface);
+}
+.proj-img img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform 0.8s cubic-bezier(0.4,0,0.2,1),filter 0.5s;
+  filter:saturate(0.8);
+}
+.proj:hover .proj-img img{
+  transform:scale(1.08);filter:saturate(1);
+}
+.proj-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top, rgba(4,5,8,0.95) 0%, transparent 60%);
+  display:flex;align-items:flex-end;justify-content:flex-start;
+  padding:1.5rem;gap:0.8rem;
+  opacity:0;transition:opacity 0.4s;
+}
+.proj:hover .proj-overlay{opacity:1}
+.ov-btn{
+  font-family:var(--font-mono);font-size:0.62rem;
+  letter-spacing:1.5px;text-transform:uppercase;
+  padding:0.6rem 1.2rem;
+  border:1px solid rgba(201,168,76,0.5);
+  background:rgba(201,168,76,0.1);
+  color:var(--gold);text-decoration:none;
+  display:inline-flex;align-items:center;gap:0.4rem;
+  transition:all 0.3s;
+}
+.ov-btn:hover{background:var(--gold);color:var(--void)}
+
+.proj-body{padding:1.8rem 2rem}
+.proj-cat{
+  font-family:var(--font-mono);font-size:0.6rem;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--gold);opacity:0.7;margin-bottom:0.7rem;
+}
+.proj-body h3{
+  font-family:var(--font-display);
+  font-size:1.4rem;font-weight:600;
+  margin-bottom:0.7rem;transition:color 0.3s;
+}
+.proj:hover .proj-body h3{color:var(--gold)}
+.proj-body p{
+  color:var(--muted);font-size:0.85rem;
+  line-height:1.7;margin-bottom:1.2rem;font-weight:300;
+}
+.tech-tags{display:flex;flex-wrap:wrap;gap:0.5rem}
+.t-tag{
+  font-family:var(--font-mono);font-size:0.62rem;
+  letter-spacing:1px;padding:0.3rem 0.8rem;
+  border:1px solid rgba(255,255,255,0.06);
+  color:rgba(240,237,232,0.35);
+  transition:all 0.3s;
+}
+.proj:hover .t-tag{
+  border-color:rgba(201,168,76,0.2);
+  color:rgba(201,168,76,0.7);
+}
+
+/* ══════════════════════════════════════
+   CONTACT
+══════════════════════════════════════ */
+.contact{background:var(--deep)}
+.contact-grid{
+  max-width:1200px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1.2fr;
+  gap:6rem;
+}
+.contact-left h3{
+  font-family:var(--font-display);
+  font-size:clamp(1.8rem,4vw,3rem);
+  font-weight:300;line-height:1.2;
+  margin-bottom:1.5rem;
+}
+.contact-left h3 em{font-style:italic;color:var(--gold)}
+.contact-left p{
+  color:var(--muted);font-size:0.9rem;
+  line-height:1.9;margin-bottom:2.5rem;font-weight:300;
+}
+.c-items{display:flex;flex-direction:column;gap:1px}
+.c-item{
+  display:flex;align-items:center;gap:1.5rem;
+  padding:1.2rem 1.5rem;
+  background:var(--card);
+  border:1px solid transparent;
+  transition:all 0.3s;
+}
+.c-item:hover{border-color:var(--border);transform:translateX(5px)}
+.c-ico{
+  width:44px;height:44px;flex-shrink:0;
+  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;color:var(--gold);
+}
+.c-txt h4{font-size:0.8rem;font-weight:600;margin-bottom:0.2rem;
+  font-family:var(--font-mono);letter-spacing:1px;text-transform:uppercase;}
+.c-txt p{color:var(--muted);font-size:0.88rem;font-weight:300}
+
+.contact-form{
+  background:var(--card);
+  border:1px solid var(--border);
+  padding:3rem;
+}
+.f-group{margin-bottom:1.5rem}
+.f-group label{
+  display:block;font-family:var(--font-mono);
+  font-size:0.62rem;letter-spacing:2px;
+  text-transform:uppercase;color:var(--muted);
+  margin-bottom:0.7rem;
+}
+.f-group input,.f-group textarea{
+  width:100%;padding:0.9rem 1rem;
+  background:rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.06);
+  border-bottom:1px solid rgba(201,168,76,0.2);
+  color:var(--text);font-family:var(--font-body);
+  font-size:0.9rem;font-weight:300;
+  transition:all 0.3s;outline:none;
+}
+.f-group input:focus,.f-group textarea:focus{
+  border-bottom-color:var(--gold);
+  background:rgba(201,168,76,0.03);
+}
+.f-group textarea{resize:vertical;min-height:130px}
+.submit-btn{
+  width:100%;padding:1.1rem;
+  background:linear-gradient(135deg,var(--gold),var(--gold-light));
+  border:none;color:var(--void);
+  font-family:var(--font-mono);font-size:0.72rem;
+  letter-spacing:2px;text-transform:uppercase;
+  cursor:none;font-weight:500;
+  display:flex;align-items:center;justify-content:center;gap:0.8rem;
+  transition:all 0.4s;
+  box-shadow:0 8px 30px rgba(201,168,76,0.2);
+}
+.submit-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 16px 50px rgba(201,168,76,0.4);
+}
+
+/* ══════════════════════════════════════
+   FOOTER
+══════════════════════════════════════ */
+footer{
+  background:var(--void);
+  border-top:1px solid var(--border);
+  padding:4rem 3rem 2.5rem;
+}
+.footer-grid{
+  max-width:1400px;margin:0 auto;
+  display:grid;
+  grid-template-columns:2.5fr 1fr 1fr 1fr;
+  gap:4rem;margin-bottom:3rem;
+  padding-bottom:3rem;
+  border-bottom:1px solid var(--border);
+}
+.f-about h3{
+  font-family:var(--font-display);
+  font-size:1.8rem;color:var(--gold);
+  margin-bottom:1rem;font-weight:600;
+}
+.f-about p{
+  color:var(--muted);font-size:0.85rem;
+  line-height:1.8;margin-bottom:1.5rem;font-weight:300;
+}
+.socials{display:flex;gap:0.8rem;flex-wrap:wrap}
+.socials a{
+  width:40px;height:40px;
+  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--muted);font-size:0.9rem;
+  text-decoration:none;transition:all 0.3s;
+}
+.socials a:hover{
+  border-color:var(--gold);
+  color:var(--gold);background:var(--gold-dim);
+  transform:translateY(-4px);
+}
+.f-col h4{
+  font-family:var(--font-mono);font-size:0.65rem;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--text);margin-bottom:1.5rem;
+}
+.f-links{list-style:none}
+.f-links li{margin-bottom:0.7rem}
+.f-links a{
+  color:var(--muted);text-decoration:none;
+  font-size:0.85rem;font-weight:300;
+  transition:all 0.3s;display:inline-block;
+}
+.f-links a:hover{color:var(--gold);transform:translateX(4px)}
+.footer-bot{
+  max-width:1400px;margin:0 auto;
+  display:flex;justify-content:space-between;
+  align-items:center;color:var(--muted);
+  font-size:0.8rem;font-family:var(--font-mono);
+  letter-spacing:1px;flex-wrap:wrap;gap:1rem;
+}
+
+/* ══════════════════════════════════════
+   SUCCESS TOAST
+══════════════════════════════════════ */
+.toast{
+  position:fixed;top:5rem;right:2rem;
+  background:var(--card);
+  border:1px solid var(--gold);
+  padding:1rem 1.5rem;z-index:9999;
+  display:flex;align-items:center;gap:0.8rem;
+  font-family:var(--font-mono);font-size:0.7rem;
+  letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--gold);
+  transform:translateX(300px);opacity:0;
+  transition:all 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+.toast.show{transform:translateX(0);opacity:1}
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media(max-width:1024px){
+  .hero-grid,.exp-grid,.contact-grid{
+    grid-template-columns:1fr;text-align:center;gap:4rem;
+  }
+  .hero-right{order:-1}
+  .hero-desc{margin:0 auto 3rem}
+  .hero-btns{justify-content:center}
+  .hero-tags{display:none}
+  #hero-scene{width:350px;height:350px}
+  .photo-frame{width:260px;height:320px}
+  .hero-badge{right:-10px}
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  nav .nav-links{
+    position:fixed;top:0;left:-100%;
+    width:80%;height:100vh;
+    background:rgba(4,5,8,0.98);
+    backdrop-filter:blur(30px);
+    flex-direction:column;align-items:center;
+    justify-content:center;gap:2.5rem;
+    border-right:1px solid var(--border);
+    transition:left 0.4s;padding-top:2rem;
+  }
+  nav .nav-links.open{left:0}
+  .menu-btn{display:block}
+  .nav-cta{display:none}
+}
+@media(max-width:640px){
+  section{padding:5rem 1.5rem}
+  nav .nav-inner{padding:0 1.5rem}
+  .hero{padding:0 1.5rem}
+  .footer-grid{grid-template-columns:1fr}
+  .port-grid{grid-template-columns:1fr}
+  .services-grid{grid-template-columns:1fr}
+}
+</style>
 </head>
 <body>
 
-<!-- Scroll Progress Bar -->
-<div id="scroll-progress"></div>
+<!-- Custom Cursor -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
 
-<!-- THREE.JS Canvas (background) -->
-<canvas id="three-canvas"></canvas>
-<div id="canvas-overlay"></div>
+<!-- Scroll Progress -->
+<div id="progress"></div>
 
-<!-- Success Message -->
-<div class="success-message" id="successMessage">
-    <i class="fas fa-check-circle"></i>
-    <span>Message sent!</span>
+<!-- Three.js Background Canvas -->
+<canvas id="bg-canvas"></canvas>
+<div id="grain"></div>
+<div id="vignette"></div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <i class="fas fa-check"></i> Message Sent
 </div>
 
-<div class="content-wrapper">
+<div class="content">
 
-    <!-- NAV -->
-    <nav id="navbar">
-        <div class="nav-container">
-            <div class="logo">
-                <i class="fas fa-terminal"></i>
-                ahmed.sh
-            </div>
-            <ul class="nav-links" id="navLinks">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#expertise">Expertise</a></li>
-                <li><a href="#portfolio">Portfolio</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-            <button class="hire-btn" onclick="location.href='#contact'">HIRE ME</button>
-            <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+<!-- ── NAV ── -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="#home" class="logo">Ahmed<em>Shah</em></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">Services</a></li>
+      <li><a href="#expertise">Expertise</a></li>
+      <li><a href="#portfolio">Work</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="nav-cta" onclick="location.href='#contact'">Hire Me</button>
+    <button class="menu-btn" id="menuBtn"><i class="fas fa-bars"></i></button>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero" id="home">
+  <div class="hero-grid">
+    <div class="hero-left">
+      <div class="hero-eyebrow">
+        <span class="eyebrow-line"></span>
+        <span class="status-dot"></span>
+        Available for Projects
+        <span class="eyebrow-line"></span>
+      </div>
+      <h1 class="hero-name">
+        <span class="first">Ahmed</span>
+        <span class="last">Shah</span>
+      </h1>
+      <p class="hero-role">Full Stack Developer & Digital Craftsman</p>
+      <p class="hero-desc">
+        Transforming ideas into extraordinary digital experiences. I architect scalable web applications that don't just work — they captivate, perform, and endure.
+      </p>
+      <div class="hero-btns">
+        <a href="#portfolio" class="btn-gold"><i class="fas fa-rocket"></i> View Projects</a>
+        <a href="#contact" class="btn-ghost"><i class="fas fa-paper-plane"></i> Let's Talk</a>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <canvas id="hero-scene"></canvas>
+
+      <div class="hero-tags">
+        <div class="tag">React / Next.js</div>
+        <div class="tag">Node.js / Express</div>
+        <div class="tag">Python / Django</div>
+      </div>
+
+      <div class="photo-frame">
+        <div class="photo-border"></div>
+        <div class="photo-hexagon">
+          <img src="./img/pf.png" alt="Ahmed Shah" id="heroPhoto">
         </div>
-    </nav>
+      </div>
 
-    <!-- HERO -->
-    <section class="hero" id="home">
-        <div class="hero-container">
-            <div class="hero-content">
-                <div class="hero-badge">
-                    <span class="dot"></span>
-                    Available For Projects
-                </div>
-                <h1>
-                    <span class="name">Ahmed Shah</span>
-                    <span class="role">Full Stack Developer</span>
-                </h1>
-                <p class="hero-description">
-                    Transforming ideas into digital reality. I build modern, scalable web applications that drive business growth — from concept to deployment.
-                </p>
-                <div class="cta-buttons">
-                    <a href="#portfolio" class="btn btn-primary">
-                        <i class="fas fa-rocket"></i> View Projects
-                    </a>
-                    <a href="#contact" class="btn btn-secondary">
-                        <i class="fas fa-paper-plane"></i> Let's Talk
-                    </a>
-                </div>
-            </div>
+      <div class="hero-badge">
+        <div class="badge-value">100%</div>
+        <div class="badge-label">Client Satisfaction</div>
+      </div>
+    </div>
+  </div>
 
-            <div class="hero-image">
-                <div class="hero-3d-ring"></div>
-                <div class="hero-3d-ring"></div>
-                <canvas id="hero-3d"></canvas>
-                <div class="satisfaction-badge">
-                    <h4>100% Client Satisfaction</h4>
-                    <p><i class="fas fa-headset"></i> 24/7 Tech Support</p>
-                </div>
-            </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ── SERVICES ── -->
+<section id="about">
+  <div class="sec-header">
+    <div class="sec-number">01 / Services</div>
+    <h2 class="sec-title">What I <em>Offer</em></h2>
+    <div class="gold-line"></div>
+    <p class="sec-sub">End-to-end solutions from concept to deployment, tailored for your business goals</p>
+  </div>
+  <div class="services-grid">
+    <div class="srv-card">
+      <div class="srv-num">01</div>
+      <div class="srv-icon"><i class="fas fa-code"></i></div>
+      <h3>Full Stack Development</h3>
+      <p>End-to-end web development from database design to responsive frontend. Expert in MERN stack, Python Django, and modern frameworks.</p>
+      <a href="#contact" class="srv-link">Discuss Project <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="srv-card">
+      <div class="srv-num">02</div>
+      <div class="srv-icon"><i class="fas fa-mobile-alt"></i></div>
+      <h3>API Development</h3>
+      <p>RESTful APIs and GraphQL services built for performance and scalability. Secure authentication, real-time data, and integrations.</p>
+      <a href="#contact" class="srv-link">Discuss Project <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="srv-card">
+      <div class="srv-num">03</div>
+      <div class="srv-icon"><i class="fas fa-laptop-code"></i></div>
+      <h3>Frontend Engineering</h3>
+      <p>Modern, responsive UIs with React, Vue, and Next.js. Pixel-perfect design implementation with exceptional performance.</p>
+      <a href="#contact" class="srv-link">Discuss Project <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="srv-card">
+      <div class="srv-num">04</div>
+      <div class="srv-icon"><i class="fas fa-database"></i></div>
+      <h3>Backend Architecture</h3>
+      <p>Robust server-side architecture with Node.js, Express, and Python. Database optimization, caching strategies, and cloud deployment.</p>
+      <a href="#contact" class="srv-link">Discuss Project <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="srv-card">
+      <div class="srv-num">05</div>
+      <div class="srv-icon"><i class="fas fa-cloud"></i></div>
+      <h3>DevOps & Deployment</h3>
+      <p>Cloud infrastructure on AWS, Docker containerization, CI/CD pipelines, and automated testing for seamless production deployments.</p>
+      <a href="#contact" class="srv-link">Discuss Project <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="srv-card">
+      <div class="srv-num">06</div>
+      <div class="srv-icon"><i class="fab fa-wordpress"></i></div>
+      <h3>WordPress & E-Commerce</h3>
+      <p>Custom themes, plugins, WooCommerce stores, and full e-commerce solutions with secure payments and inventory management.</p>
+      <a href="#contact" class="srv-link">Discuss Project <i class="fas fa-arrow-right"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- ── EXPERTISE ── -->
+<section class="expertise" id="expertise">
+  <div class="sec-header">
+    <div class="sec-number">02 / Expertise</div>
+    <h2 class="sec-title">Why Choose <em>Me</em></h2>
+    <div class="gold-line"></div>
+    <p class="sec-sub">Years of experience delivering technically excellent, business-driven solutions</p>
+  </div>
+  <div class="exp-grid">
+    <div>
+      <p class="exp-text">
+        I transform ideas into reality through <strong>powerful software solutions</strong> that meet your business goals precisely. With expertise in modern frameworks and a passion for clean, maintainable code, I create applications that <strong>scale effortlessly</strong>. From startups to enterprise-level projects, I bring technical excellence and creative problem-solving to every challenge.
+      </p>
+      <div class="stats-row">
+        <div class="stat"><div class="stat-n">3+</div><div class="stat-l">Years Exp.</div></div>
+        <div class="stat"><div class="stat-n">100%</div><div class="stat-l">Clean Code</div></div>
+        <div class="stat"><div class="stat-n">100%</div><div class="stat-l">Satisfaction</div></div>
+        <div class="stat"><div class="stat-n">24/7</div><div class="stat-l">Support</div></div>
+      </div>
+    </div>
+    <div class="feat-list">
+      <div class="feat"><div class="feat-ico"><i class="fas fa-tachometer-alt"></i></div><div><h4>High-Speed Performance</h4><p>Optimized code and architecture for blazing-fast load times</p></div></div>
+      <div class="feat"><div class="feat-ico"><i class="fas fa-code-branch"></i></div><div><h4>Modern Tech Stack</h4><p>Latest frameworks and tools for cutting-edge solutions</p></div></div>
+      <div class="feat"><div class="feat-ico"><i class="fas fa-shield-alt"></i></div><div><h4>Security First</h4><p>Enterprise-grade security measures in every project</p></div></div>
+      <div class="feat"><div class="feat-ico"><i class="fas fa-headset"></i></div><div><h4>24/7 Availability</h4><p>Round-the-clock support and rapid response times</p></div></div>
+      <div class="feat"><div class="feat-ico"><i class="fas fa-chart-line"></i></div><div><h4>100% Lighthouse Score</h4><p>Exceptional performance metrics and best practices</p></div></div>
+      <div class="feat"><div class="feat-ico"><i class="fas fa-file-code"></i></div><div><h4>Full Ownership</h4><p>Complete source code and documentation on delivery</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PORTFOLIO ── -->
+<section id="portfolio">
+  <div class="sec-header">
+    <div class="sec-number">03 / Work</div>
+    <h2 class="sec-title">Featured <em>Projects</em></h2>
+    <div class="gold-line"></div>
+    <p class="sec-sub">A selection of recent work showcasing craft and capability</p>
+  </div>
+  <div class="filters">
+    <button class="f-btn active" data-filter="all">All</button>
+    <button class="f-btn" data-filter="web">Web Apps</button>
+    <button class="f-btn" data-filter="ecommerce">E-Commerce</button>
+    <button class="f-btn" data-filter="wordpress">WordPress</button>
+  </div>
+  <div class="port-grid">
+    <div class="proj" data-category="wordpress">
+      <div class="proj-img"><img src="./shoe.png" alt="Shoes Store" loading="lazy">
+        <div class="proj-overlay">
+          <a href="https://shoesitegk.netlify.app/" target="_blank" class="ov-btn"><i class="fas fa-external-link-alt"></i> Live</a>
+          <a href="https://github.com/Ahmedshah56" target="_blank" class="ov-btn"><i class="fab fa-github"></i> Code</a>
         </div>
-    </section>
-
-    <!-- ABOUT / SERVICES (what I'm offering) -->
-    <section id="about">
-        <div class="section-header">
-            <div class="section-label">WHO AM I</div>
-            <h2 class="section-title">What I'm <span>Offering</span></h2>
-            <div class="section-divider"></div>
-            <p class="section-subtitle">Comprehensive web development solutions tailored to your business needs</p>
+      </div>
+      <div class="proj-body">
+        <div class="proj-cat">E-Commerce</div>
+        <h3>STRIDE — Shoes Store</h3>
+        <p>Modern footwear e-commerce with clean product displays, category navigation and seamless checkout.</p>
+        <div class="tech-tags"><span class="t-tag">HTML5</span><span class="t-tag">JavaScript</span><span class="t-tag">Bootstrap</span></div>
+      </div>
+    </div>
+    <div class="proj" data-category="ecommerce">
+      <div class="proj-img"><img src="./eCommerce.webp" alt="Fashion Store" loading="lazy">
+        <div class="proj-overlay">
+          <a href="https://syedcollectionstore.netlify.app/" class="ov-btn"><i class="fas fa-external-link-alt"></i> Live</a>
+          <a href="https://github.com/Ahmedshah56" target="_blank" class="ov-btn"><i class="fab fa-github"></i> Code</a>
         </div>
-        <div class="services-grid">
-            <div class="service-card">
-                <div class="service-icon"><i class="fas fa-code"></i></div>
-                <h3>Full Stack Solutions</h3>
-                <p>End-to-end web development from database design to responsive frontend interfaces. Expert in MERN stack, Python Django, and modern frameworks.</p>
-                <a href="#contact" class="service-link">Explore more <i class="fas fa-arrow-right"></i></a>
-            </div>
-            <div class="service-card">
-                <div class="service-icon"><i class="fas fa-mobile-alt"></i></div>
-                <h3>API Development</h3>
-                <p>RESTful APIs and GraphQL services built for performance and scalability. Secure authentication, real-time data, and third-party integrations.</p>
-                <a href="#contact" class="service-link">Explore more <i class="fas fa-arrow-right"></i></a>
-            </div>
-            <div class="service-card">
-                <div class="service-icon"><i class="fas fa-laptop-code"></i></div>
-                <h3>Frontend Development</h3>
-                <p>Modern, responsive UIs with React, Vue, and Next.js. Focus on performance, accessibility, and stunning visual experiences that convert.</p>
-                <a href="#contact" class="service-link">Explore more <i class="fas fa-arrow-right"></i></a>
-            </div>
-            <div class="service-card">
-                <div class="service-icon"><i class="fas fa-database"></i></div>
-                <h3>Backend Development</h3>
-                <p>Robust server-side architecture with Node.js, Express, and Python. Database optimization, caching strategies, and cloud deployment.</p>
-                <a href="#contact" class="service-link">Explore more <i class="fas fa-arrow-right"></i></a>
-            </div>
-            <div class="service-card">
-                <div class="service-icon"><i class="fas fa-cloud"></i></div>
-                <h3>Deployment & DevOps</h3>
-                <p>Cloud infrastructure setup on AWS, Docker containerization, CI/CD pipelines, and automated testing for seamless deployments.</p>
-                <a href="#contact" class="service-link">Explore more <i class="fas fa-arrow-right"></i></a>
-            </div>
-            <div class="service-card">
-                <div class="service-icon"><i class="fas fa-bug"></i></div>
-                <h3>Speed & Optimization</h3>
-                <p>Performance tuning, code refactoring, and optimization. Make your applications lightning-fast with modern best practices.</p>
-                <a href="#contact" class="service-link">Explore more <i class="fas fa-arrow-right"></i></a>
-            </div>
+      </div>
+      <div class="proj-body">
+        <div class="proj-cat">E-Commerce</div>
+        <h3>Fashion Retail Store</h3>
+        <p>Premium clothing collections with easy browsing, filtering, and seamless checkout experience.</p>
+        <div class="tech-tags"><span class="t-tag">HTML5</span><span class="t-tag">CSS3</span><span class="t-tag">Bootstrap 5</span></div>
+      </div>
+    </div>
+    <div class="proj" data-category="web">
+      <div class="proj-img"><img src="food.png" alt="Restaurant" loading="lazy">
+        <div class="proj-overlay">
+          <a href="https://ahmedresturantweb.netlify.app/" class="ov-btn"><i class="fas fa-external-link-alt"></i> Live</a>
+          <a href="https://github.com/Ahmedshah56" target="_blank" class="ov-btn"><i class="fab fa-github"></i> Code</a>
         </div>
-    </section>
-
-    <!-- EXPERTISE -->
-    <section class="expertise" id="expertise">
-        <div class="section-header">
-            <div class="section-label">WHY CHOOSE ME</div>
-            <h2 class="section-title">My <span>Expertise</span></h2>
-            <div class="section-divider"></div>
-            <p class="section-subtitle">Years of experience delivering exceptional results</p>
+      </div>
+      <div class="proj-body">
+        <div class="proj-cat">Restaurant</div>
+        <h3>Crispy Bites Restaurant</h3>
+        <p>Modern restaurant site with full menu, online ordering system and reservation management.</p>
+        <div class="tech-tags"><span class="t-tag">HTML5</span><span class="t-tag">JavaScript</span><span class="t-tag">Bootstrap</span></div>
+      </div>
+    </div>
+    <div class="proj" data-category="wordpress">
+      <div class="proj-img"><img src="./img/st.jpg" alt="Academy" loading="lazy">
+        <div class="proj-overlay">
+          <a href="https://www.chemistaacademy.com/" target="_blank" class="ov-btn"><i class="fas fa-external-link-alt"></i> Live</a>
+          <a href="https://github.com/Ahmedshah56" target="_blank" class="ov-btn"><i class="fab fa-github"></i> Code</a>
         </div>
-        <div class="expertise-content">
-            <div>
-                <p class="expertise-text">
-                    Transforming ideas into reality, I deliver powerful software solutions that meet your business goals. With expertise in modern frameworks and a passion for clean, maintainable code, I create applications that not only work perfectly but also scale effortlessly. From startups to enterprise-level projects, I bring technical excellence and creative problem-solving to every challenge.
-                </p>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-number">3+</div>
-                        <div class="stat-label">Years Experience</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">100%</div>
-                        <div class="stat-label">Clean Code</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">100%</div>
-                        <div class="stat-label">Satisfaction Rate</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">24/7</div>
-                        <div class="stat-label">Support</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="expertise-features">
-                <div class="feature-item"><div class="feature-icon"><i class="fas fa-tachometer-alt"></i></div><div class="feature-text"><h4>High-Speed Performance</h4><p>Optimized code and architecture for blazing-fast load times</p></div></div>
-                <div class="feature-item"><div class="feature-icon"><i class="fas fa-code-branch"></i></div><div class="feature-text"><h4>Modern Tech Stack</h4><p>Latest frameworks and tools for cutting-edge solutions</p></div></div>
-                <div class="feature-item"><div class="feature-icon"><i class="fas fa-shield-alt"></i></div><div class="feature-text"><h4>Security First</h4><p>Enterprise-grade security measures in every project</p></div></div>
-                <div class="feature-item"><div class="feature-icon"><i class="fas fa-headset"></i></div><div class="feature-text"><h4>24/7 Availability</h4><p>Round-the-clock support and quick response times</p></div></div>
-                <div class="feature-item"><div class="feature-icon"><i class="fas fa-chart-line"></i></div><div class="feature-text"><h4>100% Google Lighthouse Score</h4><p>Exceptional performance metrics and best practices</p></div></div>
-                <div class="feature-item"><div class="feature-icon"><i class="fas fa-smile"></i></div><div class="feature-text"><h4>Full Ownership</h4><p>Complete source code and documentation delivery</p></div></div>
-            </div>
+      </div>
+      <div class="proj-body">
+        <div class="proj-cat">Education Platform</div>
+        <h3>Chemista Academy</h3>
+        <p>Full learning platform with course management, video lessons, quizzes and progress tracking.</p>
+        <div class="tech-tags"><span class="t-tag">WordPress</span><span class="t-tag">PHP</span><span class="t-tag">MySQL</span></div>
+      </div>
+    </div>
+    <div class="proj" data-category="wordpress">
+      <div class="proj-img"><img src="./alex-knight-2EJCSULRwC8-unsplash.jpg" alt="AI Chatbot" loading="lazy">
+        <div class="proj-overlay">
+          <a href="https://askahmedaigpt.netlify.app/" class="ov-btn"><i class="fas fa-external-link-alt"></i> Live</a>
+          <a href="https://github.com/Ahmedshah56" target="_blank" class="ov-btn"><i class="fab fa-github"></i> Code</a>
         </div>
-    </section>
-
-    <!-- ADDITIONAL SERVICES -->
-    <section id="services">
-        <div class="section-header">
-            <div class="section-label">SERVICES</div>
-            <h2 class="section-title">Additional <span>Services</span></h2>
-            <div class="section-divider"></div>
+      </div>
+      <div class="proj-body">
+        <div class="proj-cat">AI Application</div>
+        <h3>Ask Ahmed AI</h3>
+        <p>Smart AI chatbot powered by advanced language models for instant answers and creative solutions.</p>
+        <div class="tech-tags"><span class="t-tag">JavaScript</span><span class="t-tag">AI API</span><span class="t-tag">CSS3</span></div>
+      </div>
+    </div>
+    <div class="proj" data-category="web">
+      <div class="proj-img"><img src="./lloyd-dirks-kz8pEH4IsUo-unsplash.jpg" alt="Weather" loading="lazy">
+        <div class="proj-overlay">
+          <a href="https://ahmedshahweatherapp.netlify.app/" class="ov-btn"><i class="fas fa-external-link-alt"></i> Live</a>
+          <a href="https://github.com/Ahmedshah56" target="_blank" class="ov-btn"><i class="fab fa-github"></i> Code</a>
         </div>
-        <div class="services-grid">
-            <div class="service-card">
-                <div class="service-icon"><i class="fab fa-wordpress"></i></div>
-                <h3>WordPress Development</h3>
-                <p>Custom WordPress themes, plugins, and WooCommerce stores. SEO-optimized and performance-tuned for maximum results.</p>
-                <a href="#contact" class="service-link">Explore more <i class="fas fa-arrow-right"></i></a>
-            </div>
-            <div class="service-card">
-                <div class="service-icon"><i class="fas fa-shopping-cart"></i></div>
-                <h3>E-Commerce Solutions</h3>
-                <p>Full-featured online stores with secure payment gateways, inventory management, and seamless checkout experiences.</p>
-                <a href="#contact" class="service-link">Explore more <i class="fas fa-arrow-right"></i></a>
-            </div>
-            <div class="service-card">
-                <div class="service-icon"><i class="fas fa-palette"></i></div>
-                <h3>UI/UX Design</h3>
-                <p>Beautiful, intuitive interfaces designed to engage users and drive conversions with thoughtful user experience.</p>
-                <a href="#contact" class="service-link">Explore more <i class="fas fa-arrow-right"></i></a>
-            </div>
+      </div>
+      <div class="proj-body">
+        <div class="proj-cat">Web App</div>
+        <h3>Weather Forecast App</h3>
+        <p>Real-time weather for any city worldwide with forecasts, temperature and conditions.</p>
+        <div class="tech-tags"><span class="t-tag">JavaScript</span><span class="t-tag">Weather API</span></div>
+      </div>
+    </div>
+    <div class="proj" data-category="web">
+      <div class="proj-img"><img src="./mail.jpg" alt="CatchMail" loading="lazy">
+        <div class="proj-overlay">
+          <a href="https://ahmedshahpotfolio.netlify.app/" class="ov-btn"><i class="fas fa-external-link-alt"></i> Live</a>
+          <a href="https://github.com/Ahmedshah56" target="_blank" class="ov-btn"><i class="fab fa-github"></i> Code</a>
         </div>
-    </section>
-
-    <!-- PORTFOLIO -->
-    <section class="portfolio" id="portfolio">
-        <div class="section-header">
-            <div class="section-label">MY WORK</div>
-            <h2 class="section-title">Featured <span>Projects</span></h2>
-            <div class="section-divider"></div>
-            <p class="section-subtitle">Recent projects showcasing my expertise and creativity</p>
+      </div>
+      <div class="proj-body">
+        <div class="proj-cat">Web Tool</div>
+        <h3>CatchMail Temp Email</h3>
+        <p>Temporary disposable mailboxes with real-time inbox viewing. Instant, no registration needed.</p>
+        <div class="tech-tags"><span class="t-tag">JavaScript</span><span class="t-tag">REST API</span></div>
+      </div>
+    </div>
+    <div class="proj" data-category="web">
+      <div class="proj-img"><img src="./CV.jpg" alt="Resume" loading="lazy">
+        <div class="proj-overlay">
+          <a href="https://ahmedshahresumegenrator.netlify.app/" class="ov-btn"><i class="fas fa-external-link-alt"></i> Live</a>
+          <a href="https://github.com/Ahmedshah56" target="_blank" class="ov-btn"><i class="fab fa-github"></i> Code</a>
         </div>
-
-        <div class="portfolio-filters">
-            <button class="filter-btn active" data-filter="all">All</button>
-            <button class="filter-btn" data-filter="web">Web Apps</button>
-            <button class="filter-btn" data-filter="ecommerce">E-Commerce</button>
-            <button class="filter-btn" data-filter="wordpress">WordPress</button>
+      </div>
+      <div class="proj-body">
+        <div class="proj-cat">Web Tool</div>
+        <h3>Resume Generator</h3>
+        <p>Professional resume builder with multiple templates and instant PDF export capability.</p>
+        <div class="tech-tags"><span class="t-tag">HTML5</span><span class="t-tag">JavaScript</span><span class="t-tag">PDF.js</span></div>
+      </div>
+    </div>
+    <div class="proj" data-category="web">
+      <div class="proj-img"><img src="player.webp" alt="Music" loading="lazy">
+        <div class="proj-overlay">
+          <a href="https://musicplayersong2.netlify.app/" class="ov-btn"><i class="fas fa-external-link-alt"></i> Live</a>
+          <a href="https://github.com/Ahmedshah56" target="_blank" class="ov-btn"><i class="fab fa-github"></i> Code</a>
         </div>
+      </div>
+      <div class="proj-body">
+        <div class="proj-cat">Entertainment</div>
+        <h3>Nova Music Player</h3>
+        <p>Feature-rich music player with playlist management, visualizer and full audio controls.</p>
+        <div class="tech-tags"><span class="t-tag">JavaScript</span><span class="t-tag">Audio API</span></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <div class="portfolio-grid">
-            <div class="project-card" data-category="wordpress">
-                <div class="project-image">
-                    <img src="./shoe.png" alt="Shoes Store" loading="lazy">
-                    <div class="project-overlay">
-                        <a href="https://shoesitegk.netlify.app/" target="_blank" class="overlay-btn"><i class="fas fa-external-link-alt"></i> Live</a>
-                        <a href="https://github.com/Ahmedshah56" target="_blank" class="overlay-btn"><i class="fab fa-github"></i> Code</a>
-                    </div>
-                </div>
-                <div class="project-content">
-                    <span class="project-category">E-Commerce</span>
-                    <h3>Shoes Store</h3>
-                    <p>STRIDE — modern e-commerce footwear website with clean product displays, category navigation, and seamless checkout flow.</p>
-                    <div class="tech-stack"><span class="tech-badge">HTML5</span><span class="tech-badge">JavaScript</span><span class="tech-badge">CSS3</span><span class="tech-badge">Bootstrap</span></div>
-                </div>
-            </div>
+<!-- ── CONTACT ── -->
+<section class="contact" id="contact">
+  <div class="sec-header">
+    <div class="sec-number">04 / Contact</div>
+    <h2 class="sec-title">Let's <em>Build</em></h2>
+    <div class="gold-line"></div>
+    <p class="sec-sub">Have a project in mind? I'd love to hear about it</p>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-left">
+      <h3>Start Something <em>Extraordinary</em> Together</h3>
+      <p>Whether you have a fully-formed idea or just a spark of inspiration, I'm here to help transform it into a digital reality. I respond within 24 hours — all messages go straight to my WhatsApp.</p>
+      <div class="c-items">
+        <div class="c-item"><div class="c-ico"><i class="fas fa-envelope"></i></div><div class="c-txt"><h4>Email</h4><p>ahmedshah@example.com</p></div></div>
+        <div class="c-item"><div class="c-ico"><i class="fab fa-whatsapp"></i></div><div class="c-txt"><h4>WhatsApp</h4><p>+92 315 4901455</p></div></div>
+        <div class="c-item"><div class="c-ico"><i class="fas fa-map-marker-alt"></i></div><div class="c-txt"><h4>Location</h4><p>Pakistan — Remote Worldwide</p></div></div>
+      </div>
+    </div>
+    <form class="contact-form" id="contactForm">
+      <div class="f-group"><label>Your Name *</label><input type="text" id="name" required placeholder="John Doe"></div>
+      <div class="f-group"><label>Your Email *</label><input type="email" id="email" required placeholder="john@example.com"></div>
+      <div class="f-group"><label>Phone Number</label><input type="tel" id="phone" placeholder="+92 300 1234567"></div>
+      <div class="f-group"><label>Your Message *</label><textarea id="message" required placeholder="Tell me about your project..."></textarea></div>
+      <button type="submit" class="submit-btn"><i class="fab fa-whatsapp"></i> Send via WhatsApp</button>
+    </form>
+  </div>
+</section>
 
-            <div class="project-card" data-category="ecommerce">
-                <div class="project-image">
-                    <img src="./eCommerce.webp" alt="Fashion Store" loading="lazy">
-                    <div class="project-overlay">
-                        <a href="https://syedcollectionstore.netlify.app/" class="overlay-btn"><i class="fas fa-external-link-alt"></i> Live</a>
-                        <a href="https://github.com/Ahmedshah56" target="_blank" class="overlay-btn"><i class="fab fa-github"></i> Code</a>
-                    </div>
-                </div>
-                <div class="project-content">
-                    <span class="project-category">E-Commerce</span>
-                    <h3>Fashion Retail Store</h3>
-                    <p>A stylish online fashion shop featuring premium clothing collections with easy browsing and seamless checkout.</p>
-                    <div class="tech-stack"><span class="tech-badge">HTML5</span><span class="tech-badge">CSS3</span><span class="tech-badge">JavaScript</span><span class="tech-badge">Bootstrap 5</span></div>
-                </div>
-            </div>
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-grid">
+    <div class="f-about">
+      <h3>Ahmed Shah</h3>
+      <p>Full Stack Developer crafting digital experiences that are fast, beautiful, and built to last. Specialized in React, Node.js, Python and modern web architecture.</p>
+      <div class="socials">
+        <a href="https://github.com/Ahmedshah56"><i class="fab fa-github"></i></a>
+        <a href="https://www.linkedin.com/in/ahmed-shah-web-developer-designer"><i class="fab fa-linkedin-in"></i></a>
+        <a href="https://www.facebook.com/share/17mHGjDjHF/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://x.com/Syed_says10"><i class="fab fa-twitter"></i></a>
+        <a href="https://www.instagram.com/ahmedshah.zn" target="_blank"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.behance.net/ahmedshah45" target="_blank"><i class="fab fa-behance"></i></a>
+        <a href="https://wa.me/923154901455" target="_blank"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+    <div class="f-col">
+      <h4>Navigation</h4>
+      <ul class="f-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">Services</a></li>
+        <li><a href="#expertise">Expertise</a></li>
+        <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="f-col">
+      <h4>Services</h4>
+      <ul class="f-links">
+        <li><a href="#about">Web Development</a></li>
+        <li><a href="#about">API Development</a></li>
+        <li><a href="#about">WordPress</a></li>
+        <li><a href="#about">E-Commerce</a></li>
+        <li><a href="#about">UI/UX Design</a></li>
+      </ul>
+    </div>
+    <div class="f-col">
+      <h4>Get In Touch</h4>
+      <ul class="f-links">
+        <li><a href="mailto:ahmedshah@example.com">Email Me</a></li>
+        <li><a href="https://wa.me/923154901455">WhatsApp</a></li>
+        <li><a href="#contact">Contact Form</a></li>
+        <li><a href="https://github.com/Ahmedshah56">GitHub</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bot">
+    <span>&copy; 2025 Ahmed Shah — All rights reserved</span>
+    <span>Designed & Developed with precision</span>
+  </div>
+</footer>
 
-            <div class="project-card" data-category="web">
-                <div class="project-image">
-                    <img src="food.png" alt="Restaurant" loading="lazy">
-                    <div class="project-overlay">
-                        <a href="https://ahmedresturantweb.netlify.app/" class="overlay-btn"><i class="fas fa-external-link-alt"></i> Live</a>
-                        <a href="https://github.com/Ahmedshah56" target="_blank" class="overlay-btn"><i class="fab fa-github"></i> Code</a>
-                    </div>
-                </div>
-                <div class="project-content">
-                    <span class="project-category">Restaurant</span>
-                    <h3>Crispy Bites Restaurant</h3>
-                    <p>Modern restaurant website with menu showcase, online ordering, and reservation system.</p>
-                    <div class="tech-stack"><span class="tech-badge">HTML5</span><span class="tech-badge">CSS3</span><span class="tech-badge">JavaScript</span><span class="tech-badge">Bootstrap</span></div>
-                </div>
-            </div>
-
-            <div class="project-card" data-category="wordpress">
-                <div class="project-image">
-                    <img src="./img/st.jpg" alt="Academy" loading="lazy">
-                    <div class="project-overlay">
-                        <a href="https://www.chemistaacademy.com/" target="_blank" class="overlay-btn"><i class="fas fa-external-link-alt"></i> Live</a>
-                        <a href="https://github.com/Ahmedshah56" target="_blank" class="overlay-btn"><i class="fab fa-github"></i> Code</a>
-                    </div>
-                </div>
-                <div class="project-content">
-                    <span class="project-category">Education Platform</span>
-                    <h3>Chemista Academy</h3>
-                    <p>Comprehensive online learning platform with course management, video lessons, quizzes, and progress tracking.</p>
-                    <div class="tech-stack"><span class="tech-badge">HTML5</span><span class="tech-badge">JavaScript</span><span class="tech-badge">CSS3</span><span class="tech-badge">Bootstrap</span></div>
-                </div>
-            </div>
-
-            <div class="project-card" data-category="wordpress">
-                <div class="project-image">
-                    <img src="./alex-knight-2EJCSULRwC8-unsplash.jpg" alt="AI Chatbot" loading="lazy">
-                    <div class="project-overlay">
-                        <a href="https://askahmedaigpt.netlify.app/" class="overlay-btn"><i class="fas fa-external-link-alt"></i> Live</a>
-                        <a href="https://github.com/Ahmedshah56" target="_blank" class="overlay-btn"><i class="fab fa-github"></i> Code</a>
-                    </div>
-                </div>
-                <div class="project-content">
-                    <span class="project-category">AI Application</span>
-                    <h3>Ask Ahmed AI</h3>
-                    <p>Smart AI chatbot powered by advanced language models for instant answers and creative solutions.</p>
-                    <div class="tech-stack"><span class="tech-badge">HTML5</span><span class="tech-badge">CSS3</span><span class="tech-badge">JavaScript</span><span class="tech-badge">AI API</span></div>
-                </div>
-            </div>
-
-            <div class="project-card" data-category="web">
-                <div class="project-image">
-                    <img src="./mail.jpg" alt="Temp Mail" loading="lazy">
-                    <div class="project-overlay">
-                        <a href="https://ahmedshahpotfolio.netlify.app/" class="overlay-btn"><i class="fas fa-external-link-alt"></i> Live</a>
-                        <a href="https://github.com/Ahmedshah56" target="_blank" class="overlay-btn"><i class="fab fa-github"></i> Code</a>
-                    </div>
-                </div>
-                <div class="project-content">
-                    <span class="project-category">Web Tool</span>
-                    <h3>CatchMail - Temp Email</h3>
-                    <p>Temporary email service for instant disposable mailboxes with real-time message viewing.</p>
-                    <div class="tech-stack"><span class="tech-badge">HTML5</span><span class="tech-badge">CSS3</span><span class="tech-badge">JavaScript</span><span class="tech-badge">REST API</span></div>
-                </div>
-            </div>
-
-            <div class="project-card" data-category="web">
-                <div class="project-image">
-                    <img src="./lloyd-dirks-kz8pEH4IsUo-unsplash.jpg" alt="Weather App" loading="lazy">
-                    <div class="project-overlay">
-                        <a href="https://ahmedshahweatherapp.netlify.app/" class="overlay-btn"><i class="fas fa-external-link-alt"></i> Live</a>
-                        <a href="https://github.com/Ahmedshah56" target="_blank" class="overlay-btn"><i class="fab fa-github"></i> Code</a>
-                    </div>
-                </div>
-                <div class="project-content">
-                    <span class="project-category">Web App</span>
-                    <h3>Weather Forecast App</h3>
-                    <p>Real-time weather conditions, temperature, and forecasts for any city worldwide.</p>
-                    <div class="tech-stack"><span class="tech-badge">HTML5</span><span class="tech-badge">CSS3</span><span class="tech-badge">JavaScript</span><span class="tech-badge">Weather API</span></div>
-                </div>
-            </div>
-
-            <div class="project-card" data-category="web">
-                <div class="project-image">
-                    <img src="./CV.jpg" alt="Resume Builder" loading="lazy">
-                    <div class="project-overlay">
-                        <a href="https://ahmedshahresumegenrator.netlify.app/" class="overlay-btn"><i class="fas fa-external-link-alt"></i> Live</a>
-                        <a href="https://github.com/Ahmedshah56" target="_blank" class="overlay-btn"><i class="fab fa-github"></i> Code</a>
-                    </div>
-                </div>
-                <div class="project-content">
-                    <span class="project-category">Web Tool</span>
-                    <h3>Resume Generator</h3>
-                    <p>Professional resume builder with multiple templates and instant PDF export.</p>
-                    <div class="tech-stack"><span class="tech-badge">HTML5</span><span class="tech-badge">CSS3</span><span class="tech-badge">JavaScript</span><span class="tech-badge">LocalStorage</span></div>
-                </div>
-            </div>
-
-            <div class="project-card" data-category="web">
-                <div class="project-image">
-                    <img src="./todo.jpg" alt="Todo App" loading="lazy">
-                    <div class="project-overlay">
-                        <a href="https://todolistahmed.netlify.app/" class="overlay-btn"><i class="fas fa-external-link-alt"></i> Live</a>
-                        <a href="https://github.com/Ahmedshah56" target="_blank" class="overlay-btn"><i class="fab fa-github"></i> Code</a>
-                    </div>
-                </div>
-                <div class="project-content">
-                    <span class="project-category">Productivity</span>
-                    <h3>Task Manager</h3>
-                    <p>Simple and effective task list with add, complete, and delete functionality.</p>
-                    <div class="tech-stack"><span class="tech-badge">HTML5</span><span class="tech-badge">CSS3</span><span class="tech-badge">JavaScript</span><span class="tech-badge">LocalStorage</span></div>
-                </div>
-            </div>
-
-            <div class="project-card" data-category="web">
-                <div class="project-image">
-                    <img src="player.webp" alt="Music Player" loading="lazy">
-                    <div class="project-overlay">
-                        <a href="https://musicplayersong2.netlify.app/" class="overlay-btn"><i class="fas fa-external-link-alt"></i> Live</a>
-                        <a href="https://github.com/Ahmedshah56" target="_blank" class="overlay-btn"><i class="fab fa-github"></i> Code</a>
-                    </div>
-                </div>
-                <div class="project-content">
-                    <span class="project-category">Entertainment</span>
-                    <h3>Nova Music Player</h3>
-                    <p>Feature-rich music player with playlist management and audio controls.</p>
-                    <div class="tech-stack"><span class="tech-badge">HTML5</span><span class="tech-badge">CSS3</span><span class="tech-badge">JavaScript</span><span class="tech-badge">Audio API</span></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section class="contact" id="contact">
-        <div class="section-header">
-            <div class="section-label">GET IN TOUCH</div>
-            <h2 class="section-title">Let's <span>Talk</span></h2>
-            <div class="section-divider"></div>
-            <p class="section-subtitle">Ready to start your next project? Let's discuss how I can help</p>
-        </div>
-        <div class="contact-container">
-            <div class="contact-info">
-                <h3>Let's Build Something <span>Amazing</span></h3>
-                <p>Have a project in mind? I'm here to help bring your ideas to life. Fill out the form and I'll get back to you within 24 hours. All messages are sent directly to my WhatsApp for faster response.</p>
-                <div class="contact-details">
-                    <div class="contact-item">
-                        <div class="contact-icon"><i class="fas fa-envelope"></i></div>
-                        <div class="contact-text"><h4>Email</h4><p>ahmedshah@example.com</p></div>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon"><i class="fab fa-whatsapp"></i></div>
-                        <div class="contact-text"><h4>WhatsApp</h4><p>+92 315 4901455</p></div>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
-                        <div class="contact-text"><h4>Location</h4><p>Pakistan</p></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="contact-form-wrapper">
-                <form class="contact-form" id="contactForm">
-                    <div class="form-group">
-                        <label for="name">Your Name *</label>
-                        <input type="text" id="name" name="name" required placeholder="John Doe">
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Your Email *</label>
-                        <input type="email" id="email" name="email" required placeholder="john@example.com">
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Phone Number</label>
-                        <input type="tel" id="phone" name="phone" placeholder="+92 300 1234567">
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Your Message *</label>
-                        <textarea id="message" name="message" required placeholder="Tell me about your project..."></textarea>
-                    </div>
-                    <button type="submit" class="submit-btn">
-                        <i class="fab fa-whatsapp"></i> Send via WhatsApp
-                    </button>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer>
-        <div class="footer-content">
-            <div class="footer-main">
-                <div class="footer-about">
-                    <h3>&lt;AhmedShah/&gt;</h3>
-                    <p>Full Stack Developer passionate about creating innovative web solutions. Specialized in React, Node.js, Python, and modern web technologies.</p>
-                    <div class="footer-social">
-                        <a href="https://github.com/Ahmedshah56"><i class="fab fa-github"></i></a>
-                        <a href="https://www.linkedin.com/in/ahmed-shah-web-developer-designer"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="https://www.facebook.com/share/17mHGjDjHF/" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://x.com/Syed_says10"><i class="fab fa-twitter"></i></a>
-                        <a href="https://www.instagram.com/ahmedshah.zn" target="_blank"><i class="fab fa-instagram"></i></a>
-                        <a href="https://www.behance.net/ahmedshah45" target="_blank"><i class="fab fa-behance"></i></a>
-                        <a href="https://wa.me/923154901455" target="_blank"><i class="fab fa-whatsapp"></i></a>
-                    </div>
-                </div>
-                <div class="footer-section">
-                    <h4>Quick Links</h4>
-                    <ul class="footer-links">
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="#about">About</a></li>
-                        <li><a href="#services">Services</a></li>
-                        <li><a href="#portfolio">Portfolio</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Services</h4>
-                    <ul class="footer-links">
-                        <li><a href="#services">Web Development</a></li>
-                        <li><a href="#services">API Development</a></li>
-                        <li><a href="#services">WordPress</a></li>
-                        <li><a href="#services">E-Commerce</a></li>
-                        <li><a href="#services">UI/UX Design</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Contact</h4>
-                    <ul class="footer-links">
-                        <li><a href="mailto:ahmedshah@example.com">Email Me</a></li>
-                        <li><a href="https://wa.me/923154901455">WhatsApp</a></li>
-                        <li><a href="#contact">Contact Form</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 Ahmed Shah. All rights reserved.</p>
-                <p>Designed & Developed with <i class="fas fa-heart" style="color:#00FF87"></i> by Ahmed Shah</p>
-            </div>
-        </div>
-    </footer>
-
-</div><!-- end content-wrapper -->
+</div><!-- /content -->
 
 <script>
-// =====================================================
-//  THREE.JS — PARTICLE BACKGROUND
-// =====================================================
-(function() {
-    const canvas = document.getElementById('three-canvas');
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0x000000, 0);
+// ═══════════════════════════════════
+//  CURSOR
+// ═══════════════════════════════════
+const cur = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+function animCursor(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animCursor)}
+animCursor();
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 80;
+// ═══════════════════════════════════
+//  SCROLL PROGRESS + NAV
+// ═══════════════════════════════════
+const prog=document.getElementById('progress');
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>{
+  const st=window.scrollY,dh=document.documentElement.scrollHeight-window.innerHeight;
+  prog.style.width=(st/dh*100)+'%';
+  nav.classList.toggle('stuck',st>60);
+});
 
-    // ---- MAIN PARTICLE FIELD ----
-    const particleCount = 3000;
-    const positions = new Float32Array(particleCount * 3);
-    const colors = new Float32Array(particleCount * 3);
-    const sizes = new Float32Array(particleCount);
+// ═══════════════════════════════════
+//  MOBILE MENU
+// ═══════════════════════════════════
+const menuBtn=document.getElementById('menuBtn');
+const navLinks=document.getElementById('navLinks');
+menuBtn.addEventListener('click',()=>{
+  navLinks.classList.toggle('open');
+  menuBtn.innerHTML=navLinks.classList.contains('open')?'<i class="fas fa-times"></i>':'<i class="fas fa-bars"></i>';
+});
+navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{
+  navLinks.classList.remove('open');
+  menuBtn.innerHTML='<i class="fas fa-bars"></i>';
+}));
 
-    const colorA = new THREE.Color(0x00FF87); // green
-    const colorB = new THREE.Color(0x00D9FF); // cyan
-    const colorC = new THREE.Color(0xFFFFFF); // white
+// ═══════════════════════════════════
+//  BG THREE.JS — LUXURY NEBULA
+// ═══════════════════════════════════
+(function(){
+  const canvas=document.getElementById('bg-canvas');
+  const W=window.innerWidth,H=window.innerHeight;
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.setSize(W,H);
+  renderer.setClearColor(0x000000,0);
 
-    for (let i = 0; i < particleCount; i++) {
-        positions[i * 3]     = (Math.random() - 0.5) * 300;
-        positions[i * 3 + 1] = (Math.random() - 0.5) * 300;
-        positions[i * 3 + 2] = (Math.random() - 0.5) * 200;
+  const scene=new THREE.Scene();
+  const cam=new THREE.PerspectiveCamera(60,W/H,0.1,2000);
+  cam.position.z=120;
 
-        const t = Math.random();
-        let c;
-        if (t < 0.33) c = colorA;
-        else if (t < 0.66) c = colorB;
-        else c = colorC;
-
-        colors[i * 3]     = c.r;
-        colors[i * 3 + 1] = c.g;
-        colors[i * 3 + 2] = c.b;
-
-        sizes[i] = Math.random() * 2 + 0.5;
+  // ─── GALAXY SPIRAL PARTICLES ───
+  function makeGalaxy(count,radius,spread,colorIn,colorOut){
+    const geo=new THREE.BufferGeometry();
+    const pos=new Float32Array(count*3);
+    const col=new Float32Array(count*3);
+    const cIn=new THREE.Color(colorIn);
+    const cOut=new THREE.Color(colorOut);
+    const arms=3;
+    for(let i=0;i<count;i++){
+      const r=Math.random()*radius;
+      const arm=Math.floor(Math.random()*arms)*(Math.PI*2/arms);
+      const spin=r*0.8;
+      const theta=arm+spin+Math.random()*0.4;
+      const phi=(Math.random()-0.5)*spread;
+      pos[i*3]=Math.cos(theta)*r+(Math.random()-0.5)*r*0.3;
+      pos[i*3+1]=phi*r*0.15;
+      pos[i*3+2]=Math.sin(theta)*r+(Math.random()-0.5)*r*0.3;
+      const t=r/radius;
+      const c=cIn.clone().lerp(cOut,t);
+      col[i*3]=c.r;col[i*3+1]=c.g;col[i*3+2]=c.b;
     }
+    geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+    geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+    const mat=new THREE.PointsMaterial({size:0.4,vertexColors:true,transparent:true,opacity:0.75,sizeAttenuation:true});
+    return new THREE.Points(geo,mat);
+  }
 
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-    geo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+  const galaxy1=makeGalaxy(8000,120,2,0xC9A84C,0x00C8FF);
+  galaxy1.rotation.x=0.4;
+  scene.add(galaxy1);
 
-    const mat = new THREE.PointsMaterial({
-        size: 0.8,
-        vertexColors: true,
-        transparent: true,
-        opacity: 0.7,
-        sizeAttenuation: true
+  const galaxy2=makeGalaxy(4000,80,1.5,0x00E5A0,0xC9A84C);
+  galaxy2.rotation.x=-0.3;galaxy2.rotation.z=0.5;galaxy2.position.set(30,-20,0);
+  scene.add(galaxy2);
+
+  // ─── NEBULA GLOW ORBS ───
+  const orbs=[];
+  const orbData=[
+    {pos:[0,0,-80],color:0xC9A84C,size:40,op:0.04},
+    {pos:[-60,30,-100],color:0x00C8FF,size:55,op:0.03},
+    {pos:[70,-20,-90],color:0x00E5A0,size:35,op:0.04},
+  ];
+  orbData.forEach(d=>{
+    const g=new THREE.SphereGeometry(d.size,16,16);
+    const m=new THREE.MeshBasicMaterial({color:d.color,transparent:true,opacity:d.op});
+    const mesh=new THREE.Mesh(g,m);
+    mesh.position.set(...d.pos);
+    scene.add(mesh);orbs.push({mesh,baseOp:d.op});
+  });
+
+  // ─── FLOATING LUXURY GEOMETRY ───
+  const luxShapes=[];
+  function makeLux(geo,color,pos){
+    const mat=new THREE.MeshBasicMaterial({color,wireframe:true,transparent:true,opacity:0.08});
+    const m=new THREE.Mesh(geo,mat);
+    m.position.set(...pos);
+    m.userData.rx=(Math.random()-0.5)*0.004;
+    m.userData.ry=(Math.random()-0.5)*0.004;
+    m.userData.float=Math.random()*Math.PI*2;
+    scene.add(m);luxShapes.push(m);
+  }
+  makeLux(new THREE.OctahedronGeometry(12,0),0xC9A84C,[-60,20,-30]);
+  makeLux(new THREE.IcosahedronGeometry(8,0),0x00C8FF,[50,-15,-25]);
+  makeLux(new THREE.TetrahedronGeometry(10,0),0x00E5A0,[20,30,-20]);
+  makeLux(new THREE.OctahedronGeometry(6,0),0xC9A84C,[80,10,-40]);
+  makeLux(new THREE.IcosahedronGeometry(14,0),0x00E5A0,[-80,-20,-50]);
+
+  // ─── GRID PLANE ───
+  const gridHelper=new THREE.GridHelper(400,40,0xC9A84C,0xC9A84C);
+  gridHelper.material.opacity=0.03;gridHelper.material.transparent=true;
+  gridHelper.position.y=-60;gridHelper.rotation.x=0.1;
+  scene.add(gridHelper);
+
+  // ─── SHOOTING STARS ───
+  const stars=[];
+  function shootStar(){
+    const g=new THREE.BufferGeometry();
+    const len=Math.random()*30+15;
+    const x=(Math.random()-0.5)*300;
+    const y=(Math.random()-0.5)*200;
+    const pts=[new THREE.Vector3(x,y,-60),new THREE.Vector3(x+len,y-len*0.3,-60)];
+    g.setFromPoints(pts);
+    const m=new THREE.LineBasicMaterial({color:0xF0D080,transparent:true,opacity:0.8});
+    const line=new THREE.Line(g,m);
+    scene.add(line);
+    stars.push({line,life:0,maxLife:60,dx:-1.5,dy:0.5});
+  }
+  setInterval(shootStar,2000);
+
+  // Mouse
+  let mX=0,mY=0;
+  document.addEventListener('mousemove',e=>{mX=(e.clientX/innerWidth-0.5);mY=(e.clientY/innerHeight-0.5)});
+
+  window.addEventListener('resize',()=>{
+    cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();
+    renderer.setSize(innerWidth,innerHeight);
+  });
+
+  let t=0;
+  function tick(){
+    requestAnimationFrame(tick);t+=0.004;
+
+    galaxy1.rotation.y+=0.001;
+    galaxy2.rotation.y-=0.0008;
+    gridHelper.rotation.y+=0.001;
+
+    luxShapes.forEach(s=>{
+      s.rotation.x+=s.userData.rx;s.rotation.y+=s.userData.ry;
+      s.position.y+=Math.sin(t+s.userData.float)*0.02;
     });
 
-    const particles = new THREE.Points(geo, mat);
-    scene.add(particles);
-
-    // ---- CONNECTING LINES (sparse web) ----
-    const lineMat = new THREE.LineBasicMaterial({
-        color: 0x00FF87,
-        transparent: true,
-        opacity: 0.08
+    orbs.forEach((o,i)=>{
+      o.mesh.material.opacity=o.baseOp+Math.sin(t*0.8+i)*0.01;
+      o.mesh.scale.setScalar(1+Math.sin(t*0.5+i)*0.05);
     });
 
-    const linePoints = [];
-    const nodeCount = 80;
-    const nodes = [];
-    for (let i = 0; i < nodeCount; i++) {
-        nodes.push(new THREE.Vector3(
-            (Math.random() - 0.5) * 200,
-            (Math.random() - 0.5) * 200,
-            (Math.random() - 0.5) * 60
-        ));
+    // Update shooting stars
+    for(let i=stars.length-1;i>=0;i--){
+      const s=stars[i];
+      s.life++;
+      const pts=s.line.geometry.attributes.position;
+      pts.array[0]+=s.dx;pts.array[1]+=s.dy;
+      pts.array[3]+=s.dx;pts.array[4]+=s.dy;
+      pts.needsUpdate=true;
+      s.line.material.opacity=0.8*(1-s.life/s.maxLife);
+      if(s.life>=s.maxLife){scene.remove(s.line);stars.splice(i,1);}
     }
 
-    for (let i = 0; i < nodeCount; i++) {
-        for (let j = i + 1; j < nodeCount; j++) {
-            if (nodes[i].distanceTo(nodes[j]) < 35) {
-                linePoints.push(nodes[i], nodes[j]);
-            }
-        }
-    }
-
-    const lineGeo = new THREE.BufferGeometry().setFromPoints(linePoints);
-    const lines = new THREE.LineSegments(lineGeo, lineMat);
-    scene.add(lines);
-
-    // ---- FLOATING WIREFRAME SHAPES ----
-    const shapes = [];
-    const shapeGeos = [
-        new THREE.IcosahedronGeometry(4, 0),
-        new THREE.OctahedronGeometry(5, 0),
-        new THREE.TetrahedronGeometry(4, 0),
-    ];
-
-    for (let i = 0; i < 6; i++) {
-        const geo = shapeGeos[i % 3];
-        const mat = new THREE.MeshBasicMaterial({
-            color: i % 2 === 0 ? 0x00FF87 : 0x00D9FF,
-            wireframe: true,
-            transparent: true,
-            opacity: 0.12
-        });
-        const mesh = new THREE.Mesh(geo, mat);
-        mesh.position.set(
-            (Math.random() - 0.5) * 160,
-            (Math.random() - 0.5) * 120,
-            (Math.random() - 0.5) * 40 - 20
-        );
-        mesh.userData = {
-            rotSpeedX: (Math.random() - 0.5) * 0.01,
-            rotSpeedY: (Math.random() - 0.5) * 0.01,
-            floatSpeed: Math.random() * 0.005 + 0.003,
-            floatOffset: Math.random() * Math.PI * 2
-        };
-        shapes.push(mesh);
-        scene.add(mesh);
-    }
-
-    // Mouse parallax
-    let mouseX = 0, mouseY = 0;
-    document.addEventListener('mousemove', e => {
-        mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-        mouseY = -(e.clientY / window.innerHeight - 0.5) * 2;
-    });
-
-    // Resize
-    window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-
-    let t = 0;
-    function animate() {
-        requestAnimationFrame(animate);
-        t += 0.005;
-
-        // Rotate main particle field slowly
-        particles.rotation.y += 0.0005;
-        particles.rotation.x += 0.0002;
-
-        // Lines slow drift
-        lines.rotation.y += 0.0003;
-
-        // Shapes individual rotation + float
-        shapes.forEach(s => {
-            s.rotation.x += s.userData.rotSpeedX;
-            s.rotation.y += s.userData.rotSpeedY;
-            s.position.y += Math.sin(t + s.userData.floatOffset) * s.userData.floatSpeed;
-        });
-
-        // Camera parallax
-        camera.position.x += (mouseX * 8 - camera.position.x) * 0.02;
-        camera.position.y += (mouseY * 8 - camera.position.y) * 0.02;
-        camera.lookAt(scene.position);
-
-        renderer.render(scene, camera);
-    }
-
-    animate();
+    cam.position.x+=(mX*15-cam.position.x)*0.015;
+    cam.position.y+=(-mY*10-cam.position.y)*0.015;
+    cam.lookAt(scene.position);
+    renderer.render(scene,cam);
+  }
+  tick();
 })();
 
+// ═══════════════════════════════════
+//  HERO THREE.JS — LUXURY ORB
+// ═══════════════════════════════════
+(function(){
+  const canvas=document.getElementById('hero-scene');
+  if(!canvas)return;
+  const S=Math.min(500,window.innerWidth*0.5);
+  canvas.width=S;canvas.height=S;
+  canvas.style.width=S+'px';canvas.style.height=S+'px';
 
-// =====================================================
-//  THREE.JS — HERO 3D OBJECT
-// =====================================================
-(function() {
-    const canvas = document.getElementById('hero-3d');
-    if (!canvas) return;
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.setSize(S,S);renderer.setClearColor(0,0);
 
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-    const size = canvas.offsetWidth || 380;
-    renderer.setSize(size, size);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setClearColor(0x000000, 0);
+  const scene=new THREE.Scene();
+  const cam=new THREE.PerspectiveCamera(45,1,0.1,100);
+  cam.position.z=6;
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
-    camera.position.z = 5;
+  // Lights
+  scene.add(new THREE.AmbientLight(0xffffff,0.2));
+  const pL1=new THREE.PointLight(0xC9A84C,5,20);pL1.position.set(4,4,4);scene.add(pL1);
+  const pL2=new THREE.PointLight(0x00C8FF,3,15);pL2.position.set(-4,-2,3);scene.add(pL2);
+  const pL3=new THREE.PointLight(0x00E5A0,2,15);pL3.position.set(0,5,-3);scene.add(pL3);
 
-    // Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
-    scene.add(ambientLight);
+  // Core sphere with metallic gold
+  const coreGeo=new THREE.IcosahedronGeometry(1.0,3);
+  const coreMat=new THREE.MeshStandardMaterial({
+    color:0x0C0E14,emissive:0xC9A84C,emissiveIntensity:0.08,
+    roughness:0.1,metalness:1.0
+  });
+  const core=new THREE.Mesh(coreGeo,coreMat);scene.add(core);
 
-    const pointLight1 = new THREE.PointLight(0x00FF87, 3, 20);
-    pointLight1.position.set(3, 3, 3);
-    scene.add(pointLight1);
+  // Outer glow sphere
+  const glowGeo=new THREE.SphereGeometry(1.05,32,32);
+  const glowMat=new THREE.MeshBasicMaterial({color:0xC9A84C,transparent:true,opacity:0.04,side:THREE.BackSide});
+  scene.add(new THREE.Mesh(glowGeo,glowMat));
 
-    const pointLight2 = new THREE.PointLight(0x00D9FF, 2, 20);
-    pointLight2.position.set(-3, -2, 2);
-    scene.add(pointLight2);
+  // Wireframe cage
+  const cageGeo=new THREE.IcosahedronGeometry(1.45,1);
+  const cageMat=new THREE.MeshBasicMaterial({color:0xC9A84C,wireframe:true,transparent:true,opacity:0.18});
+  const cage=new THREE.Mesh(cageGeo,cageMat);scene.add(cage);
 
-    // Central icosahedron
-    const coreGeo = new THREE.IcosahedronGeometry(1.2, 0);
-    const coreMat = new THREE.MeshStandardMaterial({
-        color: 0x0A0F1C,
-        emissive: 0x00FF87,
-        emissiveIntensity: 0.15,
-        roughness: 0.2,
-        metalness: 0.9,
-        wireframe: false
+  // DNA double helix rings
+  const rings=[];
+  for(let i=0;i<5;i++){
+    const angle=i*(Math.PI*2/5);
+    const r=new THREE.TorusGeometry(1.8+i*0.15,0.012,8,120);
+    const m=new THREE.MeshBasicMaterial({
+      color:i%2===0?0xC9A84C:0x00C8FF,
+      transparent:true,opacity:0.35-i*0.04
     });
-    const core = new THREE.Mesh(coreGeo, coreMat);
-    scene.add(core);
+    const mesh=new THREE.Mesh(r,m);
+    mesh.rotation.x=angle*0.6;mesh.rotation.y=angle*0.4;
+    rings.push(mesh);scene.add(mesh);
+  }
 
-    // Wireframe overlay
-    const wireGeo = new THREE.IcosahedronGeometry(1.22, 0);
-    const wireMat = new THREE.MeshBasicMaterial({ color: 0x00FF87, wireframe: true, transparent: true, opacity: 0.35 });
-    const wire = new THREE.Mesh(wireGeo, wireMat);
-    scene.add(wire);
+  // Satellite dots
+  const sats=[];
+  const satPositions=[
+    {r:2.2,speed:0.012,a:0,y:0,size:0.06,color:0xC9A84C},
+    {r:1.9,speed:-0.018,a:2,y:0.3,size:0.05,color:0x00E5A0},
+    {r:2.5,speed:0.009,a:4,y:-0.4,size:0.07,color:0x00C8FF},
+    {r:2.0,speed:0.022,a:1,y:0.1,size:0.04,color:0xF0D080},
+  ];
+  satPositions.forEach(s=>{
+    const g=new THREE.SphereGeometry(s.size,8,8);
+    const m=new THREE.MeshBasicMaterial({color:s.color});
+    const mesh=new THREE.Mesh(g,m);
+    const glow=new THREE.PointLight(s.color,0.8,1.5);
+    const group=new THREE.Group();group.add(mesh);group.add(glow);
+    scene.add(group);
+    sats.push({group,mesh,glow,...s});
+  });
 
-    // Orbiting ring 1
-    const ring1Geo = new THREE.TorusGeometry(1.9, 0.02, 16, 100);
-    const ring1Mat = new THREE.MeshBasicMaterial({ color: 0x00FF87, transparent: true, opacity: 0.5 });
-    const ring1 = new THREE.Mesh(ring1Geo, ring1Mat);
-    ring1.rotation.x = Math.PI / 3;
-    scene.add(ring1);
+  // Orbiting ring for satellite trails
+  const trailGeo=new THREE.BufferGeometry();
+  const trailPts=[];
+  for(let i=0;i<=200;i++){
+    const a=(i/200)*Math.PI*2;
+    trailPts.push(new THREE.Vector3(Math.cos(a)*2.2,0,Math.sin(a)*2.2));
+  }
+  trailGeo.setFromPoints(trailPts);
+  const trailMat=new THREE.LineBasicMaterial({color:0xC9A84C,transparent:true,opacity:0.1});
+  scene.add(new THREE.Line(trailGeo,trailMat));
 
-    // Orbiting ring 2
-    const ring2Geo = new THREE.TorusGeometry(2.3, 0.015, 16, 100);
-    const ring2Mat = new THREE.MeshBasicMaterial({ color: 0x00D9FF, transparent: true, opacity: 0.3 });
-    const ring2 = new THREE.Mesh(ring2Geo, ring2Mat);
-    ring2.rotation.x = Math.PI / 6;
-    ring2.rotation.y = Math.PI / 4;
-    scene.add(ring2);
+  // Halo particle ring
+  const haloCount=500;
+  const hPos=new Float32Array(haloCount*3);
+  for(let i=0;i<haloCount;i++){
+    const a=Math.random()*Math.PI*2;
+    const r=2.8+Math.random()*1.2;
+    const spread=(Math.random()-0.5)*0.5;
+    hPos[i*3]=Math.cos(a)*r;hPos[i*3+1]=spread;hPos[i*3+2]=Math.sin(a)*r;
+  }
+  const hGeo=new THREE.BufferGeometry();hGeo.setAttribute('position',new THREE.BufferAttribute(hPos,3));
+  const hMat=new THREE.PointsMaterial({size:0.025,color:0xF0D080,transparent:true,opacity:0.6});
+  const halo=new THREE.Points(hGeo,hMat);scene.add(halo);
 
-    // Small orbiting spheres
-    const orbitGroup = new THREE.Group();
-    scene.add(orbitGroup);
+  // Mouse interaction
+  let mox=0,moy=0;
+  document.addEventListener('mousemove',e=>{
+    mox=(e.clientX/innerWidth-0.5)*2;
+    moy=(e.clientY/innerHeight-0.5)*2;
+  });
 
-    const orbitPositions = [
-        { r: 1.9, angle: 0,        y: 0.4 },
-        { r: 1.9, angle: Math.PI,  y: -0.4 },
-        { r: 2.3, angle: 1.5,      y: 0.2 },
-    ];
+  let t=0;
+  function tick(){
+    requestAnimationFrame(tick);t+=0.008;
 
-    orbitPositions.forEach((op, i) => {
-        const sg = new THREE.SphereGeometry(0.08, 8, 8);
-        const sm = new THREE.MeshBasicMaterial({ color: i === 2 ? 0x00D9FF : 0x00FF87 });
-        const sphere = new THREE.Mesh(sg, sm);
-        sphere.userData = { r: op.r, angle: op.angle, y: op.y, speed: 0.01 + i * 0.005 };
-        orbitGroup.add(sphere);
+    core.rotation.y+=0.003;core.rotation.x+=0.001;
+    cage.rotation.y-=0.005;cage.rotation.x+=0.003;
+    halo.rotation.y+=0.002;
+
+    rings.forEach((r,i)=>{r.rotation.z+=0.004*(i%2===0?1:-1);r.rotation.x+=0.002;});
+
+    sats.forEach(s=>{
+      s.a+=s.speed;
+      s.mesh.position.x=Math.cos(s.a)*s.r;
+      s.mesh.position.z=Math.sin(s.a)*s.r;
+      s.mesh.position.y=s.y+Math.sin(t*2+s.a)*0.2;
+      s.glow.position.copy(s.mesh.position);
     });
 
-    // Outer particle halo
-    const haloCount = 300;
-    const haloPos = new Float32Array(haloCount * 3);
-    for (let i = 0; i < haloCount; i++) {
-        const theta = Math.random() * Math.PI * 2;
-        const phi = Math.acos(2 * Math.random() - 1);
-        const r = 2.8 + Math.random() * 0.6;
-        haloPos[i*3]   = r * Math.sin(phi) * Math.cos(theta);
-        haloPos[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
-        haloPos[i*3+2] = r * Math.cos(phi);
-    }
-    const haloGeo = new THREE.BufferGeometry();
-    haloGeo.setAttribute('position', new THREE.BufferAttribute(haloPos, 3));
-    const haloMat = new THREE.PointsMaterial({ color: 0x00FF87, size: 0.04, transparent: true, opacity: 0.5 });
-    const halo = new THREE.Points(haloGeo, haloMat);
-    scene.add(halo);
+    // Pulse emissive
+    coreMat.emissiveIntensity=0.05+Math.sin(t*2)*0.06;
+    pL1.intensity=4+Math.sin(t)*1.5;
 
-    let t = 0;
-    function animate() {
-        requestAnimationFrame(animate);
-        t += 0.01;
+    // Mouse parallax on hero scene
+    scene.rotation.y+=(mox*0.3-scene.rotation.y)*0.04;
+    scene.rotation.x+=(-moy*0.2-scene.rotation.x)*0.04;
 
-        core.rotation.y += 0.008;
-        core.rotation.x += 0.003;
-        wire.rotation.y = core.rotation.y;
-        wire.rotation.x = core.rotation.x;
-
-        ring1.rotation.z += 0.006;
-        ring2.rotation.z -= 0.004;
-
-        halo.rotation.y -= 0.003;
-
-        // Update orbiting spheres
-        orbitGroup.children.forEach(s => {
-            s.userData.angle += s.userData.speed;
-            s.position.x = Math.cos(s.userData.angle) * s.userData.r;
-            s.position.z = Math.sin(s.userData.angle) * s.userData.r;
-            s.position.y = s.userData.y + Math.sin(t) * 0.1;
-        });
-
-        // Pulsing emissive
-        coreMat.emissiveIntensity = 0.1 + Math.sin(t * 2) * 0.08;
-
-        renderer.render(scene, camera);
-    }
-
-    animate();
-
-    window.addEventListener('resize', () => {
-        const s = canvas.offsetWidth;
-        renderer.setSize(s, s);
-    });
+    renderer.render(scene,cam);
+  }
+  tick();
 })();
 
+// ═══════════════════════════════════
+//  GSAP ANIMATIONS
+// ═══════════════════════════════════
+gsap.registerPlugin(ScrollTrigger,TextPlugin);
 
-// =====================================================
-//  GSAP SCROLL ANIMATIONS
-// =====================================================
-gsap.registerPlugin(ScrollTrigger);
+// Hero entrance — staggered luxury reveal
+const tl=gsap.timeline({delay:0.3});
+tl.to('.hero-left',{opacity:1,y:0,duration:1.4,ease:'power4.out'})
+  .to('.hero-right',{opacity:1,x:0,duration:1.2,ease:'power3.out'},'-=0.9');
 
-// Hero entrance
-gsap.to('.hero-content', {
-    opacity: 1,
-    y: 0,
-    duration: 1.2,
-    ease: 'power3.out',
-    delay: 0.3
+// Service cards
+gsap.utils.toArray('.srv-card').forEach((el,i)=>{
+  gsap.to(el,{
+    opacity:1,y:0,duration:0.9,
+    delay:i*0.08,ease:'power3.out',
+    scrollTrigger:{trigger:el,start:'top 88%',once:true}
+  });
 });
 
-gsap.to('.hero-image', {
-    opacity: 1,
-    duration: 1.2,
-    ease: 'power3.out',
-    delay: 0.5
-});
-
-// Service cards stagger
-gsap.utils.toArray('.service-card').forEach((card, i) => {
-    gsap.to(card, {
-        opacity: 1,
-        y: 0,
-        duration: 0.7,
-        delay: i * 0.1,
-        ease: 'power2.out',
-        scrollTrigger: {
-            trigger: card,
-            start: 'top 85%',
-            once: true
-        }
-    });
-});
-
-// Stat cards
-gsap.utils.toArray('.stat-card').forEach((card, i) => {
-    gsap.to(card, {
-        opacity: 1,
-        scale: 1,
-        duration: 0.6,
-        delay: i * 0.1,
-        ease: 'back.out(1.5)',
-        scrollTrigger: {
-            trigger: card,
-            start: 'top 85%',
-            once: true
-        }
-    });
+// Stats
+gsap.utils.toArray('.stat').forEach((el,i)=>{
+  gsap.to(el,{
+    opacity:1,duration:0.7,delay:i*0.1,
+    ease:'power2.out',
+    scrollTrigger:{trigger:el,start:'top 85%',once:true}
+  });
 });
 
 // Feature items
-gsap.utils.toArray('.feature-item').forEach((item, i) => {
-    gsap.to(item, {
-        opacity: 1,
-        x: 0,
-        duration: 0.6,
-        delay: i * 0.08,
-        ease: 'power2.out',
-        scrollTrigger: {
-            trigger: item,
-            start: 'top 88%',
-            once: true
-        }
-    });
+gsap.utils.toArray('.feat').forEach((el,i)=>{
+  gsap.to(el,{
+    opacity:1,x:0,duration:0.7,delay:i*0.07,
+    ease:'power2.out',
+    scrollTrigger:{trigger:el,start:'top 90%',once:true}
+  });
 });
 
-// Project cards
-gsap.utils.toArray('.project-card').forEach((card, i) => {
-    gsap.to(card, {
-        opacity: 1,
-        y: 0,
-        duration: 0.6,
-        delay: (i % 3) * 0.12,
-        ease: 'power2.out',
-        scrollTrigger: {
-            trigger: card,
-            start: 'top 88%',
-            once: true
-        }
-    });
+// Projects
+gsap.utils.toArray('.proj').forEach((el,i)=>{
+  gsap.to(el,{
+    opacity:1,scale:1,duration:0.7,
+    delay:(i%3)*0.1,ease:'power2.out',
+    scrollTrigger:{trigger:el,start:'top 88%',once:true}
+  });
 });
 
 // Section titles reveal
-gsap.utils.toArray('.section-title').forEach(title => {
-    gsap.from(title, {
-        opacity: 0,
-        y: 30,
-        duration: 0.8,
-        ease: 'power2.out',
-        scrollTrigger: {
-            trigger: title,
-            start: 'top 88%',
-            once: true
-        }
-    });
-});
-
-
-// =====================================================
-//  SCROLL PROGRESS BAR
-// =====================================================
-window.addEventListener('scroll', () => {
-    const scrollTop = window.scrollY;
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const pct = (scrollTop / docHeight) * 100;
-    document.getElementById('scroll-progress').style.width = pct + '%';
-
-    // Nav scroll class
-    const nav = document.getElementById('navbar');
-    nav.classList.toggle('scrolled', scrollTop > 50);
-});
-
-
-// =====================================================
-//  NAV MOBILE MENU
-// =====================================================
-const menuToggle = document.getElementById('menuToggle');
-const navLinks = document.getElementById('navLinks');
-
-menuToggle.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
-    const icon = menuToggle.querySelector('i');
-    icon.classList.toggle('fa-bars');
-    icon.classList.toggle('fa-times');
-});
-
-document.querySelectorAll('.nav-links a').forEach(link => {
-    link.addEventListener('click', () => {
-        navLinks.classList.remove('active');
-        menuToggle.querySelector('i').classList.add('fa-bars');
-        menuToggle.querySelector('i').classList.remove('fa-times');
-    });
+gsap.utils.toArray('.sec-title').forEach(el=>{
+  gsap.from(el,{
+    opacity:0,y:50,duration:1,ease:'power3.out',
+    scrollTrigger:{trigger:el,start:'top 88%',once:true}
+  });
 });
 
 // Smooth scroll
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-});
-
-
-// =====================================================
-//  PORTFOLIO FILTER
-// =====================================================
-const filterBtns = document.querySelectorAll('.filter-btn');
-const projectCards = document.querySelectorAll('.project-card');
-
-filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        filterBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-
-        const filter = btn.getAttribute('data-filter');
-        projectCards.forEach(card => {
-            const show = filter === 'all' || card.getAttribute('data-category') === filter;
-            card.classList.toggle('hidden', !show);
-        });
-    });
-});
-
-
-// =====================================================
-//  WHATSAPP CONTACT FORM
-// =====================================================
-document.getElementById('contactForm').addEventListener('submit', function(e) {
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',function(e){
     e.preventDefault();
-    const name    = document.getElementById('name').value;
-    const email   = document.getElementById('email').value;
-    const phone   = document.getElementById('phone').value;
-    const message = document.getElementById('message').value;
+    const t=document.querySelector(this.getAttribute('href'));
+    if(t)t.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+});
 
-    const text = `*New Contact Form Submission*%0A%0A*Name:* ${name}%0A*Email:* ${email}%0A*Phone:* ${phone || 'Not provided'}%0A*Message:* ${message}`;
-    window.open(`https://wa.me/923154901455?text=${text}`, '_blank');
+// ═══════════════════════════════════
+//  PORTFOLIO FILTER
+// ═══════════════════════════════════
+document.querySelectorAll('.f-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.f-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const f=btn.dataset.filter;
+    document.querySelectorAll('.proj').forEach(p=>{
+      p.classList.toggle('hidden',f!=='all'&&p.dataset.category!==f);
+    });
+  });
+});
 
-    const sm = document.getElementById('successMessage');
-    sm.classList.add('show');
-    setTimeout(() => sm.classList.remove('show'), 3000);
-    this.reset();
+// ═══════════════════════════════════
+//  WHATSAPP FORM
+// ═══════════════════════════════════
+document.getElementById('contactForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  const name=document.getElementById('name').value;
+  const email=document.getElementById('email').value;
+  const phone=document.getElementById('phone').value;
+  const msg=document.getElementById('message').value;
+  const text=`*New Contact*%0A%0A*Name:* ${name}%0A*Email:* ${email}%0A*Phone:* ${phone||'N/A'}%0A*Message:* ${msg}`;
+  window.open(`https://wa.me/923154901455?text=${text}`,'_blank');
+  const t=document.getElementById('toast');
+  t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500);
+  this.reset();
 });
 </script>
 </body>
