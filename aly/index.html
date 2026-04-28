@@ -1,1123 +1,1154 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ahmed Shah — Full Stack Developer</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;0,700;1,300;1,600&family=DM+Mono:wght@300;400&family=Outfit:wght@200;300;400;500;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --gold:#C8A96E;--gold2:#F0D080;--teal:#00E5C8;--cyan:#00B4FF;
-  --void:#030407;--deep:#060A10;--card:#0D1119;--muted:#6B7280;
-  --text:#ECE8E0;--border:rgba(200,169,110,0.12);
-  --font-d:'Cormorant Garamond',serif;--font-b:'Outfit',sans-serif;--font-m:'DM Mono',monospace;
-}
-html{scroll-behavior:smooth;overflow-x:hidden}
-body{
-  font-family:var(--font-b);background:var(--void);color:var(--text);
-  overflow-x:hidden;cursor:none;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ahmed Shah - Full Stack Developer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;}
+        :root{
+            --primary:#00FF87;--secondary:#00D9FF;--dark:#0A0F1C;--darker:#050810;
+            --card-bg:#141824;--text:#FFFFFF;--text-muted:#8B92A8;--accent:#FF3366;
+        }
+        html{scroll-behavior:smooth;}
+        body{font-family:'Syne',sans-serif;background:var(--darker);color:var(--text);overflow-x:hidden;line-height:1.6;}
+        #three-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+        #canvas-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(ellipse at 20% 20%,rgba(0,255,135,0.08) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(0,217,255,0.08) 0%,transparent 50%);z-index:1;pointer-events:none;}
+        .content-wrapper{position:relative;z-index:2;}
+        #scroll-progress{position:fixed;top:0;left:0;width:0%;height:3px;background:linear-gradient(90deg,var(--primary),var(--secondary));z-index:9999;transition:width 0.1s linear;}
 
-/* ── CURSOR ── */
-#c-dot{position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .25s,height .25s,background .25s}
-#c-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(200,169,110,.45);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .3s,height .3s,border-color .3s}
-body:has(a:hover) #c-dot,body:has(button:hover) #c-dot{width:16px;height:16px;background:var(--teal)}
-body:has(a:hover) #c-ring,body:has(button:hover) #c-ring{width:52px;height:52px;border-color:var(--teal)}
+        /* NAV */
+        nav{position:fixed;top:0;width:100%;background:rgba(5,8,16,0.75);backdrop-filter:blur(24px);border-bottom:1px solid rgba(0,255,135,0.1);z-index:1000;padding:1.2rem 0;transition:all 0.4s;}
+        nav.scrolled{background:rgba(5,8,16,0.95);box-shadow:0 4px 40px rgba(0,255,135,0.1);}
+        .nav-container{max-width:1400px;margin:0 auto;padding:0 2rem;display:flex;justify-content:space-between;align-items:center;}
+        .logo{font-family:'Space Mono',monospace;font-size:1.4rem;font-weight:700;color:var(--primary);display:flex;align-items:center;gap:0.5rem;letter-spacing:-1px;}
+        .nav-links{display:flex;gap:2.5rem;list-style:none;}
+        .nav-links a{color:var(--text-muted);text-decoration:none;font-weight:600;font-size:0.85rem;letter-spacing:1px;text-transform:uppercase;transition:color 0.3s;position:relative;}
+        .nav-links a:hover{color:var(--primary);}
+        .nav-links a::after{content:'';position:absolute;bottom:-5px;left:0;width:0;height:2px;background:var(--primary);transition:width 0.3s;}
+        .nav-links a:hover::after{width:100%;}
+        .hire-btn{padding:0.75rem 1.8rem;background:transparent;color:var(--primary);border:2px solid var(--primary);border-radius:4px;font-weight:700;font-family:'Space Mono',monospace;cursor:pointer;transition:all 0.3s;font-size:0.85rem;letter-spacing:1px;}
+        .hire-btn:hover{background:var(--primary);color:var(--dark);transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,255,135,0.35);}
+        .menu-toggle{display:none;background:none;border:none;font-size:1.8rem;color:var(--primary);cursor:pointer;}
 
-/* ── WEBGL CANVAS (FULLSCREEN STICKY) ── */
-#webgl{
-  position:fixed;top:0;left:0;width:100%;height:100vh;
-  z-index:0;pointer-events:none;
-}
+        /* HERO */
+        .hero{min-height:100vh;display:flex;align-items:center;padding:8rem 2rem 4rem;position:relative;}
+        .hero-container{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;}
+        .hero-content{opacity:0;}
+        .hero-badge{display:inline-flex;align-items:center;gap:0.5rem;padding:0.5rem 1.5rem;background:rgba(0,255,135,0.07);border:1px solid rgba(0,255,135,0.4);border-radius:4px;color:var(--primary);font-size:0.8rem;margin-bottom:1.5rem;font-family:'Space Mono',monospace;letter-spacing:2px;text-transform:uppercase;}
+        .hero-badge .dot{width:8px;height:8px;background:var(--primary);border-radius:50%;animation:blink 1.5s infinite;}
+        @keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+        .hero h1{font-size:clamp(2.8rem,6vw,5rem);font-weight:900;margin-bottom:0.5rem;line-height:1.05;letter-spacing:-2px;}
+        .hero h1 .name{color:var(--primary);}
+        .hero h1 .role{font-weight:400;font-size:clamp(1.2rem,3vw,1.8rem);color:var(--text-muted);display:block;letter-spacing:0px;margin-top:0.5rem;}
+        .hero-description{font-size:1rem;color:var(--text-muted);margin:1.5rem 0 2.5rem;line-height:1.8;max-width:520px;}
+        .cta-buttons{display:flex;gap:1rem;flex-wrap:wrap;}
+        .btn{padding:0.9rem 2.2rem;border:none;border-radius:4px;font-size:0.9rem;font-weight:700;cursor:pointer;transition:all 0.3s;text-decoration:none;display:inline-flex;align-items:center;gap:0.7rem;font-family:'Space Mono',monospace;letter-spacing:0.5px;}
+        .btn-primary{background:var(--primary);color:var(--dark);}
+        .btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 35px rgba(0,255,135,0.4);}
+        .btn-secondary{background:transparent;border:2px solid rgba(255,255,255,0.2);color:var(--text);}
+        .btn-secondary:hover{border-color:var(--primary);color:var(--primary);}
 
-/* ── LOADING SCREEN ── */
-#loader{
-  position:fixed;inset:0;z-index:9999;
-  background:var(--void);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;
-  transition:opacity .8s ease,visibility .8s ease;
-}
-#loader.hide{opacity:0;visibility:hidden}
-.loader-name{
-  font-family:var(--font-d);font-size:clamp(2rem,5vw,4rem);
-  font-weight:300;letter-spacing:4px;color:var(--gold);
-}
-.loader-bar-wrap{width:300px;height:1px;background:rgba(200,169,110,.15)}
-.loader-bar{height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--teal));transition:width .05s linear}
-.loader-pct{font-family:var(--font-m);font-size:.7rem;letter-spacing:3px;color:var(--muted)}
+        /* HERO IMAGE & PROFILE */
+        .hero-image{position:relative;display:flex;justify-content:center;align-items:center;opacity:0;}
+        .profile-photo-wrapper{position:relative;width:360px;height:360px;z-index:2;}
+        .profile-photo-frame{width:100%;height:100%;border-radius:20px;overflow:hidden;border:2px solid rgba(0,255,135,0.25);position:relative;background:var(--card-bg);}
+        .profile-photo-frame img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block;}
+        .profile-photo-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#141824 0%,#0d1220 100%);color:var(--text-muted);gap:1rem;}
+        .profile-photo-placeholder .avatar-icon{width:100px;height:100px;border-radius:50%;background:rgba(0,255,135,0.08);border:2px dashed rgba(0,255,135,0.3);display:flex;align-items:center;justify-content:center;font-size:2.5rem;color:var(--primary);}
+        .profile-photo-placeholder p{font-size:0.85rem;font-family:'Space Mono',monospace;color:rgba(0,255,135,0.5);text-align:center;padding:0 1rem;}
+        .photo-upload-hint{position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);background:var(--primary);color:var(--dark);padding:0.4rem 1rem;border-radius:20px;font-size:0.75rem;font-weight:700;font-family:'Space Mono',monospace;white-space:nowrap;}
+        .profile-corner-accent{position:absolute;width:40px;height:40px;border-color:var(--primary);border-style:solid;border-width:0;}
+        .profile-corner-accent.tl{top:-8px;left:-8px;border-top-width:3px;border-left-width:3px;border-radius:4px 0 0 0;}
+        .profile-corner-accent.tr{top:-8px;right:-8px;border-top-width:3px;border-right-width:3px;border-radius:0 4px 0 0;}
+        .profile-corner-accent.bl{bottom:-8px;left:-8px;border-bottom-width:3px;border-left-width:3px;border-radius:0 0 0 4px;}
+        .profile-corner-accent.br{bottom:-8px;right:-8px;border-bottom-width:3px;border-right-width:3px;border-radius:0 0 4px 0;}
+        .hero-3d-ring{position:absolute;width:420px;height:420px;border:1px solid rgba(0,255,135,0.15);border-radius:50%;animation:spin 20s linear infinite;}
+        .hero-3d-ring:nth-child(2){width:480px;height:480px;border-color:rgba(0,217,255,0.1);animation-duration:30s;animation-direction:reverse;}
+        @keyframes spin{to{transform:rotate(360deg);}}
+        .satisfaction-badge{position:absolute;bottom:-20px;left:-20px;background:rgba(10,15,28,0.95);backdrop-filter:blur(10px);padding:1rem 1.2rem;border-radius:10px;border:1px solid rgba(0,255,135,0.3);z-index:3;}
+        .satisfaction-badge h4{color:var(--text);font-size:0.85rem;margin-bottom:0.3rem;}
+        .satisfaction-badge p{color:var(--primary);font-size:0.78rem;display:flex;align-items:center;gap:0.5rem;font-family:'Space Mono',monospace;}
+        .exp-badge{position:absolute;top:-15px;right:-15px;background:rgba(10,15,28,0.95);backdrop-filter:blur(10px);padding:1rem 1.2rem;border-radius:10px;border:1px solid rgba(0,217,255,0.3);z-index:3;text-align:center;}
+        .exp-badge .big-num{font-size:2rem;font-weight:900;color:var(--secondary);font-family:'Space Mono',monospace;line-height:1;}
+        .exp-badge p{color:var(--text-muted);font-size:0.75rem;margin-top:0.2rem;}
 
-/* ── SCROLL CONTAINER ── */
-#scroll-wrap{
-  position:relative;z-index:2;
-  /* tall enough for camera animation */
-  height:800vh;
-}
+        /* MARQUEE */
+        .marquee-section{padding:1.5rem 0;background:rgba(0,255,135,0.04);border-top:1px solid rgba(0,255,135,0.1);border-bottom:1px solid rgba(0,255,135,0.1);overflow:hidden;}
+        .marquee-track{display:flex;gap:3rem;animation:marquee 25s linear infinite;width:max-content;}
+        .marquee-track:hover{animation-play-state:paused;}
+        @keyframes marquee{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+        .marquee-item{display:flex;align-items:center;gap:0.7rem;color:var(--text-muted);font-size:0.85rem;font-family:'Space Mono',monospace;white-space:nowrap;}
+        .marquee-item i{color:var(--primary);font-size:1rem;}
+        .marquee-dot{color:var(--primary);font-size:0.6rem;}
 
-/* ── STICKY SECTIONS ── */
-.sticky-section{
-  position:sticky;top:0;height:100vh;
-  display:flex;align-items:center;justify-content:center;
-  pointer-events:none;
-  overflow:hidden;
-}
+        /* SECTIONS */
+        section{padding:7rem 2rem;position:relative;}
+        .section-header{text-align:center;margin-bottom:4rem;}
+        .section-label{color:var(--primary);font-weight:700;font-size:0.75rem;text-transform:uppercase;letter-spacing:4px;margin-bottom:1rem;font-family:'Space Mono',monospace;}
+        .section-title{font-size:clamp(2rem,5vw,3.5rem);font-weight:900;margin-bottom:1rem;letter-spacing:-1.5px;}
+        .section-title span{color:var(--primary);}
+        .section-subtitle{color:var(--text-muted);font-size:1rem;max-width:600px;margin:0 auto;}
+        .section-divider{width:60px;height:3px;background:linear-gradient(90deg,var(--primary),var(--secondary));margin:1.5rem auto;}
 
-/* ── HERO TEXT ── */
-#hero-text{
-  position:fixed;top:0;left:0;width:100%;height:100vh;
-  display:flex;flex-direction:column;
-  align-items:flex-start;justify-content:center;
-  padding:0 8vw;
-  z-index:3;pointer-events:none;
-}
-.hero-eyebrow{
-  font-family:var(--font-m);font-size:.65rem;
-  letter-spacing:4px;text-transform:uppercase;
-  color:var(--gold);opacity:0;
-  display:flex;align-items:center;gap:1rem;
-  margin-bottom:1.5rem;
-}
-.eyebrow-pulse{
-  width:8px;height:8px;background:var(--teal);border-radius:50%;
-  box-shadow:0 0 12px var(--teal);
-  animation:pulse 2s ease-in-out infinite;
-}
-@keyframes pulse{0%,100%{box-shadow:0 0 8px var(--teal)}50%{box-shadow:0 0 24px var(--teal),0 0 48px rgba(0,229,200,.3)}}
+        /* ABOUT SECTION */
+        .about-section{background:rgba(10,15,28,0.6);}
+        .about-content{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1.2fr;gap:5rem;align-items:center;}
+        .about-image-block{position:relative;}
+        .about-photo-frame{width:100%;max-width:420px;height:480px;border-radius:20px;overflow:hidden;border:2px solid rgba(0,255,135,0.2);background:var(--card-bg);}
+        .about-photo-frame img{width:100%;height:100%;object-fit:cover;object-position:top;}
+        .about-photo-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;background:linear-gradient(160deg,#141824,#0d1220);}
+        .about-photo-placeholder .big-avatar{width:120px;height:120px;border-radius:50%;background:rgba(0,255,135,0.06);border:2px dashed rgba(0,255,135,0.25);display:flex;align-items:center;justify-content:center;font-size:3rem;color:rgba(0,255,135,0.4);}
+        .about-photo-placeholder p{color:rgba(0,255,135,0.4);font-size:0.8rem;font-family:'Space Mono',monospace;text-align:center;padding:0 2rem;}
+        .about-floating-badge{position:absolute;bottom:30px;right:-20px;background:rgba(10,15,28,0.95);backdrop-filter:blur(10px);padding:1.2rem 1.5rem;border-radius:12px;border:1px solid rgba(0,255,135,0.3);}
+        .about-floating-badge .badge-num{font-size:2.2rem;font-weight:900;color:var(--primary);font-family:'Space Mono',monospace;line-height:1;}
+        .about-floating-badge p{color:var(--text-muted);font-size:0.8rem;margin-top:0.3rem;}
+        .about-text h3{font-size:2rem;font-weight:900;margin-bottom:1.5rem;letter-spacing:-1px;}
+        .about-text h3 span{color:var(--primary);}
+        .about-text p{color:var(--text-muted);line-height:1.9;margin-bottom:1.2rem;font-size:0.95rem;}
+        .about-highlights{display:flex;flex-direction:column;gap:0.8rem;margin:2rem 0;}
+        .about-highlight{display:flex;align-items:center;gap:1rem;padding:0.9rem 1.2rem;background:var(--card-bg);border:1px solid rgba(255,255,255,0.06);border-radius:10px;transition:border-color 0.3s;}
+        .about-highlight:hover{border-color:rgba(0,255,135,0.25);}
+        .about-highlight i{color:var(--primary);font-size:1rem;width:20px;text-align:center;}
+        .about-highlight span{color:var(--text-muted);font-size:0.9rem;}
+        .about-highlight strong{color:var(--text);}
 
-.hero-title{
-  font-family:var(--font-d);
-  font-size:clamp(4rem,9vw,9rem);
-  font-weight:300;line-height:.95;
-  letter-spacing:-2px;opacity:0;
-}
-.hero-title .name-line{display:block}
-.hero-title .gold-word{
-  font-style:italic;
-  background:linear-gradient(120deg,var(--gold) 0%,var(--gold2) 40%,var(--gold) 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  background-size:200%;animation:shimmer 5s ease-in-out infinite;
-}
-@keyframes shimmer{0%,100%{background-position:0%}50%{background-position:100%}}
+        /* SERVICES GRID */
+        .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem;max-width:1400px;margin:0 auto;}
+        .service-card{background:var(--card-bg);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:2.5rem;transition:all 0.4s;position:relative;overflow:hidden;opacity:0;transform:translateY(40px);}
+        .service-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:2px;background:linear-gradient(90deg,var(--primary),var(--secondary));transform:scaleX(0);transition:transform 0.4s;}
+        .service-card:hover::before{transform:scaleX(1);}
+        .service-card:hover{transform:translateY(-8px)!important;border-color:rgba(0,255,135,0.2);box-shadow:0 20px 60px rgba(0,0,0,0.4);}
+        .service-icon{width:60px;height:60px;background:rgba(0,255,135,0.08);border:1px solid rgba(0,255,135,0.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;color:var(--primary);margin-bottom:1.5rem;transition:transform 0.3s;}
+        .service-card:hover .service-icon{transform:scale(1.1) rotate(5deg);}
+        .service-card h3{font-size:1.3rem;margin-bottom:0.8rem;font-weight:800;}
+        .service-card p{color:var(--text-muted);line-height:1.7;margin-bottom:1.5rem;font-size:0.95rem;}
+        .service-link{color:var(--primary);font-weight:700;display:inline-flex;align-items:center;gap:0.5rem;font-size:0.85rem;text-decoration:none;font-family:'Space Mono',monospace;letter-spacing:1px;transition:gap 0.3s;}
+        .service-link:hover{gap:1rem;}
 
-.hero-sub{
-  font-size:clamp(1rem,2vw,1.4rem);font-weight:300;
-  color:rgba(236,232,224,.5);
-  margin-top:1.5rem;opacity:0;
-  max-width:520px;line-height:1.7;
-}
+        /* TECH STACK */
+        .tech-section{background:rgba(10,15,28,0.6);}
+        .tech-content{max-width:1200px;margin:0 auto;}
+        .tech-categories{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem;}
+        .tech-category{background:var(--card-bg);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:2rem;opacity:0;transform:translateY(30px);transition:border-color 0.3s;}
+        .tech-category:hover{border-color:rgba(0,255,135,0.2);}
+        .tech-cat-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;}
+        .tech-cat-icon{width:44px;height:44px;background:rgba(0,255,135,0.08);border:1px solid rgba(0,255,135,0.2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:var(--primary);}
+        .tech-cat-header h4{font-size:1rem;font-weight:800;}
+        .tech-tags{display:flex;flex-wrap:wrap;gap:0.6rem;}
+        .tech-tag{padding:0.4rem 1rem;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;font-size:0.82rem;color:var(--text-muted);font-family:'Space Mono',monospace;transition:all 0.3s;cursor:default;}
+        .tech-tag:hover{background:rgba(0,255,135,0.08);border-color:rgba(0,255,135,0.3);color:var(--primary);}
 
-.hero-btns{
-  display:flex;gap:1.2rem;margin-top:3rem;
-  opacity:0;pointer-events:auto;
-}
-.btn-primary{
-  font-family:var(--font-m);font-size:.68rem;
-  letter-spacing:2.5px;text-transform:uppercase;
-  padding:.9rem 2.2rem;
-  background:linear-gradient(135deg,var(--gold),var(--gold2));
-  color:#0A0806;border:none;cursor:none;
-  text-decoration:none;display:inline-flex;
-  align-items:center;gap:.8rem;
-  transition:all .4s;font-weight:500;
-  box-shadow:0 8px 40px rgba(200,169,110,.2);
-}
-.btn-primary:hover{transform:translateY(-3px);box-shadow:0 16px 60px rgba(200,169,110,.4)}
-.btn-outline{
-  font-family:var(--font-m);font-size:.68rem;
-  letter-spacing:2.5px;text-transform:uppercase;
-  padding:.9rem 2.2rem;
-  background:transparent;
-  border:1px solid rgba(200,169,110,.35);
-  color:var(--gold);cursor:none;
-  text-decoration:none;display:inline-flex;
-  align-items:center;gap:.8rem;transition:all .4s;
-}
-.btn-outline:hover{background:rgba(200,169,110,.08);border-color:var(--gold)}
+        /* EXPERTISE */
+        .expertise{background:rgba(5,8,16,0.8);}
+        .expertise-content{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;}
+        .expertise-text{color:var(--text-muted);font-size:1rem;line-height:1.9;margin-bottom:2rem;}
+        .stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;}
+        .stat-card{background:var(--card-bg);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:2rem;text-align:center;transition:all 0.4s;opacity:0;transform:scale(0.9);}
+        .stat-card:hover{transform:translateY(-5px) scale(1)!important;border-color:rgba(0,255,135,0.3);}
+        .stat-number{font-size:2.8rem;font-weight:900;color:var(--primary);font-family:'Space Mono',monospace;margin-bottom:0.5rem;}
+        .stat-label{color:var(--text-muted);font-size:0.9rem;}
+        .expertise-features{display:grid;gap:1.2rem;}
+        .feature-item{background:var(--card-bg);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:1.2rem 1.5rem;display:flex;align-items:center;gap:1.2rem;transition:all 0.3s;opacity:0;transform:translateX(40px);}
+        .feature-item:hover{border-color:rgba(0,255,135,0.3);transform:translateX(8px)!important;}
+        .feature-icon{width:50px;height:50px;background:linear-gradient(135deg,rgba(0,255,135,0.15),rgba(0,217,255,0.15));border:1px solid rgba(0,255,135,0.2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:var(--primary);flex-shrink:0;}
+        .feature-text h4{font-size:1rem;margin-bottom:0.2rem;font-weight:700;}
+        .feature-text p{color:var(--text-muted);font-size:0.85rem;}
 
-.hero-photo-wrap{
-  position:fixed;right:8vw;top:50%;
-  transform:translateY(-50%);
-  z-index:3;pointer-events:none;
-  opacity:0;
-}
-.photo-clip{
-  width:min(300px,28vw);
-  aspect-ratio:3/4;
-  clip-path:polygon(30% 0%,70% 0%,100% 30%,100% 70%,70% 100%,30% 100%,0% 70%,0% 30%);
-  overflow:hidden;
-  position:relative;
-}
-.photo-clip img{width:100%;height:100%;object-fit:cover;object-position:top}
-.photo-glow{
-  position:absolute;inset:-40px;
-  background:radial-gradient(circle at 50% 50%,rgba(200,169,110,.15),transparent 70%);
-  pointer-events:none;
-}
-.photo-orbit{
-  position:absolute;inset:-30px;
-  border:1px solid rgba(200,169,110,.2);
-  clip-path:polygon(30% 0%,70% 0%,100% 30%,100% 70%,70% 100%,30% 100%,0% 70%,0% 30%);
-  animation:orbit-spin 12s linear infinite;
-}
-@keyframes orbit-spin{to{transform:rotate(360deg)}}
+        /* HOW I WORK PROCESS */
+        .process-section{}
+        .process-steps{max-width:1100px;margin:0 auto;position:relative;}
+        .process-steps::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,rgba(0,255,135,0.3),rgba(0,255,135,0.3),transparent);transform:translateX(-50%);}
+        .process-step{display:grid;grid-template-columns:1fr 60px 1fr;gap:2rem;align-items:center;margin-bottom:3rem;opacity:0;}
+        .process-step:nth-child(odd) .step-content{order:1;text-align:right;}
+        .process-step:nth-child(odd) .step-connector{order:2;}
+        .process-step:nth-child(odd) .step-empty{order:3;}
+        .process-step:nth-child(even) .step-empty{order:1;}
+        .process-step:nth-child(even) .step-connector{order:2;}
+        .process-step:nth-child(even) .step-content{order:3;text-align:left;}
+        .step-connector{display:flex;align-items:center;justify-content:center;flex-direction:column;position:relative;}
+        .step-num{width:56px;height:56px;border-radius:50%;background:var(--card-bg);border:2px solid var(--primary);display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-weight:700;font-size:1rem;color:var(--primary);position:relative;z-index:1;}
+        .step-content{background:var(--card-bg);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:1.8rem;transition:border-color 0.3s;}
+        .step-content:hover{border-color:rgba(0,255,135,0.25);}
+        .step-step-label{font-family:'Space Mono',monospace;font-size:0.72rem;color:var(--primary);letter-spacing:2px;text-transform:uppercase;margin-bottom:0.5rem;}
+        .step-content h4{font-size:1.2rem;font-weight:800;margin-bottom:0.6rem;}
+        .step-content p{color:var(--text-muted);font-size:0.9rem;line-height:1.7;}
+        .step-content ul{list-style:none;margin-top:0.8rem;display:flex;flex-wrap:wrap;gap:0.5rem;}
+        .step-content ul li{background:rgba(0,255,135,0.06);border:1px solid rgba(0,255,135,0.15);padding:0.3rem 0.8rem;border-radius:4px;font-size:0.78rem;color:var(--primary);font-family:'Space Mono',monospace;}
+        .step-empty{}
 
-.photo-badge{
-  position:absolute;bottom:-20px;left:-30px;
-  background:var(--card);border:1px solid var(--border);
-  padding:1rem 1.3rem;backdrop-filter:blur(20px);
-}
-.badge-val{
-  font-family:var(--font-d);font-size:2rem;
-  font-weight:700;color:var(--gold);line-height:1;
-}
-.badge-lbl{
-  font-family:var(--font-m);font-size:.6rem;
-  letter-spacing:2px;text-transform:uppercase;
-  color:var(--muted);margin-top:.3rem;
-}
+        /* PORTFOLIO */
+        .portfolio-filters{display:flex;justify-content:center;gap:1rem;margin-bottom:3rem;flex-wrap:wrap;}
+        .filter-btn{padding:0.6rem 1.6rem;background:transparent;border:1px solid rgba(255,255,255,0.1);border-radius:4px;color:var(--text-muted);cursor:pointer;transition:all 0.3s;font-weight:600;font-family:'Space Mono',monospace;font-size:0.8rem;letter-spacing:1px;}
+        .filter-btn:hover,.filter-btn.active{background:var(--primary);color:var(--dark);border-color:var(--primary);}
+        .portfolio-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.5rem;max-width:1400px;margin:0 auto;}
+        .project-card{background:var(--card-bg);border:1px solid rgba(255,255,255,0.06);border-radius:16px;overflow:hidden;transition:all 0.4s;opacity:0;transform:translateY(30px);}
+        .project-card.hidden{display:none;}
+        .project-card:hover{transform:translateY(-8px)!important;border-color:rgba(0,255,135,0.2);box-shadow:0 25px 70px rgba(0,0,0,0.5);}
+        .project-image{width:100%;height:220px;position:relative;overflow:hidden;background:rgba(20,24,36,1);}
+        .project-image img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s;}
+        .project-card:hover .project-image img{transform:scale(1.08);}
+        .project-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(5,8,16,0.9);display:flex;align-items:center;justify-content:center;gap:1rem;opacity:0;transition:opacity 0.3s;}
+        .project-card:hover .project-overlay{opacity:1;}
+        .overlay-btn{padding:0.65rem 1.3rem;background:var(--primary);color:var(--dark);border:none;border-radius:4px;font-weight:700;cursor:pointer;transition:all 0.3s;text-decoration:none;display:inline-flex;align-items:center;gap:0.5rem;font-size:0.85rem;font-family:'Space Mono',monospace;}
+        .overlay-btn:hover{transform:scale(1.05);}
+        .project-content{padding:1.5rem;}
+        .project-category{display:inline-block;padding:0.35rem 0.9rem;background:rgba(0,255,135,0.07);border:1px solid rgba(0,255,135,0.2);border-radius:4px;font-size:0.78rem;color:var(--primary);margin-bottom:0.8rem;font-weight:700;font-family:'Space Mono',monospace;letter-spacing:0.5px;}
+        .project-content h3{color:var(--text);margin-bottom:0.6rem;font-size:1.15rem;font-weight:800;}
+        .project-content p{color:var(--text-muted);line-height:1.6;margin-bottom:1rem;font-size:0.9rem;}
+        .tech-stack{display:flex;flex-wrap:wrap;gap:0.5rem;}
+        .tech-badge{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);padding:0.3rem 0.8rem;border-radius:4px;font-size:0.78rem;color:var(--text-muted);font-family:'Space Mono',monospace;transition:all 0.3s;}
+        .tech-badge:hover{background:rgba(0,255,135,0.1);border-color:rgba(0,255,135,0.3);color:var(--primary);}
 
-/* scroll indicator */
-.scroll-ind{
-  position:fixed;bottom:2.5rem;left:50%;transform:translateX(-50%);
-  z-index:5;display:flex;flex-direction:column;
-  align-items:center;gap:.6rem;opacity:0;
-}
-.scroll-ind span{font-family:var(--font-m);font-size:.6rem;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
-.scroll-line{width:1px;height:60px;background:linear-gradient(to bottom,var(--gold),transparent);position:relative;overflow:hidden}
-.scroll-line::after{content:'';position:absolute;top:-100%;width:100%;height:100%;background:linear-gradient(to bottom,transparent,var(--gold2),transparent);animation:scanline 2s ease-in-out infinite}
-@keyframes scanline{to{top:200%}}
+        /* PRICING */
+        .pricing-section{background:rgba(10,15,28,0.7);}
+        .pricing-toggle{display:flex;align-items:center;justify-content:center;gap:1rem;margin-bottom:3rem;}
+        .pricing-toggle span{color:var(--text-muted);font-size:0.9rem;font-family:'Space Mono',monospace;}
+        .pricing-toggle span.active{color:var(--primary);}
+        .toggle-switch{width:52px;height:28px;background:rgba(0,255,135,0.15);border:1px solid rgba(0,255,135,0.3);border-radius:14px;cursor:pointer;position:relative;transition:background 0.3s;}
+        .toggle-switch .knob{width:20px;height:20px;background:var(--primary);border-radius:50%;position:absolute;top:3px;left:4px;transition:left 0.3s;}
+        .toggle-switch.annual .knob{left:28px;}
+        .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;max-width:1100px;margin:0 auto;}
+        .pricing-card{background:var(--card-bg);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:2.5rem;position:relative;opacity:0;transform:translateY(40px);transition:all 0.4s;}
+        .pricing-card:hover{border-color:rgba(0,255,135,0.2);transform:translateY(-8px)!important;}
+        .pricing-card.popular{border:2px solid rgba(0,255,135,0.4);background:linear-gradient(135deg,rgba(0,255,135,0.05),rgba(0,217,255,0.03));}
+        .popular-badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,var(--primary),var(--secondary));color:var(--dark);padding:0.4rem 1.5rem;border-radius:20px;font-size:0.78rem;font-weight:700;font-family:'Space Mono',monospace;white-space:nowrap;}
+        .pricing-tier{color:var(--text-muted);font-size:0.78rem;letter-spacing:3px;text-transform:uppercase;font-family:'Space Mono',monospace;margin-bottom:0.8rem;}
+        .pricing-price{font-size:3rem;font-weight:900;color:var(--text);font-family:'Space Mono',monospace;margin-bottom:0.3rem;line-height:1;}
+        .pricing-price span{font-size:1.2rem;color:var(--text-muted);}
+        .pricing-period{color:var(--text-muted);font-size:0.85rem;margin-bottom:1rem;}
+        .pricing-desc{color:var(--text-muted);font-size:0.88rem;margin-bottom:1.8rem;line-height:1.6;padding-bottom:1.5rem;border-bottom:1px solid rgba(255,255,255,0.06);}
+        .pricing-features{list-style:none;display:flex;flex-direction:column;gap:0.8rem;margin-bottom:2rem;}
+        .pricing-features li{display:flex;align-items:flex-start;gap:0.8rem;font-size:0.88rem;color:var(--text-muted);}
+        .pricing-features li i{color:var(--primary);margin-top:2px;flex-shrink:0;}
+        .pricing-features li.unavailable{opacity:0.4;}
+        .pricing-features li.unavailable i{color:var(--text-muted);}
+        .pricing-btn{width:100%;padding:0.9rem;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-family:'Space Mono',monospace;font-size:0.85rem;letter-spacing:1px;transition:all 0.3s;}
+        .pricing-btn-outline{background:transparent;border:2px solid rgba(0,255,135,0.3);color:var(--primary);}
+        .pricing-btn-outline:hover{background:rgba(0,255,135,0.08);}
+        .pricing-btn-filled{background:var(--primary);color:var(--dark);}
+        .pricing-btn-filled:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,255,135,0.35);}
 
-/* ── FIXED SECTION OVERLAYS ── */
-.section-overlay{
-  position:fixed;top:0;left:0;width:100%;height:100vh;
-  display:flex;align-items:center;
-  padding:0 8vw;z-index:3;
-  pointer-events:none;opacity:0;
-  transition:opacity .5s;
-}
-.section-overlay.visible{opacity:1}
+        /* TESTIMONIALS */
+        .testimonials-section{background:rgba(5,8,16,0.8);}
+        .testimonials-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.5rem;max-width:1200px;margin:0 auto;}
+        .testimonial-card{background:var(--card-bg);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:2rem;position:relative;opacity:0;transform:translateY(30px);transition:all 0.4s;}
+        .testimonial-card:hover{border-color:rgba(0,255,135,0.2);transform:translateY(-5px)!important;}
+        .testimonial-card::before{content:'❝';position:absolute;top:1.2rem;right:1.5rem;font-size:3rem;color:rgba(0,255,135,0.08);font-family:Georgia,serif;line-height:1;}
+        .stars{display:flex;gap:4px;margin-bottom:1rem;}
+        .stars i{color:#FFD700;font-size:0.9rem;}
+        .testimonial-text{color:var(--text-muted);font-size:0.93rem;line-height:1.8;margin-bottom:1.5rem;font-style:italic;}
+        .testimonial-author{display:flex;align-items:center;gap:1rem;}
+        .author-avatar{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,rgba(0,255,135,0.2),rgba(0,217,255,0.2));border:2px solid rgba(0,255,135,0.2);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;color:var(--primary);flex-shrink:0;font-family:'Space Mono',monospace;}
+        .author-info h5{font-size:0.95rem;font-weight:800;margin-bottom:0.2rem;}
+        .author-info p{color:var(--text-muted);font-size:0.8rem;}
+        .author-verified{display:inline-flex;align-items:center;gap:0.3rem;color:var(--secondary);font-size:0.72rem;font-family:'Space Mono',monospace;margin-top:0.2rem;}
 
-.sec-label{
-  font-family:var(--font-m);font-size:.6rem;
-  letter-spacing:4px;text-transform:uppercase;
-  color:var(--gold);margin-bottom:1rem;opacity:.7;
-}
-.sec-big-title{
-  font-family:var(--font-d);
-  font-size:clamp(2.5rem,5vw,5rem);
-  font-weight:300;line-height:1;letter-spacing:-1px;
-  margin-bottom:1.5rem;
-}
-.sec-big-title em{font-style:italic;color:var(--gold)}
+        /* CONTACT */
+        .contact{background:rgba(10,15,28,0.6);}
+        .contact-container{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:4rem;}
+        .contact-info h3{font-size:2rem;margin-bottom:1rem;font-weight:900;letter-spacing:-1px;}
+        .contact-info h3 span{color:var(--primary);}
+        .contact-info>p{color:var(--text-muted);margin-bottom:2rem;line-height:1.8;font-size:0.95rem;}
+        .contact-details{display:flex;flex-direction:column;gap:1rem;}
+        .contact-item{display:flex;align-items:center;gap:1rem;padding:1rem 1.2rem;background:var(--card-bg);border:1px solid rgba(255,255,255,0.06);border-radius:12px;transition:all 0.3s;}
+        .contact-item:hover{border-color:rgba(0,255,135,0.3);transform:translateX(8px);}
+        .contact-icon{width:50px;height:50px;background:rgba(0,255,135,0.1);border:1px solid rgba(0,255,135,0.2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:var(--primary);flex-shrink:0;}
+        .contact-text h4{color:var(--text);margin-bottom:0.2rem;font-size:0.9rem;}
+        .contact-text p{color:var(--text-muted);margin:0;font-size:0.9rem;}
+        .contact-form{background:var(--card-bg);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:2.5rem;}
+        .form-group{margin-bottom:1.3rem;}
+        .form-group label{display:block;color:var(--text-muted);margin-bottom:0.5rem;font-weight:600;font-size:0.8rem;text-transform:uppercase;letter-spacing:1px;font-family:'Space Mono',monospace;}
+        .form-group input,.form-group textarea,.form-group select{width:100%;padding:0.9rem 1rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text);font-size:0.95rem;transition:all 0.3s;font-family:'Syne',sans-serif;}
+        .form-group input:focus,.form-group textarea:focus,.form-group select:focus{outline:none;border-color:var(--primary);background:rgba(0,255,135,0.03);box-shadow:0 0 0 3px rgba(0,255,135,0.08);}
+        .form-group select option{background:var(--dark);}
+        .form-group textarea{resize:vertical;min-height:140px;}
+        .submit-btn{width:100%;padding:1.1rem;background:var(--primary);color:var(--dark);border:none;border-radius:8px;font-size:0.9rem;font-weight:700;cursor:pointer;transition:all 0.3s;display:flex;align-items:center;justify-content:center;gap:0.8rem;font-family:'Space Mono',monospace;letter-spacing:1px;}
+        .submit-btn:hover{transform:translateY(-3px);box-shadow:0 12px 35px rgba(0,255,135,0.4);}
 
-/* ── NAV ── */
-#nav{
-  position:fixed;top:0;width:100%;z-index:100;
-  padding:1.8rem 0;transition:all .5s;
-}
-#nav.dark{
-  background:rgba(3,4,7,.85);
-  backdrop-filter:blur(30px);
-  border-bottom:1px solid var(--border);
-  padding:1.1rem 0;
-}
-.nav-inner{
-  max-width:1400px;margin:0 auto;
-  padding:0 3rem;
-  display:flex;justify-content:space-between;align-items:center;
-}
-.logo{
-  font-family:var(--font-d);font-size:1.5rem;
-  font-weight:600;color:var(--gold);text-decoration:none;letter-spacing:1px;
-}
-.logo span{font-weight:300;font-style:italic;color:var(--text);opacity:.6}
-.nav-links{display:flex;gap:2.5rem;list-style:none}
-.nav-links a{
-  font-family:var(--font-m);font-size:.68rem;
-  letter-spacing:2px;text-transform:uppercase;
-  color:rgba(236,232,224,.5);text-decoration:none;
-  transition:color .3s;position:relative;
-}
-.nav-links a:hover{color:var(--gold)}
-.nav-links a::after{
-  content:'';position:absolute;bottom:-4px;left:0;
-  width:0;height:1px;background:var(--gold);transition:width .3s;
-}
-.nav-links a:hover::after{width:100%}
-.nav-hire{
-  font-family:var(--font-m);font-size:.65rem;
-  letter-spacing:2px;text-transform:uppercase;
-  padding:.65rem 1.6rem;border:1px solid var(--gold);
-  background:transparent;color:var(--gold);cursor:none;
-  transition:all .35s;position:relative;overflow:hidden;
-}
-.nav-hire::before{
-  content:'';position:absolute;top:0;left:-100%;
-  width:100%;height:100%;
-  background:var(--gold);transition:left .35s cubic-bezier(.4,0,.2,1);z-index:-1;
-}
-.nav-hire:hover{color:var(--void)}.nav-hire:hover::before{left:0}
-.menu-btn{display:none;background:none;border:none;color:var(--gold);font-size:1.4rem;cursor:none}
+        /* FAQ */
+        .faq-section{}
+        .faq-grid{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:1rem;}
+        .faq-item{background:var(--card-bg);border:1px solid rgba(255,255,255,0.06);border-radius:12px;overflow:hidden;transition:border-color 0.3s;opacity:0;transform:translateY(20px);}
+        .faq-item:hover{border-color:rgba(0,255,135,0.2);}
+        .faq-question{padding:1.3rem 1.5rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;gap:1rem;}
+        .faq-question h4{font-size:1rem;font-weight:700;}
+        .faq-icon{width:28px;height:28px;border-radius:50%;background:rgba(0,255,135,0.08);border:1px solid rgba(0,255,135,0.2);display:flex;align-items:center;justify-content:center;color:var(--primary);font-size:0.8rem;flex-shrink:0;transition:transform 0.3s;}
+        .faq-item.open .faq-icon{transform:rotate(45deg);}
+        .faq-answer{max-height:0;overflow:hidden;transition:max-height 0.4s ease,padding 0.3s;}
+        .faq-answer p{padding:0 1.5rem 1.3rem;color:var(--text-muted);font-size:0.92rem;line-height:1.8;}
+        .faq-item.open .faq-answer{max-height:300px;}
 
-/* ── HTML SECTIONS (below 3D) ── */
-#html-content{
-  position:relative;z-index:10;
-  background:var(--void);
-  margin-top:100vh;/* after full scroll-wrap */
-}
+        /* CTA BANNER */
+        .cta-banner{background:linear-gradient(135deg,rgba(0,255,135,0.06) 0%,rgba(0,217,255,0.04) 100%);border-top:1px solid rgba(0,255,135,0.1);border-bottom:1px solid rgba(0,255,135,0.1);padding:6rem 2rem;}
+        .cta-banner-inner{max-width:800px;margin:0 auto;text-align:center;}
+        .cta-banner h2{font-size:clamp(2rem,5vw,3.5rem);font-weight:900;letter-spacing:-1.5px;margin-bottom:1rem;}
+        .cta-banner h2 span{color:var(--primary);}
+        .cta-banner p{color:var(--text-muted);font-size:1rem;margin-bottom:2.5rem;line-height:1.8;}
+        .cta-banner-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
 
-/* services */
-.section-wrap{padding:7rem 3rem;max-width:1400px;margin:0 auto}
+        /* FOOTER */
+        footer{background:var(--darker);border-top:1px solid rgba(255,255,255,0.06);padding:4rem 2rem 2rem;}
+        .footer-content{max-width:1400px;margin:0 auto;}
+        .footer-main{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem;padding-bottom:3rem;border-bottom:1px solid rgba(255,255,255,0.06);}
+        .footer-about h3{font-size:1.6rem;color:var(--primary);margin-bottom:1rem;font-family:'Space Mono',monospace;}
+        .footer-about p{color:var(--text-muted);line-height:1.8;margin-bottom:1.5rem;font-size:0.9rem;}
+        .footer-social{display:flex;gap:0.8rem;flex-wrap:wrap;}
+        .footer-social a{width:42px;height:42px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:1rem;transition:all 0.3s;}
+        .footer-social a:hover{background:var(--primary);color:var(--dark);border-color:var(--primary);transform:translateY(-4px);}
+        .footer-section h4{color:var(--text);font-size:0.9rem;margin-bottom:1.5rem;font-family:'Space Mono',monospace;letter-spacing:1px;text-transform:uppercase;}
+        .footer-links{list-style:none;}
+        .footer-links li{margin-bottom:0.7rem;}
+        .footer-links a{color:var(--text-muted);text-decoration:none;transition:all 0.3s;display:inline-block;font-size:0.9rem;}
+        .footer-links a:hover{color:var(--primary);transform:translateX(5px);}
+        .footer-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;color:var(--text-muted);font-size:0.85rem;}
 
-.section-head{text-align:center;margin-bottom:5rem}
-.s-num{font-family:var(--font-m);font-size:.6rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);opacity:.7;margin-bottom:.5rem}
-.s-title{font-family:var(--font-d);font-size:clamp(2.5rem,5vw,4.5rem);font-weight:300;line-height:1;letter-spacing:-1px}
-.s-title em{font-style:italic;color:var(--gold)}
-.gold-rule{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:1.5rem auto}
-.s-sub{color:var(--muted);font-size:.9rem;max-width:550px;margin:.8rem auto 0;line-height:1.8;font-weight:300}
+        /* SUCCESS MSG */
+        .success-message{position:fixed;top:100px;right:20px;background:var(--card-bg);border:1px solid var(--primary);color:var(--primary);padding:1rem 1.5rem;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.5);transform:translateX(400px);transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);z-index:2000;display:flex;align-items:center;gap:0.8rem;font-weight:600;font-family:'Space Mono',monospace;font-size:0.85rem;}
+        .success-message.show{transform:translateX(0);}
 
-/* Services grid */
-.srv-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-  gap:1px;
-  border:1px solid var(--border);
-  background:var(--border);
-}
-.srv{
-  background:var(--card);padding:2.5rem;
-  position:relative;overflow:hidden;
-  transition:background .4s;
-  opacity:0;transform:translateY(25px);
-}
-.srv::before{content:'';position:absolute;top:0;left:0;width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);transform:scaleX(0);transition:transform .5s}
-.srv:hover{background:#111825}
-.srv:hover::before{transform:scaleX(1)}
-.srv-n{
-  position:absolute;top:1.5rem;right:1.5rem;
-  font-family:var(--font-d);font-size:4.5rem;font-weight:700;
-  line-height:1;color:rgba(200,169,110,.06);
-  transition:color .4s;pointer-events:none;
-}
-.srv:hover .srv-n{color:rgba(200,169,110,.12)}
-.srv-ico{
-  width:52px;height:52px;
-  border:1px solid var(--border);
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.3rem;color:var(--gold);margin-bottom:2rem;
-  transition:border-color .4s,box-shadow .4s;
-}
-.srv:hover .srv-ico{border-color:var(--gold);box-shadow:0 0 20px rgba(200,169,110,.15)}
-.srv h3{font-family:var(--font-d);font-size:1.4rem;font-weight:600;margin-bottom:.8rem;transition:color .3s}
-.srv:hover h3{color:var(--gold)}
-.srv p{color:var(--muted);font-size:.85rem;line-height:1.8;font-weight:300;margin-bottom:1.5rem}
-.srv-link{font-family:var(--font-m);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;opacity:.6;transition:opacity .3s,gap .3s}
-.srv-link:hover{opacity:1;gap:.9rem}
-
-/* Expertise */
-.exp-bg{background:var(--deep)}
-.exp-grid{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:start}
-.exp-p{color:rgba(236,232,224,.5);font-size:1rem;line-height:2;font-weight:300;margin-bottom:3rem}
-.exp-p strong{color:var(--text);font-weight:500}
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--border)}
-.stat{
-  padding:2rem 1.2rem;text-align:center;
-  border-right:1px solid var(--border);
-  position:relative;overflow:hidden;
-  opacity:0;transform:translateY(15px);
-}
-.stat::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);transform:scaleX(0);transition:transform .4s}
-.stat:hover::after{transform:scaleX(1)}
-.stat-n{font-family:var(--font-d);font-size:2.5rem;font-weight:700;color:var(--gold)}
-.stat-l{font-family:var(--font-m);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:.3rem}
-.feat-list{display:flex;flex-direction:column;gap:1px}
-.feat{
-  display:flex;align-items:center;gap:1.3rem;
-  padding:1.3rem 1.5rem;background:var(--card);
-  border:1px solid transparent;
-  transition:all .35s;
-  opacity:0;transform:translateX(25px);
-}
-.feat:hover{border-color:var(--border);background:#111825;transform:translateX(6px)!important}
-.feat-ico{width:42px;height:42px;flex-shrink:0;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--gold);transition:all .4s}
-.feat:hover .feat-ico{background:rgba(200,169,110,.08);border-color:var(--gold)}
-.feat h4{font-size:.9rem;font-weight:600;margin-bottom:.2rem}
-.feat p{color:var(--muted);font-size:.8rem;font-weight:300}
-
-/* Portfolio */
-.filt-row{display:flex;justify-content:center;gap:0;margin-bottom:4rem;border:1px solid var(--border);max-width:480px;margin-left:auto;margin-right:auto;margin-bottom:4rem}
-.f-btn{
-  flex:1;padding:.75rem .5rem;background:transparent;
-  border:none;border-right:1px solid var(--border);
-  color:var(--muted);cursor:none;
-  font-family:var(--font-m);font-size:.6rem;letter-spacing:2px;
-  text-transform:uppercase;transition:all .3s;
-}
-.f-btn:last-child{border-right:none}
-.f-btn:hover,.f-btn.active{background:rgba(200,169,110,.08);color:var(--gold)}
-
-.port-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(360px,1fr));
-  gap:1px;background:var(--border);
-  border:1px solid var(--border);
-}
-.proj{background:var(--card);overflow:hidden;transition:background .4s;opacity:0;transform:scale(.97)}
-.proj.hidden{display:none}
-.proj:hover{background:#111825}
-.proj-img{width:100%;height:200px;overflow:hidden;position:relative;background:var(--deep)}
-.proj-img img{width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.4,0,.2,1),filter .5s;filter:saturate(.75) brightness(.9)}
-.proj:hover .proj-img img{transform:scale(1.06);filter:saturate(1) brightness(1)}
-.proj-ov{
-  position:absolute;inset:0;
-  background:linear-gradient(to top,rgba(3,4,7,.95) 0%,transparent 55%);
-  display:flex;align-items:flex-end;padding:1.5rem;gap:.8rem;
-  opacity:0;transition:opacity .4s;
-}
-.proj:hover .proj-ov{opacity:1}
-.ov-a{
-  font-family:var(--font-m);font-size:.6rem;letter-spacing:1.5px;text-transform:uppercase;
-  padding:.55rem 1.1rem;border:1px solid rgba(200,169,110,.4);
-  background:rgba(200,169,110,.08);color:var(--gold);text-decoration:none;
-  display:inline-flex;align-items:center;gap:.4rem;transition:all .3s;
-}
-.ov-a:hover{background:var(--gold);color:var(--void)}
-.proj-body{padding:1.6rem 1.8rem}
-.proj-cat{font-family:var(--font-m);font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);opacity:.7;margin-bottom:.6rem}
-.proj-body h3{font-family:var(--font-d);font-size:1.3rem;font-weight:600;margin-bottom:.6rem;transition:color .3s}
-.proj:hover .proj-body h3{color:var(--gold)}
-.proj-body p{color:var(--muted);font-size:.83rem;line-height:1.7;margin-bottom:1rem;font-weight:300}
-.tech-tags{display:flex;flex-wrap:wrap;gap:.4rem}
-.tt{font-family:var(--font-m);font-size:.58rem;letter-spacing:1px;padding:.28rem .7rem;border:1px solid rgba(255,255,255,.05);color:rgba(236,232,224,.3);transition:all .3s}
-.proj:hover .tt{border-color:rgba(200,169,110,.2);color:rgba(200,169,110,.65)}
-
-/* Contact */
-.contact-bg{background:var(--deep)}
-.contact-grid{display:grid;grid-template-columns:1fr 1.3fr;gap:5rem}
-.contact-left h3{font-family:var(--font-d);font-size:clamp(1.8rem,4vw,3rem);font-weight:300;line-height:1.2;margin-bottom:1.3rem}
-.contact-left h3 em{font-style:italic;color:var(--gold)}
-.contact-left p{color:var(--muted);font-size:.88rem;line-height:1.9;margin-bottom:2.5rem;font-weight:300}
-.c-items{display:flex;flex-direction:column;gap:1px}
-.c-item{display:flex;align-items:center;gap:1.3rem;padding:1.1rem 1.3rem;background:var(--card);border:1px solid transparent;transition:all .3s}
-.c-item:hover{border-color:var(--border);transform:translateX(5px)}
-.c-ico{width:42px;height:42px;flex-shrink:0;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.95rem;color:var(--gold)}
-.c-txt h4{font-family:var(--font-m);font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.2rem}
-.c-txt p{color:var(--muted);font-size:.85rem;font-weight:300}
-.form-box{background:var(--card);border:1px solid var(--border);padding:2.5rem}
-.fg{margin-bottom:1.3rem}
-.fg label{display:block;font-family:var(--font-m);font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem}
-.fg input,.fg textarea{
-  width:100%;padding:.85rem 1rem;
-  background:rgba(255,255,255,.02);
-  border:none;border-bottom:1px solid rgba(200,169,110,.15);
-  color:var(--text);font-family:var(--font-b);font-size:.9rem;font-weight:300;
-  transition:border-color .3s;outline:none;
-}
-.fg input:focus,.fg textarea:focus{border-bottom-color:var(--gold);background:rgba(200,169,110,.02)}
-.fg textarea{resize:vertical;min-height:120px}
-.sub-btn{
-  width:100%;padding:1rem;
-  background:linear-gradient(135deg,var(--gold),var(--gold2));
-  border:none;color:#0A0806;
-  font-family:var(--font-m);font-size:.68rem;letter-spacing:2px;text-transform:uppercase;
-  cursor:none;font-weight:500;
-  display:flex;align-items:center;justify-content:center;gap:.8rem;
-  transition:all .4s;box-shadow:0 8px 30px rgba(200,169,110,.15);
-}
-.sub-btn:hover{transform:translateY(-2px);box-shadow:0 16px 50px rgba(200,169,110,.35)}
-
-/* Footer */
-footer{background:var(--void);border-top:1px solid var(--border);padding:4rem 3rem 2.5rem}
-.foot-grid{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:2.2fr 1fr 1fr 1fr;gap:3.5rem;margin-bottom:3rem;padding-bottom:3rem;border-bottom:1px solid var(--border)}
-.fa-brand h3{font-family:var(--font-d);font-size:1.7rem;color:var(--gold);margin-bottom:1rem;font-weight:600}
-.fa-brand p{color:var(--muted);font-size:.83rem;line-height:1.8;margin-bottom:1.5rem;font-weight:300}
-.socials{display:flex;gap:.7rem;flex-wrap:wrap}
-.socials a{width:38px;height:38px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.85rem;text-decoration:none;transition:all .3s}
-.socials a:hover{border-color:var(--gold);color:var(--gold);background:rgba(200,169,110,.06);transform:translateY(-3px)}
-.fc h4{font-family:var(--font-m);font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--text);margin-bottom:1.3rem}
-.fl{list-style:none}.fl li{margin-bottom:.6rem}
-.fl a{color:var(--muted);text-decoration:none;font-size:.83rem;font-weight:300;transition:all .3s;display:inline-block}
-.fl a:hover{color:var(--gold);transform:translateX(4px)}
-.foot-bot{max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-family:var(--font-m);font-size:.68rem;letter-spacing:1px;flex-wrap:wrap;gap:1rem}
-
-/* Toast */
-.toast{
-  position:fixed;top:5rem;right:2rem;
-  background:var(--card);border:1px solid var(--gold);
-  padding:.9rem 1.4rem;z-index:9999;
-  display:flex;align-items:center;gap:.7rem;
-  font-family:var(--font-m);font-size:.65rem;letter-spacing:1.5px;text-transform:uppercase;
-  color:var(--gold);transform:translateX(300px);opacity:0;
-  transition:all .5s cubic-bezier(.175,.885,.32,1.275);
-}
-.toast.show{transform:translateX(0);opacity:1}
-
-/* Progress */
-#prog{position:fixed;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,var(--gold),var(--teal));z-index:9999;transition:width .05s}
-
-/* Responsive */
-@media(max-width:1024px){
-  .exp-grid,.contact-grid{grid-template-columns:1fr;gap:3rem}
-  .stats-row{grid-template-columns:repeat(2,1fr)}
-  .foot-grid{grid-template-columns:1fr 1fr}
-  .hero-title{font-size:clamp(2.8rem,10vw,5.5rem)}
-  .nav-links{display:none}
-  .menu-btn{display:block}
-
-  /* On mobile: switch photo from fixed-right to inline centered block */
-  .hero-photo-wrap{
-    position:relative !important;
-    right:auto !important; top:auto !important;
-    transform:none !important;
-    display:flex !important;
-    justify-content:center;
-    margin:2rem auto 0;
-    width:100%;
-    opacity:1 !important; /* override GSAP initial opacity:0 on load */
-  }
-  .photo-clip{
-    width:min(220px,55vw);
-  }
-  /* Badge shifts to bottom-right of photo on mobile */
-  .photo-badge{
-    bottom:-15px;left:auto;right:-10px;
-    padding:.7rem 1rem;
-  }
-  .badge-val{font-size:1.5rem}
-
-  /* Hero text becomes full-width centered column on mobile */
-  #hero-text{
-    align-items:center;
-    text-align:center;
-    padding:0 5vw;
-    flex-direction:column;
-    justify-content:flex-start;
-    padding-top:clamp(5rem,15vw,8rem);
-    height:auto;
-    min-height:100vh;
-  }
-  .hero-eyebrow{justify-content:center}
-  .hero-sub{text-align:center;margin-left:auto;margin-right:auto}
-  .hero-btns{justify-content:center}
-}
-
-@media(max-width:640px){
-  .section-wrap{padding:5rem 1.5rem}
-  #nav .nav-inner{padding:0 1.5rem}
-  .port-grid,.srv-grid{grid-template-columns:1fr}
-  .foot-grid{grid-template-columns:1fr}
-  .hero-btns{flex-direction:column;align-items:center}
-  .photo-clip{width:min(180px,50vw)}
-  .hero-title{font-size:clamp(2.5rem,13vw,4.5rem)}
-  .sec-big-title{font-size:clamp(2rem,9vw,3.5rem)}
-}
-</style>
+        /* RESPONSIVE */
+        @media(max-width:1024px){
+            .hero-container,.contact-container,.expertise-content,.about-content{grid-template-columns:1fr;text-align:center;}
+            .hero-image{order:-1;justify-content:center;}
+            .cta-buttons{justify-content:center;}
+            .profile-photo-wrapper{width:280px;height:280px;}
+            .hero-3d-ring{display:none;}
+            .about-content{text-align:left;}
+            .pricing-grid{grid-template-columns:1fr;}
+            .process-steps::before{display:none;}
+            .process-step{grid-template-columns:1fr;gap:0.5rem;}
+            .process-step:nth-child(odd) .step-content,.process-step:nth-child(even) .step-content{order:2;text-align:left;}
+            .process-step:nth-child(odd) .step-connector,.process-step:nth-child(even) .step-connector{order:1;flex-direction:row;justify-content:flex-start;gap:1rem;}
+            .step-empty{display:none;}
+            .footer-main{grid-template-columns:1fr;}
+            .nav-links{position:fixed;top:70px;left:-100%;width:100%;height:calc(100vh - 70px);background:rgba(5,8,16,0.98);backdrop-filter:blur(20px);flex-direction:column;align-items:center;justify-content:center;gap:2rem;transition:left 0.4s;}
+            .nav-links.active{left:0;}
+            .menu-toggle{display:block;}
+            .about-floating-badge{right:0;}
+            .about-photo-frame{max-width:100%;height:350px;}
+        }
+        @media(max-width:640px){
+            .portfolio-grid,.stats-grid{grid-template-columns:1fr;}
+            .pricing-grid{grid-template-columns:1fr;}
+            .testimonials-grid{grid-template-columns:1fr;}
+        }
+    </style>
 </head>
 <body>
+<div id="scroll-progress"></div>
+<canvas id="three-canvas"></canvas>
+<div id="canvas-overlay"></div>
+<div class="success-message" id="successMessage"><i class="fas fa-check-circle"></i><span>Message sent successfully!</span></div>
 
-<!-- Custom cursor -->
-<div id="c-dot"></div>
-<div id="c-ring"></div>
-<div id="prog"></div>
-
-<!-- Loading screen -->
-<div id="loader">
-  <div class="loader-name">Ahmed Shah</div>
-  <div class="loader-bar-wrap"><div class="loader-bar" id="lbar"></div></div>
-  <div class="loader-pct" id="lpct">0%</div>
-</div>
-
-<!-- WebGL Canvas -->
-<canvas id="webgl"></canvas>
+<div class="content-wrapper">
 
 <!-- NAV -->
-<nav id="nav">
-  <div class="nav-inner">
-    <a href="#home" class="logo">Ahmed<span>Shah</span></a>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#about">Services</a></li>
-      <li><a href="#expertise">Expertise</a></li>
-      <li><a href="#portfolio">Work</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-    <button class="nav-hire" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Hire Me</button>
-    <button class="menu-btn" id="mBtn"><i class="fas fa-bars"></i></button>
-  </div>
+<nav id="navbar">
+    <div class="nav-container">
+        <div class="logo"><i class="fas fa-terminal"></i>ahmed.sh</div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#process">Process</a></li>
+            <li><a href="#portfolio">Portfolio</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <button class="hire-btn" onclick="location.href='#contact'">HIRE ME</button>
+        <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+    </div>
 </nav>
 
-<!-- HERO TEXT (fixed, animated by GSAP) -->
-<div id="hero-text">
-  <div class="hero-eyebrow">
-    <span class="eyebrow-pulse"></span>
-    Available For Projects
-  </div>
-  <h1 class="hero-title">
-    <span class="name-line">Ahmed</span>
-    <span class="name-line gold-word">Shah</span>
-  </h1>
-  <p class="hero-sub">Full Stack Developer &amp; Digital Craftsman — transforming ambitious ideas into extraordinary web experiences.</p>
-  <div class="hero-btns">
-    <a href="#portfolio" class="btn-primary"><i class="fas fa-rocket"></i> View My Work</a>
-    <a href="#contact" class="btn-outline"><i class="fas fa-paper-plane"></i> Let's Talk</a>
-  </div>
-</div>
-
-<!-- Hero Photo -->
-<div class="hero-photo-wrap" id="heroPhoto">
-  <div class="photo-clip">
-    <img src="./img/pf.png" alt="Ahmed Shah">
-    <div class="photo-glow"></div>
-  </div>
-  <div class="photo-orbit"></div>
-  <div class="photo-badge">
-    <div class="badge-val">100%</div>
-    <div class="badge-lbl">Client Satisfaction</div>
-  </div>
-</div>
-
-<!-- Scroll indicator -->
-<div class="scroll-ind" id="scrollInd">
-  <span>Scroll</span>
-  <div class="scroll-line"></div>
-</div>
-
-<!-- Tall scroll container that drives 3D animation -->
-<div id="scroll-wrap"></div>
-
-<!-- HTML CONTENT (after 3D scroll experience) -->
-<div id="html-content">
-
-  <!-- SERVICES -->
-  <div id="about" style="position:relative">
-    <div class="section-wrap">
-      <div class="section-head">
-        <div class="s-num">01 — Services</div>
-        <h2 class="s-title">What I <em>Offer</em></h2>
-        <div class="gold-rule"></div>
-        <p class="s-sub">End-to-end digital solutions crafted with precision and care</p>
-      </div>
-      <div class="srv-grid">
-        <div class="srv"><div class="srv-n">01</div><div class="srv-ico"><i class="fas fa-code"></i></div><h3>Full Stack Development</h3><p>End-to-end web apps from database to UI. Expert in MERN stack, Django, and modern JS frameworks.</p><a href="#contact" class="srv-link">Start a project <i class="fas fa-arrow-right"></i></a></div>
-        <div class="srv"><div class="srv-n">02</div><div class="srv-ico"><i class="fas fa-plug"></i></div><h3>API Development</h3><p>RESTful and GraphQL APIs engineered for performance and scale, with secure auth and real-time data.</p><a href="#contact" class="srv-link">Start a project <i class="fas fa-arrow-right"></i></a></div>
-        <div class="srv"><div class="srv-n">03</div><div class="srv-ico"><i class="fas fa-laptop-code"></i></div><h3>Frontend Engineering</h3><p>Pixel-perfect React, Vue, and Next.js interfaces that captivate users and drive conversions.</p><a href="#contact" class="srv-link">Start a project <i class="fas fa-arrow-right"></i></a></div>
-        <div class="srv"><div class="srv-n">04</div><div class="srv-ico"><i class="fas fa-server"></i></div><h3>Backend Architecture</h3><p>Scalable Node.js and Python backends with optimized databases, caching, and cloud deployment.</p><a href="#contact" class="srv-link">Start a project <i class="fas fa-arrow-right"></i></a></div>
-        <div class="srv"><div class="srv-n">05</div><div class="srv-ico"><i class="fas fa-cloud-upload-alt"></i></div><h3>DevOps & Deployment</h3><p>AWS infrastructure, Docker, CI/CD pipelines and automated testing for seamless production launches.</p><a href="#contact" class="srv-link">Start a project <i class="fas fa-arrow-right"></i></a></div>
-        <div class="srv"><div class="srv-n">06</div><div class="srv-ico"><i class="fab fa-wordpress"></i></div><h3>WordPress & E-Commerce</h3><p>Custom themes, WooCommerce stores, and full e-commerce systems with secure payment integration.</p><a href="#contact" class="srv-link">Start a project <i class="fas fa-arrow-right"></i></a></div>
-      </div>
+<!-- HERO -->
+<section class="hero" id="home">
+    <div class="hero-container">
+        <div class="hero-content">
+            <div class="hero-badge"><span class="dot"></span>Available For Projects</div>
+            <h1>
+                <span class="name">Ahmed Shah</span>
+                <span class="role">Full Stack Developer</span>
+            </h1>
+            <p class="hero-description">Transforming ideas into digital reality. I build modern, scalable web applications that drive business growth — from concept to deployment.</p>
+            <div class="cta-buttons">
+                <a href="#portfolio" class="btn btn-primary"><i class="fas fa-rocket"></i>View Projects</a>
+                <a href="#contact" class="btn btn-secondary"><i class="fas fa-paper-plane"></i>Let's Talk</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <div class="hero-3d-ring"></div>
+            <div class="hero-3d-ring"></div>
+            <div class="profile-photo-wrapper">
+                <div class="profile-corner-accent tl"></div>
+                <div class="profile-corner-accent tr"></div>
+                <div class="profile-corner-accent bl"></div>
+                <div class="profile-corner-accent br"></div>
+                <div class="profile-photo-frame">
+                    <!-- REPLACE src below with your actual photo path e.g. src="./ahmed.jpg" -->
+                    <!-- <img src="./your-photo.jpg" alt="Ahmed Shah"> -->
+                    <div class="profile-photo-placeholder">
+                        <div class="avatar-icon"><i class="fas fa-user"></i></div>
+                        <p>Replace with<br>your photo here<br><small>src="./your-photo.jpg"</small></p>
+                    </div>
+                </div>
+                <div class="photo-upload-hint">📸 Add your photo above</div>
+            </div>
+            <div class="satisfaction-badge">
+                <h4>100% Client Satisfaction</h4>
+                <p><i class="fas fa-headset"></i>24/7 Tech Support</p>
+            </div>
+            <div class="exp-badge">
+                <div class="big-num">3+</div>
+                <p>Years Exp.</p>
+            </div>
+        </div>
     </div>
-  </div>
+</section>
 
-  <!-- EXPERTISE -->
-  <div id="expertise" class="exp-bg">
-    <div class="section-wrap">
-      <div class="section-head">
-        <div class="s-num">02 — Expertise</div>
-        <h2 class="s-title">Why Choose <em>Me</em></h2>
-        <div class="gold-rule"></div>
-        <p class="s-sub">Years of experience, hundreds of hours of craft</p>
-      </div>
-      <div class="exp-grid">
+<!-- MARQUEE -->
+<div class="marquee-section">
+    <div class="marquee-track" id="marqueeTrack">
+        <span class="marquee-item"><i class="fab fa-react"></i>React.js</span>
+        <span class="marquee-dot">✦</span>
+        <span class="marquee-item"><i class="fab fa-node-js"></i>Node.js</span>
+        <span class="marquee-dot">✦</span>
+        <span class="marquee-item"><i class="fab fa-python"></i>Python</span>
+        <span class="marquee-dot">✦</span>
+        <span class="marquee-item"><i class="fab fa-js-square"></i>JavaScript</span>
+        <span class="marquee-dot">✦</span>
+        <span class="marquee-item"><i class="fab fa-wordpress"></i>WordPress</span>
+        <span class="marquee-dot">✦</span>
+        <span class="marquee-item"><i class="fas fa-database"></i>MongoDB</span>
+        <span class="marquee-dot">✦</span>
+        <span class="marquee-item"><i class="fab fa-docker"></i>Docker</span>
+        <span class="marquee-dot">✦</span>
+        <span class="marquee-item"><i class="fab fa-aws"></i>AWS</span>
+        <span class="marquee-dot">✦</span>
+        <span class="marquee-item"><i class="fas fa-code-branch"></i>Next.js</span>
+        <span class="marquee-dot">✦</span>
+        <span class="marquee-item"><i class="fas fa-fire"></i>Django</span>
+        <span class="marquee-dot">✦</span>
+        <!-- duplicate for seamless loop -->
+        <span class="marquee-item"><i class="fab fa-react"></i>React.js</span>
+        <span class="marquee-dot">✦</span>
+        <span class="marquee-item"><i class="fab fa-node-js"></i>Node.js</span>
+        <span class="marquee-dot">✦</span>
+        <span class="marquee-item"><i class="fab fa-python"></i>Python</span>
+        <span class="marquee-dot">✦</span>
+        <span class="marquee-item"><i class="fab fa-js-square"></i>JavaScript</span>
+        <span class="marquee-dot">✦</span>
+        <span class="marquee-item"><i class="fab fa-wordpress"></i>WordPress</span>
+        <span class="marquee-dot">✦</span>
+        <span class="marquee-item"><i class="fas fa-database"></i>MongoDB</span>
+        <span class="marquee-dot">✦</span>
+        <span class="marquee-item"><i class="fab fa-docker"></i>Docker</span>
+        <span class="marquee-dot">✦</span>
+        <span class="marquee-item"><i class="fab fa-aws"></i>AWS</span>
+        <span class="marquee-dot">✦</span>
+        <span class="marquee-item"><i class="fas fa-code-branch"></i>Next.js</span>
+        <span class="marquee-dot">✦</span>
+        <span class="marquee-item"><i class="fas fa-fire"></i>Django</span>
+    </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about-section" id="about">
+    <div class="section-header">
+        <div class="section-label">WHO AM I</div>
+        <h2 class="section-title">About <span>Me</span></h2>
+        <div class="section-divider"></div>
+    </div>
+    <div class="about-content">
+        <div class="about-image-block">
+            <div class="about-photo-frame">
+                <!-- REPLACE with your photo: <img src="./ahmed.jpg" alt="Ahmed Shah"> -->
+                <div class="about-photo-placeholder">
+                    <div class="big-avatar"><i class="fas fa-user-tie"></i></div>
+                    <p>Add your professional<br>photo here</p>
+                </div>
+            </div>
+            <div class="about-floating-badge">
+                <div class="badge-num">10+</div>
+                <p>Projects Delivered</p>
+            </div>
+        </div>
+        <div class="about-text">
+            <h3>Crafting Experiences <span>Since 2022</span></h3>
+            <p>I'm a passionate Full Stack Developer from Pakistan who's deeply committed to bringing ideas to life through thoughtful, user-centered design. Every project I take on is built with care, creativity, and a clear understanding of what the client truly needs.</p>
+            <p>My goal is always to create websites and applications that not only look great but also work smoothly and deliver measurable results. What truly drives me is the satisfaction of solving complex problems and making a real impact for the people I work with.</p>
+            <p>I believe in clear communication, long-term value, and building strong relationships through trust and reliability.</p>
+            <div class="about-highlights">
+                <div class="about-highlight">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span><strong>Location:</strong> Pakistan (Available worldwide remotely)</span>
+                </div>
+                <div class="about-highlight">
+                    <i class="fas fa-language"></i>
+                    <span><strong>Languages:</strong> English, Urdu, Sindhi</span>
+                </div>
+                <div class="about-highlight">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span><strong>Education:</strong> Computer Science</span>
+                </div>
+                <div class="about-highlight">
+                    <i class="fas fa-clock"></i>
+                    <span><strong>Availability:</strong> Full-time & Freelance projects</span>
+                </div>
+                <div class="about-highlight">
+                    <i class="fab fa-whatsapp"></i>
+                    <span><strong>Response Time:</strong> Within 2–4 hours</span>
+                </div>
+            </div>
+            <div class="cta-buttons">
+                <a href="#contact" class="btn btn-primary"><i class="fas fa-paper-plane"></i>Hire Me</a>
+                <a href="#portfolio" class="btn btn-secondary"><i class="fas fa-eye"></i>View Work</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+    <div class="section-header">
+        <div class="section-label">WHAT I DO</div>
+        <h2 class="section-title">My <span>Services</span></h2>
+        <div class="section-divider"></div>
+        <p class="section-subtitle">Comprehensive web development solutions tailored to your business needs</p>
+    </div>
+    <div class="services-grid">
+        <div class="service-card"><div class="service-icon"><i class="fas fa-code"></i></div><h3>Full Stack Development</h3><p>End-to-end web development from database design to responsive frontend interfaces. Expert in MERN stack, Python Django, and modern frameworks.</p><a href="#contact" class="service-link">Explore more <i class="fas fa-arrow-right"></i></a></div>
+        <div class="service-card"><div class="service-icon"><i class="fas fa-plug"></i></div><h3>API Development</h3><p>RESTful APIs and GraphQL services built for performance and scalability. Secure authentication, real-time data, and third-party integrations.</p><a href="#contact" class="service-link">Explore more <i class="fas fa-arrow-right"></i></a></div>
+        <div class="service-card"><div class="service-icon"><i class="fas fa-laptop-code"></i></div><h3>Frontend Development</h3><p>Modern, responsive UIs with React, Vue, and Next.js. Focus on performance, accessibility, and stunning visual experiences that convert.</p><a href="#contact" class="service-link">Explore more <i class="fas fa-arrow-right"></i></a></div>
+        <div class="service-card"><div class="service-icon"><i class="fas fa-database"></i></div><h3>Backend Development</h3><p>Robust server-side architecture with Node.js, Express, and Python. Database optimization, caching strategies, and cloud deployment.</p><a href="#contact" class="service-link">Explore more <i class="fas fa-arrow-right"></i></a></div>
+        <div class="service-card"><div class="service-icon"><i class="fab fa-wordpress"></i></div><h3>WordPress Development</h3><p>Custom WordPress themes, plugins, and WooCommerce stores. SEO-optimized and performance-tuned for maximum results.</p><a href="#contact" class="service-link">Explore more <i class="fas fa-arrow-right"></i></a></div>
+        <div class="service-card"><div class="service-icon"><i class="fas fa-shopping-cart"></i></div><h3>E-Commerce Solutions</h3><p>Full-featured online stores with secure payment gateways, inventory management, and seamless checkout experiences.</p><a href="#contact" class="service-link">Explore more <i class="fas fa-arrow-right"></i></a></div>
+        <div class="service-card"><div class="service-icon"><i class="fas fa-cloud"></i></div><h3>Deployment & DevOps</h3><p>Cloud infrastructure setup on AWS, Docker containerization, CI/CD pipelines, and automated testing for seamless deployments.</p><a href="#contact" class="service-link">Explore more <i class="fas fa-arrow-right"></i></a></div>
+        <div class="service-card"><div class="service-icon"><i class="fas fa-palette"></i></div><h3>UI/UX Design</h3><p>Beautiful, intuitive interfaces designed to engage users and drive conversions with thoughtful user experience and modern aesthetics.</p><a href="#contact" class="service-link">Explore more <i class="fas fa-arrow-right"></i></a></div>
+        <div class="service-card"><div class="service-icon"><i class="fas fa-tachometer-alt"></i></div><h3>Speed & SEO</h3><p>Performance tuning, code refactoring, Core Web Vitals optimization, and on-page SEO. Lightning-fast sites that rank higher.</p><a href="#contact" class="service-link">Explore more <i class="fas fa-arrow-right"></i></a></div>
+    </div>
+</section>
+
+<!-- TECH STACK -->
+<section class="tech-section">
+    <div class="section-header">
+        <div class="section-label">MY TOOLKIT</div>
+        <h2 class="section-title">Tech <span>Stack</span></h2>
+        <div class="section-divider"></div>
+        <p class="section-subtitle">Technologies I use to build powerful, modern applications</p>
+    </div>
+    <div class="tech-content">
+        <div class="tech-categories">
+            <div class="tech-category">
+                <div class="tech-cat-header"><div class="tech-cat-icon"><i class="fas fa-paint-brush"></i></div><h4>Frontend</h4></div>
+                <div class="tech-tags"><span class="tech-tag">HTML5</span><span class="tech-tag">CSS3</span><span class="tech-tag">JavaScript</span><span class="tech-tag">React.js</span><span class="tech-tag">Next.js</span><span class="tech-tag">Vue.js</span><span class="tech-tag">TypeScript</span><span class="tech-tag">Tailwind CSS</span><span class="tech-tag">Bootstrap</span><span class="tech-tag">GSAP</span></div>
+            </div>
+            <div class="tech-category">
+                <div class="tech-cat-header"><div class="tech-cat-icon"><i class="fas fa-server"></i></div><h4>Backend</h4></div>
+                <div class="tech-tags"><span class="tech-tag">Node.js</span><span class="tech-tag">Express.js</span><span class="tech-tag">Python</span><span class="tech-tag">Django</span><span class="tech-tag">FastAPI</span><span class="tech-tag">REST API</span><span class="tech-tag">GraphQL</span><span class="tech-tag">JWT Auth</span></div>
+            </div>
+            <div class="tech-category">
+                <div class="tech-cat-header"><div class="tech-cat-icon"><i class="fas fa-database"></i></div><h4>Databases</h4></div>
+                <div class="tech-tags"><span class="tech-tag">MongoDB</span><span class="tech-tag">MySQL</span><span class="tech-tag">PostgreSQL</span><span class="tech-tag">Firebase</span><span class="tech-tag">Supabase</span><span class="tech-tag">Redis</span></div>
+            </div>
+            <div class="tech-category">
+                <div class="tech-cat-header"><div class="tech-cat-icon"><i class="fas fa-cloud"></i></div><h4>DevOps & Tools</h4></div>
+                <div class="tech-tags"><span class="tech-tag">Git</span><span class="tech-tag">GitHub</span><span class="tech-tag">Docker</span><span class="tech-tag">AWS</span><span class="tech-tag">Netlify</span><span class="tech-tag">Vercel</span><span class="tech-tag">Figma</span><span class="tech-tag">Linux</span><span class="tech-tag">CI/CD</span></div>
+            </div>
+            <div class="tech-category">
+                <div class="tech-cat-header"><div class="tech-cat-icon"><i class="fab fa-wordpress"></i></div><h4>CMS & E-Commerce</h4></div>
+                <div class="tech-tags"><span class="tech-tag">WordPress</span><span class="tech-tag">WooCommerce</span><span class="tech-tag">Shopify</span><span class="tech-tag">Elementor</span><span class="tech-tag">ACF</span><span class="tech-tag">Strapi</span></div>
+            </div>
+            <div class="tech-category">
+                <div class="tech-cat-header"><div class="tech-cat-icon"><i class="fas fa-robot"></i></div><h4>AI & APIs</h4></div>
+                <div class="tech-tags"><span class="tech-tag">OpenAI API</span><span class="tech-tag">Gemini API</span><span class="tech-tag">Stripe</span><span class="tech-tag">PayPal</span><span class="tech-tag">Twilio</span><span class="tech-tag">SendGrid</span><span class="tech-tag">Google Maps</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- EXPERTISE -->
+<section class="expertise" id="expertise">
+    <div class="section-header">
+        <div class="section-label">WHY CHOOSE ME</div>
+        <h2 class="section-title">My <span>Expertise</span></h2>
+        <div class="section-divider"></div>
+        <p class="section-subtitle">Years of experience delivering exceptional results</p>
+    </div>
+    <div class="expertise-content">
         <div>
-          <p class="exp-p">I transform ideas into <strong>powerful digital solutions</strong> that meet your business goals precisely. With expertise in modern frameworks and an obsession with <strong>clean, maintainable code</strong>, I create applications that scale effortlessly — from startups to enterprise.</p>
-          <div class="stats-row">
-            <div class="stat"><div class="stat-n">3+</div><div class="stat-l">Years Exp</div></div>
-            <div class="stat"><div class="stat-n">100%</div><div class="stat-l">Clean Code</div></div>
-            <div class="stat"><div class="stat-n">100%</div><div class="stat-l">Satisfaction</div></div>
-            <div class="stat"><div class="stat-n">24/7</div><div class="stat-l">Support</div></div>
-          </div>
+            <p class="expertise-text">Transforming ideas into reality, I deliver powerful software solutions that meet your business goals. With expertise in modern frameworks and a passion for clean, maintainable code, I create applications that not only work perfectly but also scale effortlessly. From startups to enterprise-level projects, I bring technical excellence and creative problem-solving to every challenge.</p>
+            <div class="stats-grid">
+                <div class="stat-card"><div class="stat-number">3+</div><div class="stat-label">Years Experience</div></div>
+                <div class="stat-card"><div class="stat-number">10+</div><div class="stat-label">Projects Delivered</div></div>
+                <div class="stat-card"><div class="stat-number">100%</div><div class="stat-label">Satisfaction Rate</div></div>
+                <div class="stat-card"><div class="stat-number">24/7</div><div class="stat-label">Support</div></div>
+            </div>
         </div>
-        <div class="feat-list">
-          <div class="feat"><div class="feat-ico"><i class="fas fa-tachometer-alt"></i></div><div><h4>High-Speed Performance</h4><p>Optimized architecture for blazing-fast load times</p></div></div>
-          <div class="feat"><div class="feat-ico"><i class="fas fa-code-branch"></i></div><div><h4>Modern Tech Stack</h4><p>Latest frameworks and tools for cutting-edge solutions</p></div></div>
-          <div class="feat"><div class="feat-ico"><i class="fas fa-shield-alt"></i></div><div><h4>Security First</h4><p>Enterprise-grade security baked into every project</p></div></div>
-          <div class="feat"><div class="feat-ico"><i class="fas fa-headset"></i></div><div><h4>24/7 Availability</h4><p>Round-the-clock support and rapid response times</p></div></div>
-          <div class="feat"><div class="feat-ico"><i class="fas fa-chart-line"></i></div><div><h4>100% Lighthouse Score</h4><p>Exceptional performance metrics on every delivery</p></div></div>
-          <div class="feat"><div class="feat-ico"><i class="fas fa-file-code"></i></div><div><h4>Full Ownership</h4><p>Complete source code and docs on every project</p></div></div>
+        <div class="expertise-features">
+            <div class="feature-item"><div class="feature-icon"><i class="fas fa-tachometer-alt"></i></div><div class="feature-text"><h4>High-Speed Performance</h4><p>Optimized code and architecture for blazing-fast load times</p></div></div>
+            <div class="feature-item"><div class="feature-icon"><i class="fas fa-code-branch"></i></div><div class="feature-text"><h4>Modern Tech Stack</h4><p>Latest frameworks and tools for cutting-edge solutions</p></div></div>
+            <div class="feature-item"><div class="feature-icon"><i class="fas fa-shield-alt"></i></div><div class="feature-text"><h4>Security First</h4><p>Enterprise-grade security measures in every project</p></div></div>
+            <div class="feature-item"><div class="feature-icon"><i class="fas fa-headset"></i></div><div class="feature-text"><h4>24/7 Availability</h4><p>Round-the-clock support and quick response times</p></div></div>
+            <div class="feature-item"><div class="feature-icon"><i class="fas fa-chart-line"></i></div><div class="feature-text"><h4>100% Lighthouse Score</h4><p>Exceptional performance metrics and best practices</p></div></div>
+            <div class="feature-item"><div class="feature-icon"><i class="fas fa-file-code"></i></div><div class="feature-text"><h4>Full Ownership</h4><p>Complete source code and documentation delivery</p></div></div>
         </div>
-      </div>
     </div>
-  </div>
+</section>
 
-  <!-- PORTFOLIO -->
-  <div id="portfolio">
-    <div class="section-wrap">
-      <div class="section-head">
-        <div class="s-num">03 — Work</div>
-        <h2 class="s-title">Featured <em>Projects</em></h2>
-        <div class="gold-rule"></div>
-        <p class="s-sub">A curated selection of recent work</p>
-      </div>
-      <div class="filt-row">
-        <button class="f-btn active" data-f="all">All</button>
-        <button class="f-btn" data-f="web">Web Apps</button>
-        <button class="f-btn" data-f="ecommerce">E-Commerce</button>
-        <button class="f-btn" data-f="wordpress">WordPress</button>
-      </div>
-      <div class="port-grid">
-        <div class="proj" data-c="wordpress"><div class="proj-img"><img src="./shoe.png" alt="Shoes Store" loading="lazy"><div class="proj-ov"><a href="https://shoesitegk.netlify.app/" target="_blank" class="ov-a"><i class="fas fa-link"></i> Live</a><a href="https://github.com/Ahmedshah56" target="_blank" class="ov-a"><i class="fab fa-github"></i> Code</a></div></div><div class="proj-body"><div class="proj-cat">E-Commerce</div><h3>STRIDE — Shoes Store</h3><p>Modern footwear e-commerce with product displays, category navigation and checkout.</p><div class="tech-tags"><span class="tt">HTML5</span><span class="tt">JavaScript</span><span class="tt">Bootstrap</span></div></div></div>
-        <div class="proj" data-c="ecommerce"><div class="proj-img"><img src="./eCommerce.webp" alt="Fashion" loading="lazy"><div class="proj-ov"><a href="https://syedcollectionstore.netlify.app/" class="ov-a"><i class="fas fa-link"></i> Live</a><a href="https://github.com/Ahmedshah56" target="_blank" class="ov-a"><i class="fab fa-github"></i> Code</a></div></div><div class="proj-body"><div class="proj-cat">E-Commerce</div><h3>Fashion Retail Store</h3><p>Premium clothing collections with seamless browsing and checkout experience.</p><div class="tech-tags"><span class="tt">HTML5</span><span class="tt">CSS3</span><span class="tt">Bootstrap 5</span></div></div></div>
-        <div class="proj" data-c="web"><div class="proj-img"><img src="food.png" alt="Restaurant" loading="lazy"><div class="proj-ov"><a href="https://ahmedresturantweb.netlify.app/" class="ov-a"><i class="fas fa-link"></i> Live</a><a href="https://github.com/Ahmedshah56" target="_blank" class="ov-a"><i class="fab fa-github"></i> Code</a></div></div><div class="proj-body"><div class="proj-cat">Restaurant</div><h3>Crispy Bites Restaurant</h3><p>Modern restaurant site with menu, online ordering and reservation management.</p><div class="tech-tags"><span class="tt">HTML5</span><span class="tt">JavaScript</span><span class="tt">Bootstrap</span></div></div></div>
-        <div class="proj" data-c="wordpress"><div class="proj-img"><img src="./img/st.jpg" alt="Academy" loading="lazy"><div class="proj-ov"><a href="https://www.chemistaacademy.com/" target="_blank" class="ov-a"><i class="fas fa-link"></i> Live</a><a href="https://github.com/Ahmedshah56" target="_blank" class="ov-a"><i class="fab fa-github"></i> Code</a></div></div><div class="proj-body"><div class="proj-cat">Education Platform</div><h3>Chemista Academy</h3><p>Full learning platform with course management, video lessons and progress tracking.</p><div class="tech-tags"><span class="tt">WordPress</span><span class="tt">PHP</span><span class="tt">MySQL</span></div></div></div>
-        <div class="proj" data-c="wordpress"><div class="proj-img"><img src="./alex-knight-2EJCSULRwC8-unsplash.jpg" alt="AI" loading="lazy"><div class="proj-ov"><a href="https://askahmedaigpt.netlify.app/" class="ov-a"><i class="fas fa-link"></i> Live</a><a href="https://github.com/Ahmedshah56" target="_blank" class="ov-a"><i class="fab fa-github"></i> Code</a></div></div><div class="proj-body"><div class="proj-cat">AI Application</div><h3>Ask Ahmed AI</h3><p>AI chatbot powered by advanced language models for instant answers and solutions.</p><div class="tech-tags"><span class="tt">JavaScript</span><span class="tt">AI API</span></div></div></div>
-        <div class="proj" data-c="web"><div class="proj-img"><img src="./lloyd-dirks-kz8pEH4IsUo-unsplash.jpg" alt="Weather" loading="lazy"><div class="proj-ov"><a href="https://ahmedshahweatherapp.netlify.app/" class="ov-a"><i class="fas fa-link"></i> Live</a><a href="https://github.com/Ahmedshah56" target="_blank" class="ov-a"><i class="fab fa-github"></i> Code</a></div></div><div class="proj-body"><div class="proj-cat">Web App</div><h3>Weather Forecast App</h3><p>Real-time weather for any city with forecasts, temperature and live conditions.</p><div class="tech-tags"><span class="tt">JavaScript</span><span class="tt">Weather API</span></div></div></div>
-        <div class="proj" data-c="web"><div class="proj-img"><img src="./mail.jpg" alt="CatchMail" loading="lazy"><div class="proj-ov"><a href="https://ahmedshahpotfolio.netlify.app/" class="ov-a"><i class="fas fa-link"></i> Live</a><a href="https://github.com/Ahmedshah56" target="_blank" class="ov-a"><i class="fab fa-github"></i> Code</a></div></div><div class="proj-body"><div class="proj-cat">Web Tool</div><h3>CatchMail Temp Email</h3><p>Disposable mailboxes with real-time inbox — instant, no registration needed.</p><div class="tech-tags"><span class="tt">JavaScript</span><span class="tt">REST API</span></div></div></div>
-        <div class="proj" data-c="web"><div class="proj-img"><img src="./CV.jpg" alt="Resume" loading="lazy"><div class="proj-ov"><a href="https://ahmedshahresumegenrator.netlify.app/" class="ov-a"><i class="fas fa-link"></i> Live</a><a href="https://github.com/Ahmedshah56" target="_blank" class="ov-a"><i class="fab fa-github"></i> Code</a></div></div><div class="proj-body"><div class="proj-cat">Web Tool</div><h3>Resume Generator</h3><p>Professional resume builder with multiple templates and PDF export.</p><div class="tech-tags"><span class="tt">HTML5</span><span class="tt">JavaScript</span></div></div></div>
-        <div class="proj" data-c="web"><div class="proj-img"><img src="player.webp" alt="Music" loading="lazy"><div class="proj-ov"><a href="https://musicplayersong2.netlify.app/" class="ov-a"><i class="fas fa-link"></i> Live</a><a href="https://github.com/Ahmedshah56" target="_blank" class="ov-a"><i class="fab fa-github"></i> Code</a></div></div><div class="proj-body"><div class="proj-cat">Entertainment</div><h3>Nova Music Player</h3><p>Feature-rich music player with playlist management and full audio controls.</p><div class="tech-tags"><span class="tt">JavaScript</span><span class="tt">Audio API</span></div></div></div>
-      </div>
+<!-- HOW I WORK - PROCESS -->
+<section id="process">
+    <div class="section-header">
+        <div class="section-label">MY PROCESS</div>
+        <h2 class="section-title">How I <span>Work</span></h2>
+        <div class="section-divider"></div>
+        <p class="section-subtitle">A structured approach to delivering exceptional results for your project</p>
     </div>
-  </div>
-
-  <!-- CONTACT -->
-  <div id="contact" class="contact-bg">
-    <div class="section-wrap">
-      <div class="section-head">
-        <div class="s-num">04 — Contact</div>
-        <h2 class="s-title">Let's <em>Build</em></h2>
-        <div class="gold-rule"></div>
-        <p class="s-sub">Have a project in mind? I'd love to hear about it</p>
-      </div>
-      <div class="contact-grid">
-        <div class="contact-left">
-          <h3>Start Something <em>Extraordinary</em> Together</h3>
-          <p>Whether you have a fully-formed idea or just a spark of inspiration, I'm here to help transform it into reality. I respond within 24 hours — messages go directly to my WhatsApp.</p>
-          <div class="c-items">
-            <div class="c-item"><div class="c-ico"><i class="fas fa-envelope"></i></div><div class="c-txt"><h4>Email</h4><p>ahmedshah@example.com</p></div></div>
-            <div class="c-item"><div class="c-ico"><i class="fab fa-whatsapp"></i></div><div class="c-txt"><h4>WhatsApp</h4><p>+92 315 4901455</p></div></div>
-            <div class="c-item"><div class="c-ico"><i class="fas fa-map-marker-alt"></i></div><div class="c-txt"><h4>Location</h4><p>Pakistan — Remote Worldwide</p></div></div>
-          </div>
+    <div class="process-steps">
+        <div class="process-step">
+            <div class="step-content">
+                <div class="step-step-label">Step • 01</div>
+                <h4>Discovery</h4>
+                <p>Understanding your needs and goals through consultation and research. I dig deep to understand your business, target audience, and project requirements.</p>
+                <ul><li>Initial consultation</li><li>Requirements analysis</li><li>Competitor research</li><li>Goal setting</li></ul>
+            </div>
+            <div class="step-connector"><div class="step-num">01</div></div>
+            <div class="step-empty"></div>
         </div>
-        <form class="form-box" id="cForm">
-          <div class="fg"><label>Your Name *</label><input type="text" id="fn" required placeholder="John Doe"></div>
-          <div class="fg"><label>Email Address *</label><input type="email" id="fe" required placeholder="john@example.com"></div>
-          <div class="fg"><label>Phone Number</label><input type="tel" id="fp" placeholder="+92 300 1234567"></div>
-          <div class="fg"><label>Your Message *</label><textarea id="fm" required placeholder="Tell me about your project..."></textarea></div>
-          <button type="submit" class="sub-btn"><i class="fab fa-whatsapp"></i> Send via WhatsApp</button>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="foot-grid">
-      <div class="fa-brand">
-        <h3>Ahmed Shah</h3>
-        <p>Full Stack Developer crafting digital experiences that are fast, beautiful, and built to last. React, Node.js, Python and modern web architecture.</p>
-        <div class="socials">
-          <a href="https://github.com/Ahmedshah56"><i class="fab fa-github"></i></a>
-          <a href="https://www.linkedin.com/in/ahmed-shah-web-developer-designer"><i class="fab fa-linkedin-in"></i></a>
-          <a href="https://www.facebook.com/share/17mHGjDjHF/" target="_blank"><i class="fab fa-facebook-f"></i></a>
-          <a href="https://x.com/Syed_says10"><i class="fab fa-twitter"></i></a>
-          <a href="https://www.instagram.com/ahmedshah.zn" target="_blank"><i class="fab fa-instagram"></i></a>
-          <a href="https://www.behance.net/ahmedshah45" target="_blank"><i class="fab fa-behance"></i></a>
-          <a href="https://wa.me/923154901455" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        <div class="process-step">
+            <div class="step-empty"></div>
+            <div class="step-connector"><div class="step-num">02</div></div>
+            <div class="step-content">
+                <div class="step-step-label">Step • 02</div>
+                <h4>Planning & Strategy</h4>
+                <p>Creating a detailed project roadmap with timelines, milestones, and technical specifications before any code is written.</p>
+                <ul><li>Tech stack selection</li><li>Architecture design</li><li>Timeline planning</li><li>Milestone definition</li></ul>
+            </div>
         </div>
-      </div>
-      <div class="fc"><h4>Navigation</h4><ul class="fl"><li><a href="#about">Services</a></li><li><a href="#expertise">Expertise</a></li><li><a href="#portfolio">Portfolio</a></li><li><a href="#contact">Contact</a></li></ul></div>
-      <div class="fc"><h4>Services</h4><ul class="fl"><li><a href="#about">Web Development</a></li><li><a href="#about">API Development</a></li><li><a href="#about">WordPress</a></li><li><a href="#about">E-Commerce</a></li></ul></div>
-      <div class="fc"><h4>Connect</h4><ul class="fl"><li><a href="mailto:ahmedshah@example.com">Email Me</a></li><li><a href="https://wa.me/923154901455">WhatsApp</a></li><li><a href="https://github.com/Ahmedshah56">GitHub</a></li></ul></div>
+        <div class="process-step">
+            <div class="step-content">
+                <div class="step-step-label">Step • 03</div>
+                <h4>Design</h4>
+                <p>Crafting wireframes, mockups, and visual designs that align with your brand identity and user experience goals.</p>
+                <ul><li>Wireframing</li><li>UI/UX design</li><li>Prototype review</li><li>Design approval</li></ul>
+            </div>
+            <div class="step-connector"><div class="step-num">03</div></div>
+            <div class="step-empty"></div>
+        </div>
+        <div class="process-step">
+            <div class="step-empty"></div>
+            <div class="step-connector"><div class="step-num">04</div></div>
+            <div class="step-content">
+                <div class="step-step-label">Step • 04</div>
+                <h4>Development</h4>
+                <p>Writing clean, maintainable code following best practices. Regular updates keep you informed of progress throughout.</p>
+                <ul><li>Frontend coding</li><li>Backend & API dev</li><li>Database setup</li><li>Progress updates</li></ul>
+            </div>
+        </div>
+        <div class="process-step">
+            <div class="step-content">
+                <div class="step-step-label">Step • 05</div>
+                <h4>Testing & QA</h4>
+                <p>Thorough testing across devices and browsers to ensure everything works perfectly before going live.</p>
+                <ul><li>Cross-browser testing</li><li>Mobile responsive checks</li><li>Performance audit</li><li>Bug fixing</li></ul>
+            </div>
+            <div class="step-connector"><div class="step-num">05</div></div>
+            <div class="step-empty"></div>
+        </div>
+        <div class="process-step">
+            <div class="step-empty"></div>
+            <div class="step-connector"><div class="step-num">06</div></div>
+            <div class="step-content">
+                <div class="step-step-label">Step • 06</div>
+                <h4>Launch & Support</h4>
+                <p>Smooth deployment with post-launch support, training, and ongoing maintenance to keep your site performing at its best.</p>
+                <ul><li>Live deployment</li><li>Client training</li><li>Post-launch support</li><li>Ongoing maintenance</li></ul>
+            </div>
+        </div>
     </div>
-    <div class="foot-bot"><span>&copy; 2025 Ahmed Shah</span><span>Crafted with precision</span></div>
-  </footer>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio" style="background:rgba(10,15,28,0.6);">
+    <div class="section-header">
+        <div class="section-label">MY WORK</div>
+        <h2 class="section-title">Featured <span>Projects</span></h2>
+        <div class="section-divider"></div>
+        <p class="section-subtitle">Recent projects showcasing my expertise and creativity</p>
+    </div>
+    <div class="portfolio-filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="web">Web Apps</button>
+        <button class="filter-btn" data-filter="ecommerce">E-Commerce</button>
+        <button class="filter-btn" data-filter="wordpress">WordPress</button>
+        <button class="filter-btn" data-filter="ai">AI & Tools</button>
+    </div>
+    <div class="portfolio-grid">
+        <div class="project-card" data-category="ecommerce">
+            <div class="project-image"><img src="./shoe.png" alt="Shoes Store" loading="lazy"><div class="project-overlay"><a href="https://shoesitegk.netlify.app/" target="_blank" class="overlay-btn"><i class="fas fa-external-link-alt"></i>Live</a><a href="https://github.com/Ahmedshah56" target="_blank" class="overlay-btn"><i class="fab fa-github"></i>Code</a></div></div>
+            <div class="project-content"><span class="project-category">E-Commerce</span><h3>STRIDE Shoes Store</h3><p>Modern e-commerce footwear website with clean product displays, category navigation, and seamless checkout flow.</p><div class="tech-stack"><span class="tech-badge">HTML5</span><span class="tech-badge">JavaScript</span><span class="tech-badge">CSS3</span><span class="tech-badge">Bootstrap</span></div></div>
+        </div>
+        <div class="project-card" data-category="ecommerce">
+            <div class="project-image"><img src="./eCommerce.webp" alt="Fashion Store" loading="lazy"><div class="project-overlay"><a href="https://syedcollectionstore.netlify.app/" class="overlay-btn"><i class="fas fa-external-link-alt"></i>Live</a><a href="https://github.com/Ahmedshah56" target="_blank" class="overlay-btn"><i class="fab fa-github"></i>Code</a></div></div>
+            <div class="project-content"><span class="project-category">E-Commerce</span><h3>Fashion Retail Store</h3><p>A stylish online fashion shop featuring premium clothing collections with easy browsing and seamless checkout.</p><div class="tech-stack"><span class="tech-badge">HTML5</span><span class="tech-badge">CSS3</span><span class="tech-badge">JavaScript</span><span class="tech-badge">Bootstrap 5</span></div></div>
+        </div>
+        <div class="project-card" data-category="web">
+            <div class="project-image"><img src="food.png" alt="Restaurant" loading="lazy"><div class="project-overlay"><a href="https://ahmedresturantweb.netlify.app/" class="overlay-btn"><i class="fas fa-external-link-alt"></i>Live</a><a href="https://github.com/Ahmedshah56" target="_blank" class="overlay-btn"><i class="fab fa-github"></i>Code</a></div></div>
+            <div class="project-content"><span class="project-category">Restaurant</span><h3>Crispy Bites Restaurant</h3><p>Modern restaurant website with menu showcase, online ordering, and reservation system with real-time availability.</p><div class="tech-stack"><span class="tech-badge">HTML5</span><span class="tech-badge">CSS3</span><span class="tech-badge">JavaScript</span><span class="tech-badge">Bootstrap</span></div></div>
+        </div>
+        <div class="project-card" data-category="wordpress">
+            <div class="project-image"><img src="./img/st.jpg" alt="Academy" loading="lazy"><div class="project-overlay"><a href="https://www.chemistaacademy.com/" target="_blank" class="overlay-btn"><i class="fas fa-external-link-alt"></i>Live</a><a href="https://github.com/Ahmedshah56" target="_blank" class="overlay-btn"><i class="fab fa-github"></i>Code</a></div></div>
+            <div class="project-content"><span class="project-category">Education Platform</span><h3>Chemista Academy</h3><p>Comprehensive online learning platform with course management, video lessons, quizzes, and student progress tracking.</p><div class="tech-stack"><span class="tech-badge">HTML5</span><span class="tech-badge">JavaScript</span><span class="tech-badge">CSS3</span><span class="tech-badge">Bootstrap</span></div></div>
+        </div>
+        <div class="project-card" data-category="ai">
+            <div class="project-image"><img src="./alex-knight-2EJCSULRwC8-unsplash.jpg" alt="AI Chatbot" loading="lazy"><div class="project-overlay"><a href="https://askahmedaigpt.netlify.app/" class="overlay-btn"><i class="fas fa-external-link-alt"></i>Live</a><a href="https://github.com/Ahmedshah56" target="_blank" class="overlay-btn"><i class="fab fa-github"></i>Code</a></div></div>
+            <div class="project-content"><span class="project-category">AI Application</span><h3>Ask Ahmed AI</h3><p>Smart AI chatbot powered by advanced language models for instant answers, code generation, and creative solutions.</p><div class="tech-stack"><span class="tech-badge">HTML5</span><span class="tech-badge">CSS3</span><span class="tech-badge">JavaScript</span><span class="tech-badge">OpenAI API</span></div></div>
+        </div>
+        <div class="project-card" data-category="web">
+            <div class="project-image"><img src="./mail.jpg" alt="Temp Mail" loading="lazy"><div class="project-overlay"><a href="https://ahmedshahpotfolio.netlify.app/" class="overlay-btn"><i class="fas fa-external-link-alt"></i>Live</a><a href="https://github.com/Ahmedshah56" target="_blank" class="overlay-btn"><i class="fab fa-github"></i>Code</a></div></div>
+            <div class="project-content"><span class="project-category">Web Tool</span><h3>CatchMail - Temp Email</h3><p>Temporary email service for instant disposable mailboxes with real-time message viewing and auto-expiry.</p><div class="tech-stack"><span class="tech-badge">HTML5</span><span class="tech-badge">CSS3</span><span class="tech-badge">JavaScript</span><span class="tech-badge">REST API</span></div></div>
+        </div>
+        <div class="project-card" data-category="web">
+            <div class="project-image"><img src="./lloyd-dirks-kz8pEH4IsUo-unsplash.jpg" alt="Weather App" loading="lazy"><div class="project-overlay"><a href="https://ahmedshahweatherapp.netlify.app/" class="overlay-btn"><i class="fas fa-external-link-alt"></i>Live</a><a href="https://github.com/Ahmedshah56" target="_blank" class="overlay-btn"><i class="fab fa-github"></i>Code</a></div></div>
+            <div class="project-content"><span class="project-category">Web App</span><h3>Weather Forecast App</h3><p>Real-time weather conditions, hourly forecasts, and weekly predictions for any city worldwide with beautiful UI.</p><div class="tech-stack"><span class="tech-badge">HTML5</span><span class="tech-badge">CSS3</span><span class="tech-badge">JavaScript</span><span class="tech-badge">Weather API</span></div></div>
+        </div>
+        <div class="project-card" data-category="web">
+            <div class="project-image"><img src="./CV.jpg" alt="Resume Builder" loading="lazy"><div class="project-overlay"><a href="https://ahmedshahresumegenrator.netlify.app/" class="overlay-btn"><i class="fas fa-external-link-alt"></i>Live</a><a href="https://github.com/Ahmedshah56" target="_blank" class="overlay-btn"><i class="fab fa-github"></i>Code</a></div></div>
+            <div class="project-content"><span class="project-category">Web Tool</span><h3>Resume Generator</h3><p>Professional resume builder with multiple templates, live preview, and instant PDF export functionality.</p><div class="tech-stack"><span class="tech-badge">HTML5</span><span class="tech-badge">CSS3</span><span class="tech-badge">JavaScript</span><span class="tech-badge">LocalStorage</span></div></div>
+        </div>
+        <div class="project-card" data-category="web">
+            <div class="project-image"><img src="player.webp" alt="Music Player" loading="lazy"><div class="project-overlay"><a href="https://musicplayersong2.netlify.app/" class="overlay-btn"><i class="fas fa-external-link-alt"></i>Live</a><a href="https://github.com/Ahmedshah56" target="_blank" class="overlay-btn"><i class="fab fa-github"></i>Code</a></div></div>
+            <div class="project-content"><span class="project-category">Entertainment</span><h3>Nova Music Player</h3><p>Feature-rich music player with playlist management, visualizer, shuffle/repeat controls, and audio API integration.</p><div class="tech-stack"><span class="tech-badge">HTML5</span><span class="tech-badge">CSS3</span><span class="tech-badge">JavaScript</span><span class="tech-badge">Audio API</span></div></div>
+        </div>
+        <div class="project-card" data-category="web">
+            <div class="project-image"><img src="./todo.jpg" alt="Todo App" loading="lazy"><div class="project-overlay"><a href="https://todolistahmed.netlify.app/" class="overlay-btn"><i class="fas fa-external-link-alt"></i>Live</a><a href="https://github.com/Ahmedshah56" target="_blank" class="overlay-btn"><i class="fab fa-github"></i>Code</a></div></div>
+            <div class="project-content"><span class="project-category">Productivity</span><h3>Task Manager App</h3><p>Clean and effective task list with add, complete, delete functionality and data persistence via LocalStorage.</p><div class="tech-stack"><span class="tech-badge">HTML5</span><span class="tech-badge">CSS3</span><span class="tech-badge">JavaScript</span><span class="tech-badge">LocalStorage</span></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="pricing">
+    <div class="section-header">
+        <div class="section-label">TRANSPARENT PRICING</div>
+        <h2 class="section-title">Choose Your <span>Plan</span></h2>
+        <div class="section-divider"></div>
+        <p class="section-subtitle">Straightforward pricing with no hidden fees. Pick the plan that fits your needs.</p>
+    </div>
+    <div class="pricing-grid">
+        <div class="pricing-card">
+            <div class="pricing-tier">Starter</div>
+            <div class="pricing-price"><span>$</span>149</div>
+            <div class="pricing-period">/ project</div>
+            <div class="pricing-desc">Perfect for simple websites, landing pages, and personal projects with basic functionality.</div>
+            <ul class="pricing-features">
+                <li><i class="fas fa-check"></i>Single page website (HTML/CSS/JS)</li>
+                <li><i class="fas fa-check"></i>Fully mobile responsive</li>
+                <li><i class="fas fa-check"></i>Contact form with email</li>
+                <li><i class="fas fa-check"></i>SEO-friendly structure</li>
+                <li><i class="fas fa-check"></i>Basic animations</li>
+                <li><i class="fas fa-check"></i>Social media links</li>
+                <li><i class="fas fa-check"></i>10 days bug-fix support</li>
+                <li><i class="fas fa-check"></i>Delivery in 1–3 days</li>
+                <li class="unavailable"><i class="fas fa-times"></i>Database integration</li>
+                <li class="unavailable"><i class="fas fa-times"></i>User authentication</li>
+            </ul>
+            <button class="pricing-btn pricing-btn-outline" onclick="location.href='#contact'">Get Started</button>
+        </div>
+        <div class="pricing-card popular">
+            <div class="popular-badge">⭐ Most Popular</div>
+            <div class="pricing-tier">Professional</div>
+            <div class="pricing-price"><span>$</span>399</div>
+            <div class="pricing-period">/ project</div>
+            <div class="pricing-desc">Advanced development for businesses, service sites, and multi-page applications.</div>
+            <ul class="pricing-features">
+                <li><i class="fas fa-check"></i>Everything in Starter</li>
+                <li><i class="fas fa-check"></i>Up to 6 pages dynamic content</li>
+                <li><i class="fas fa-check"></i>API integrations</li>
+                <li><i class="fas fa-check"></i>GSAP/scroll animations</li>
+                <li><i class="fas fa-check"></i>User authentication</li>
+                <li><i class="fas fa-check"></i>Database integration</li>
+                <li><i class="fas fa-check"></i>Advanced security setup</li>
+                <li><i class="fas fa-check"></i>Performance optimization</li>
+                <li><i class="fas fa-check"></i>18 days support</li>
+                <li><i class="fas fa-check"></i>Delivery in 1–2 weeks</li>
+            </ul>
+            <button class="pricing-btn pricing-btn-filled" onclick="location.href='#contact'">Get Started</button>
+        </div>
+        <div class="pricing-card">
+            <div class="pricing-tier">Enterprise</div>
+            <div class="pricing-price"><span>$</span>899</div>
+            <div class="pricing-period">/ project</div>
+            <div class="pricing-desc">Complex web applications, e-commerce stores, and large-scale platforms with full features.</div>
+            <ul class="pricing-features">
+                <li><i class="fas fa-check"></i>Everything in Professional</li>
+                <li><i class="fas fa-check"></i>Unlimited pages</li>
+                <li><i class="fas fa-check"></i>E-commerce & payments</li>
+                <li><i class="fas fa-check"></i>User accounts & profiles</li>
+                <li><i class="fas fa-check"></i>Custom API development</li>
+                <li><i class="fas fa-check"></i>Multi-language support</li>
+                <li><i class="fas fa-check"></i>Payment gateways (Stripe/PayPal)</li>
+                <li><i class="fas fa-check"></i>1 month premium support</li>
+                <li><i class="fas fa-check"></i>Technical training included</li>
+                <li><i class="fas fa-check"></i>Delivery in 3–4 weeks</li>
+            </ul>
+            <button class="pricing-btn pricing-btn-outline" onclick="location.href='#contact'">Get Started</button>
+        </div>
+    </div>
+    <p style="text-align:center;color:var(--text-muted);margin-top:2rem;font-size:0.85rem;">Need a custom quote? <a href="#contact" style="color:var(--primary);">Let's talk</a> about your specific requirements.</p>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials-section">
+    <div class="section-header">
+        <div class="section-label">CLIENT REVIEWS</div>
+        <h2 class="section-title">What Clients <span>Say</span></h2>
+        <div class="section-divider"></div>
+        <p class="section-subtitle">Real feedback from real clients — here's what people say about working with me</p>
+    </div>
+    <div class="testimonials-grid">
+        <div class="testimonial-card">
+            <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+            <p class="testimonial-text">"Ahmed delivered an outstanding website for our business. He was professional, responsive, and the final result exceeded our expectations. Highly recommend for any web development project!"</p>
+            <div class="testimonial-author">
+                <div class="author-avatar">AK</div>
+                <div class="author-info">
+                    <h5>Ahmed Khan</h5>
+                    <p>CEO, Tech Startup</p>
+                    <span class="author-verified"><i class="fas fa-check-circle"></i>Verified Client</span>
+                </div>
+            </div>
+        </div>
+        <div class="testimonial-card">
+            <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+            <p class="testimonial-text">"Built my online store exactly as I envisioned. The checkout process is smooth, the design is beautiful, and sales have increased significantly since launch. A true professional!"</p>
+            <div class="testimonial-author">
+                <div class="author-avatar">SR</div>
+                <div class="author-info">
+                    <h5>Sara Rehman</h5>
+                    <p>Fashion Store Owner</p>
+                    <span class="author-verified"><i class="fas fa-check-circle"></i>Verified Client</span>
+                </div>
+            </div>
+        </div>
+        <div class="testimonial-card">
+            <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+            <p class="testimonial-text">"The restaurant website Ahmed built for us is amazing. Customer enquiries have doubled and the online reservation system works perfectly. Fast, clean, and modern. 10/10!"</p>
+            <div class="testimonial-author">
+                <div class="author-avatar">IM</div>
+                <div class="author-info">
+                    <h5>Imran Malik</h5>
+                    <p>Restaurant Manager</p>
+                    <span class="author-verified"><i class="fas fa-check-circle"></i>Verified Client</span>
+                </div>
+            </div>
+        </div>
+        <div class="testimonial-card">
+            <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></div>
+            <p class="testimonial-text">"Ahmed transformed our old website into a modern, fast-loading platform. The attention to detail, clean code, and on-time delivery made the whole process stress-free."</p>
+            <div class="testimonial-author">
+                <div class="author-avatar">FA</div>
+                <div class="author-info">
+                    <h5>Fatima Ali</h5>
+                    <p>Academy Director</p>
+                    <span class="author-verified"><i class="fas fa-check-circle"></i>Verified Client</span>
+                </div>
+            </div>
+        </div>
+        <div class="testimonial-card">
+            <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+            <p class="testimonial-text">"The AI chatbot he built for our platform is brilliant. Clients love it, it handles queries 24/7, and it was delivered ahead of schedule. Will definitely hire again!"</p>
+            <div class="testimonial-author">
+                <div class="author-avatar">ZH</div>
+                <div class="author-info">
+                    <h5>Zain Hassan</h5>
+                    <p>SaaS Founder</p>
+                    <span class="author-verified"><i class="fas fa-check-circle"></i>Verified Client</span>
+                </div>
+            </div>
+        </div>
+        <div class="testimonial-card">
+            <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+            <p class="testimonial-text">"Ahmed's communication was excellent throughout the entire project. He offered smart suggestions, fixed issues quickly, and delivered a polished final product. Truly a talented developer!"</p>
+            <div class="testimonial-author">
+                <div class="author-avatar">NB</div>
+                <div class="author-info">
+                    <h5>Nadia Baig</h5>
+                    <p>Marketing Director</p>
+                    <span class="author-verified"><i class="fas fa-check-circle"></i>Verified Client</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" style="background:rgba(10,15,28,0.5);">
+    <div class="section-header">
+        <div class="section-label">FAQ</div>
+        <h2 class="section-title">Frequently Asked <span>Questions</span></h2>
+        <div class="section-divider"></div>
+    </div>
+    <div class="faq-grid">
+        <div class="faq-item"><div class="faq-question"><h4>How long does a typical project take?</h4><div class="faq-icon"><i class="fas fa-plus"></i></div></div><div class="faq-answer"><p>Project timelines vary depending on complexity. A simple landing page can be delivered in 1–3 days. A standard multi-page website takes 1–2 weeks. Complex web applications with custom functionality typically take 3–6 weeks. I always provide a clear timeline estimate before starting.</p></div></div>
+        <div class="faq-item"><div class="faq-question"><h4>What do you need from me to get started?</h4><div class="faq-icon"><i class="fas fa-plus"></i></div></div><div class="faq-answer"><p>To kick things off I'll need: a brief description of your project and goals, any design references or inspirations you like, your brand assets (logo, colors, fonts) if available, and the content you want on the site. Don't worry if you don't have everything — I can help guide you through it.</p></div></div>
+        <div class="faq-item"><div class="faq-question"><h4>Do you offer post-launch support?</h4><div class="faq-icon"><i class="fas fa-plus"></i></div></div><div class="faq-answer"><p>Yes! All projects include a bug-fixing support period after launch (10–30 days depending on the plan). Beyond that, I offer ongoing maintenance packages to keep your site updated, secure, and running smoothly. I'm always available on WhatsApp for quick questions.</p></div></div>
+        <div class="faq-item"><div class="faq-question"><h4>Will I own the source code after the project?</h4><div class="faq-icon"><i class="fas fa-plus"></i></div></div><div class="faq-answer"><p>Absolutely. Once the project is complete and final payment is made, you receive full ownership of all source code, assets, and documentation. Everything is handed over cleanly via GitHub or your preferred file-sharing method.</p></div></div>
+        <div class="faq-item"><div class="faq-question"><h4>Can you work with my existing website?</h4><div class="faq-icon"><i class="fas fa-plus"></i></div></div><div class="faq-answer"><p>Yes! I regularly work on existing sites — whether it's fixing bugs, adding new features, redesigning sections, improving performance, or migrating to a new platform. Share your current site and I'll assess what's needed.</p></div></div>
+        <div class="faq-item"><div class="faq-question"><h4>What payment methods do you accept?</h4><div class="faq-icon"><i class="fas fa-plus"></i></div></div><div class="faq-answer"><p>I accept payments via bank transfer, JazzCash, EasyPaisa, PayPal, and other methods. For larger projects, I typically work with 50% upfront and 50% on completion. We can discuss the payment structure that works best for you.</p></div></div>
+    </div>
+</section>
+
+<!-- CTA BANNER -->
+<div class="cta-banner">
+    <div class="cta-banner-inner">
+        <h2>Ready to Start Your <span>Next Project?</span></h2>
+        <p>Have an idea? Whether it's a portfolio, e-commerce store, web app, or anything in between — let's collaborate and bring your vision to life with cutting-edge technology and exceptional design.</p>
+        <div class="cta-banner-btns">
+            <a href="#contact" class="btn btn-primary"><i class="fas fa-rocket"></i>Start a Project</a>
+            <a href="https://wa.me/923154901455" target="_blank" class="btn btn-secondary"><i class="fab fa-whatsapp"></i>WhatsApp Me</a>
+        </div>
+    </div>
 </div>
 
-<div class="toast" id="toast"><i class="fas fa-check"></i> Message Sent</div>
+<!-- CONTACT -->
+<section class="contact" id="contact">
+    <div class="section-header">
+        <div class="section-label">GET IN TOUCH</div>
+        <h2 class="section-title">Let's <span>Talk</span></h2>
+        <div class="section-divider"></div>
+        <p class="section-subtitle">Ready to start your next project? Let's discuss how I can help</p>
+    </div>
+    <div class="contact-container">
+        <div class="contact-info">
+            <h3>Let's Build Something <span>Amazing</span></h3>
+            <p>Have a project in mind? I'm here to help bring your ideas to life. Fill out the form and I'll get back to you within 2–4 hours via WhatsApp. Messages are sent directly to my WhatsApp for the fastest response.</p>
+            <div class="contact-details">
+                <div class="contact-item"><div class="contact-icon"><i class="fas fa-envelope"></i></div><div class="contact-text"><h4>Email</h4><p>ahmedshah@example.com</p></div></div>
+                <div class="contact-item"><div class="contact-icon"><i class="fab fa-whatsapp"></i></div><div class="contact-text"><h4>WhatsApp</h4><p>+92 315 4901455</p></div></div>
+                <div class="contact-item"><div class="contact-icon"><i class="fab fa-linkedin"></i></div><div class="contact-text"><h4>LinkedIn</h4><p>ahmed-shah-web-developer-designer</p></div></div>
+                <div class="contact-item"><div class="contact-icon"><i class="fab fa-github"></i></div><div class="contact-text"><h4>GitHub</h4><p>github.com/Ahmedshah56</p></div></div>
+                <div class="contact-item"><div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div><div class="contact-text"><h4>Location</h4><p>Pakistan (Available Worldwide)</p></div></div>
+                <div class="contact-item"><div class="contact-icon"><i class="fas fa-clock"></i></div><div class="contact-text"><h4>Response Time</h4><p>Within 2–4 hours</p></div></div>
+            </div>
+        </div>
+        <div class="contact-form-wrapper">
+            <form class="contact-form" id="contactForm">
+                <div class="form-group"><label for="name">Your Name *</label><input type="text" id="name" name="name" required placeholder="John Doe"></div>
+                <div class="form-group"><label for="email">Your Email *</label><input type="email" id="email" name="email" required placeholder="john@example.com"></div>
+                <div class="form-group"><label for="phone">Phone / WhatsApp</label><input type="tel" id="phone" name="phone" placeholder="+92 300 1234567"></div>
+                <div class="form-group">
+                    <label for="service">Service Needed</label>
+                    <select id="service" name="service">
+                        <option value="">Select a service...</option>
+                        <option>Full Stack Development</option>
+                        <option>Frontend Development</option>
+                        <option>Backend / API Development</option>
+                        <option>WordPress Development</option>
+                        <option>E-Commerce Store</option>
+                        <option>UI/UX Design</option>
+                        <option>Speed & SEO Optimization</option>
+                        <option>Bug Fixing / Maintenance</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div class="form-group"><label for="budget">Budget Range</label><select id="budget" name="budget"><option value="">Select budget...</option><option>Under $150</option><option>$150 – $400</option><option>$400 – $900</option><option>$900+</option><option>Let's discuss</option></select></div>
+                <div class="form-group"><label for="message">Your Message *</label><textarea id="message" name="message" required placeholder="Tell me about your project — what do you need built? Any deadlines?"></textarea></div>
+                <button type="submit" class="submit-btn"><i class="fab fa-whatsapp"></i>Send via WhatsApp</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-content">
+        <div class="footer-main">
+            <div class="footer-about">
+                <h3>&lt;AhmedShah/&gt;</h3>
+                <p>Full Stack Developer from Pakistan, passionate about creating innovative web solutions. Specialized in React, Node.js, Python, and modern web technologies. Available for freelance & remote projects worldwide.</p>
+                <div class="footer-social">
+                    <a href="https://github.com/Ahmedshah56" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="https://www.linkedin.com/in/ahmed-shah-web-developer-designer" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://www.facebook.com/share/17mHGjDjHF/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://x.com/Syed_says10" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.instagram.com/ahmedshah.zn" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.behance.net/ahmedshah45" target="_blank"><i class="fab fa-behance"></i></a>
+                    <a href="https://wa.me/923154901455" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About Me</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#process">My Process</a></li>
+                    <li><a href="#portfolio">Portfolio</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Services</h4>
+                <ul class="footer-links">
+                    <li><a href="#services">Web Development</a></li>
+                    <li><a href="#services">API Development</a></li>
+                    <li><a href="#services">WordPress</a></li>
+                    <li><a href="#services">E-Commerce</a></li>
+                    <li><a href="#services">UI/UX Design</a></li>
+                    <li><a href="#services">Speed & SEO</a></li>
+                    <li><a href="#services">DevOps</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <ul class="footer-links">
+                    <li><a href="mailto:ahmedshah@example.com">Email Me</a></li>
+                    <li><a href="https://wa.me/923154901455" target="_blank">WhatsApp</a></li>
+                    <li><a href="https://github.com/Ahmedshah56" target="_blank">GitHub</a></li>
+                    <li><a href="https://www.linkedin.com/in/ahmed-shah-web-developer-designer" target="_blank">LinkedIn</a></li>
+                    <li><a href="#contact">Contact Form</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Ahmed Shah. All rights reserved.</p>
+            <p>Designed & Developed with <i class="fas fa-heart" style="color:#00FF87"></i> by Ahmed Shah</p>
+        </div>
+    </div>
+</footer>
+
+</div><!-- end content-wrapper -->
 
 <script>
-// ═══════════════════════════════════════════════════════
-//  LOADING SCREEN
-// ═══════════════════════════════════════════════════════
-let pct=0;
-const lbar=document.getElementById('lbar');
-const lpct=document.getElementById('lpct');
-const interval=setInterval(()=>{
-  pct+=Math.random()*15;
-  if(pct>=100){pct=100;clearInterval(interval);setTimeout(()=>{document.getElementById('loader').classList.add('hide');initScene()},400)}
-  lbar.style.width=pct+'%';lpct.textContent=Math.floor(pct)+'%';
-},80);
-
-// ═══════════════════════════════════════════════════════
-//  CURSOR
-// ═══════════════════════════════════════════════════════
-const cd=document.getElementById('c-dot'),cr=document.getElementById('c-ring');
-let cx=0,cy=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{cx=e.clientX;cy=e.clientY;cd.style.left=cx+'px';cd.style.top=cy+'px'});
-(function loopCursor(){rx+=(cx-rx)*.1;ry+=(cy-ry)*.1;cr.style.left=rx+'px';cr.style.top=ry+'px';requestAnimationFrame(loopCursor)})();
-
-// ═══════════════════════════════════════════════════════
-//  SCROLL PROGRESS + NAV
-// ═══════════════════════════════════════════════════════
-const prog=document.getElementById('prog'),nav=document.getElementById('nav');
-window.addEventListener('scroll',()=>{
-  const s=window.scrollY,dh=document.documentElement.scrollHeight-window.innerHeight;
-  prog.style.width=(s/dh*100)+'%';
-  nav.classList.toggle('dark',s>80);
-});
-
-// ═══════════════════════════════════════════════════════
-//  MOBILE NAV
-// ═══════════════════════════════════════════════════════
-document.getElementById('mBtn').addEventListener('click',()=>{
-  const nl=document.getElementById('navLinks');
-  nl.style.cssText=nl.style.display==='flex'?'':
-    'display:flex;flex-direction:column;position:fixed;top:0;left:0;width:80%;height:100vh;background:rgba(3,4,7,.98);backdrop-filter:blur(30px);border-right:1px solid rgba(200,169,110,.12);align-items:center;justify-content:center;gap:2.5rem;z-index:999';
-});
-
-// ═══════════════════════════════════════════════════════
-//  MAIN 3D SCENE — KUBOTA STYLE
-// ═══════════════════════════════════════════════════════
-function initScene(){
-  const canvas=document.getElementById('webgl');
-  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
-  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-  renderer.setSize(innerWidth,innerHeight);
-  renderer.setClearColor(0x030407,1);
-  renderer.shadowMap.enabled=true;
-  renderer.toneMapping=THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure=1.2;
-
-  const scene=new THREE.Scene();
-  scene.fog=new THREE.FogExp2(0x030407,0.008);
-
-  const cam=new THREE.PerspectiveCamera(55,innerWidth/innerHeight,.1,1000);
-  cam.position.set(0,0,60);
-
-  // ── LIGHTS ──
-  scene.add(new THREE.AmbientLight(0x0A0E18,2));
-  const pL1=new THREE.PointLight(0xC8A96E,8,80);pL1.position.set(20,20,20);scene.add(pL1);
-  const pL2=new THREE.PointLight(0x00E5C8,5,60);pL2.position.set(-20,-10,15);scene.add(pL2);
-  const pL3=new THREE.PointLight(0x00B4FF,4,60);pL3.position.set(0,-30,-10);scene.add(pL3);
-
-  // ── CENTRAL CUBE (Kubota-style hero element) ──
-  const cubeGroup=new THREE.Group();
-  scene.add(cubeGroup);
-
-  // Outer wireframe cube
-  const outerGeo=new THREE.BoxGeometry(12,12,12);
-  const outerMat=new THREE.MeshBasicMaterial({color:0xC8A96E,wireframe:true,transparent:true,opacity:.12});
-  const outerCube=new THREE.Mesh(outerGeo,outerMat);
-  cubeGroup.add(outerCube);
-
-  // Edge lines (clean sharp cube edges)
-  const edgeGeo=new THREE.EdgesGeometry(new THREE.BoxGeometry(12,12,12));
-  const edgeMat=new THREE.LineBasicMaterial({color:0xC8A96E,transparent:true,opacity:.5});
-  const edges=new THREE.LineSegments(edgeGeo,edgeMat);
-  cubeGroup.add(edges);
-
-  // Inner solid cube (dark metallic)
-  const innerGeo=new THREE.BoxGeometry(10,10,10);
-  const innerMat=new THREE.MeshStandardMaterial({
-    color:0x040810,roughness:.05,metalness:.9,
-    emissive:0xC8A96E,emissiveIntensity:.04
-  });
-  const innerCube=new THREE.Mesh(innerGeo,innerMat);
-  cubeGroup.add(innerCube);
-
-  // Cube corner spheres
-  const cornerPositions=[[6,6,6],[6,6,-6],[6,-6,6],[6,-6,-6],[-6,6,6],[-6,6,-6],[-6,-6,6],[-6,-6,-6]];
-  const cornerMat=new THREE.MeshBasicMaterial({color:0xF0D080});
-  cornerPositions.forEach(p=>{
-    const m=new THREE.Mesh(new THREE.SphereGeometry(.12,8,8),cornerMat);
-    m.position.set(...p);cubeGroup.add(m);
-  });
-
-  // Orbiting ring 1
-  const ring1=new THREE.Mesh(
-    new THREE.TorusGeometry(18,.04,8,200),
-    new THREE.MeshBasicMaterial({color:0xC8A96E,transparent:true,opacity:.25})
-  );
-  ring1.rotation.x=Math.PI/3;scene.add(ring1);
-
-  // Orbiting ring 2
-  const ring2=new THREE.Mesh(
-    new THREE.TorusGeometry(22,.03,8,200),
-    new THREE.MeshBasicMaterial({color:0x00E5C8,transparent:true,opacity:.18})
-  );
-  ring2.rotation.x=-Math.PI/4;ring2.rotation.y=Math.PI/6;scene.add(ring2);
-
-  // Orbiting ring 3
-  const ring3=new THREE.Mesh(
-    new THREE.TorusGeometry(26,.025,8,200),
-    new THREE.MeshBasicMaterial({color:0x00B4FF,transparent:true,opacity:.12})
-  );
-  ring3.rotation.x=Math.PI/6;ring3.rotation.z=Math.PI/4;scene.add(ring3);
-
-  // ── GALAXY PARTICLES (Kubota-style nebula) ──
-  function makeParticleField(count,spread,colorNear,colorFar,size=.3){
+// THREE.JS PARTICLE BACKGROUND
+(function(){
+    const canvas=document.getElementById('three-canvas');
+    const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+    renderer.setSize(window.innerWidth,window.innerHeight);
+    renderer.setClearColor(0x000000,0);
+    const scene=new THREE.Scene();
+    const camera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000);
+    camera.position.z=80;
+    const particleCount=3000;
+    const positions=new Float32Array(particleCount*3);
+    const colors=new Float32Array(particleCount*3);
+    const colorA=new THREE.Color(0x00FF87);
+    const colorB=new THREE.Color(0x00D9FF);
+    const colorC=new THREE.Color(0xFFFFFF);
+    for(let i=0;i<particleCount;i++){
+        positions[i*3]=(Math.random()-0.5)*300;
+        positions[i*3+1]=(Math.random()-0.5)*300;
+        positions[i*3+2]=(Math.random()-0.5)*200;
+        const t=Math.random();
+        const c=t<0.33?colorA:t<0.66?colorB:colorC;
+        colors[i*3]=c.r;colors[i*3+1]=c.g;colors[i*3+2]=c.b;
+    }
     const geo=new THREE.BufferGeometry();
-    const pos=new Float32Array(count*3);
-    const col=new Float32Array(count*3);
-    const c1=new THREE.Color(colorNear),c2=new THREE.Color(colorFar);
-    for(let i=0;i<count;i++){
-      const r=Math.pow(Math.random(),0.4)*spread;
-      const theta=Math.random()*Math.PI*2;
-      const phi=Math.acos(2*Math.random()-1);
-      pos[i*3]=r*Math.sin(phi)*Math.cos(theta);
-      pos[i*3+1]=r*Math.sin(phi)*Math.sin(theta);
-      pos[i*3+2]=r*Math.cos(phi);
-      const t=r/spread;
-      const c=c1.clone().lerp(c2,t);
-      col[i*3]=c.r;col[i*3+1]=c.g;col[i*3+2]=c.b;
+    geo.setAttribute('position',new THREE.BufferAttribute(positions,3));
+    geo.setAttribute('color',new THREE.BufferAttribute(colors,3));
+    const mat=new THREE.PointsMaterial({size:0.8,vertexColors:true,transparent:true,opacity:0.7,sizeAttenuation:true});
+    const particles=new THREE.Points(geo,mat);
+    scene.add(particles);
+    const lineMat=new THREE.LineBasicMaterial({color:0x00FF87,transparent:true,opacity:0.06});
+    const nodes=[];
+    for(let i=0;i<80;i++) nodes.push(new THREE.Vector3((Math.random()-0.5)*200,(Math.random()-0.5)*200,(Math.random()-0.5)*60));
+    const linePoints=[];
+    for(let i=0;i<nodes.length;i++) for(let j=i+1;j<nodes.length;j++) if(nodes[i].distanceTo(nodes[j])<35) linePoints.push(nodes[i],nodes[j]);
+    scene.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(linePoints),lineMat));
+    const shapes=[];
+    const geoShapes=[new THREE.IcosahedronGeometry(4,0),new THREE.OctahedronGeometry(5,0),new THREE.TetrahedronGeometry(4,0)];
+    for(let i=0;i<6;i++){
+        const m=new THREE.Mesh(geoShapes[i%3],new THREE.MeshBasicMaterial({color:i%2===0?0x00FF87:0x00D9FF,wireframe:true,transparent:true,opacity:0.1}));
+        m.position.set((Math.random()-0.5)*160,(Math.random()-0.5)*120,(Math.random()-0.5)*40-20);
+        m.userData={rx:(Math.random()-0.5)*0.01,ry:(Math.random()-0.5)*0.01,fs:Math.random()*0.005+0.003,fo:Math.random()*Math.PI*2};
+        shapes.push(m);scene.add(m);
     }
-    geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
-    geo.setAttribute('color',new THREE.BufferAttribute(col,3));
-    return new THREE.Points(geo,new THREE.PointsMaterial({size,vertexColors:true,transparent:true,opacity:.8,sizeAttenuation:true}));
-  }
+    let mx=0,my=0;
+    document.addEventListener('mousemove',e=>{mx=(e.clientX/window.innerWidth-0.5)*2;my=-(e.clientY/window.innerHeight-0.5)*2;});
+    window.addEventListener('resize',()=>{camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight);});
+    let t=0;
+    (function animate(){
+        requestAnimationFrame(animate);t+=0.005;
+        particles.rotation.y+=0.0005;particles.rotation.x+=0.0002;
+        shapes.forEach(s=>{s.rotation.x+=s.userData.rx;s.rotation.y+=s.userData.ry;s.position.y+=Math.sin(t+s.userData.fo)*s.userData.fs;});
+        camera.position.x+=(mx*8-camera.position.x)*0.02;
+        camera.position.y+=(my*8-camera.position.y)*0.02;
+        camera.lookAt(scene.position);
+        renderer.render(scene,camera);
+    })();
+})();
 
-  const nebula1=makeParticleField(6000,150,0xC8A96E,0x00B4FF,.3);scene.add(nebula1);
-  const nebula2=makeParticleField(4000,200,0x00E5C8,0xC8A96E,.25);scene.add(nebula2);
-  const nebula3=makeParticleField(3000,100,0xFFFFFF,0x6B7280,.15);scene.add(nebula3);
+// GSAP ANIMATIONS
+gsap.registerPlugin(ScrollTrigger);
+gsap.to('.hero-content',{opacity:1,y:0,duration:1.2,ease:'power3.out',delay:0.3});
+gsap.to('.hero-image',{opacity:1,duration:1.2,ease:'power3.out',delay:0.5});
+gsap.utils.toArray('.service-card').forEach((el,i)=>{gsap.to(el,{opacity:1,y:0,duration:0.7,delay:i*0.1,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 85%',once:true}});});
+gsap.utils.toArray('.stat-card').forEach((el,i)=>{gsap.to(el,{opacity:1,scale:1,duration:0.6,delay:i*0.1,ease:'back.out(1.5)',scrollTrigger:{trigger:el,start:'top 85%',once:true}});});
+gsap.utils.toArray('.feature-item').forEach((el,i)=>{gsap.to(el,{opacity:1,x:0,duration:0.6,delay:i*0.08,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 88%',once:true}});});
+gsap.utils.toArray('.project-card').forEach((el,i)=>{gsap.to(el,{opacity:1,y:0,duration:0.6,delay:(i%3)*0.12,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 88%',once:true}});});
+gsap.utils.toArray('.pricing-card').forEach((el,i)=>{gsap.to(el,{opacity:1,y:0,duration:0.7,delay:i*0.15,ease:'back.out(1.3)',scrollTrigger:{trigger:el,start:'top 88%',once:true}});});
+gsap.utils.toArray('.testimonial-card').forEach((el,i)=>{gsap.to(el,{opacity:1,y:0,duration:0.6,delay:(i%3)*0.12,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 88%',once:true}});});
+gsap.utils.toArray('.tech-category').forEach((el,i)=>{gsap.to(el,{opacity:1,y:0,duration:0.6,delay:i*0.1,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 88%',once:true}});});
+gsap.utils.toArray('.process-step').forEach((el,i)=>{gsap.to(el,{opacity:1,duration:0.7,delay:0,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 85%',once:true}});});
+gsap.utils.toArray('.faq-item').forEach((el,i)=>{gsap.to(el,{opacity:1,y:0,duration:0.5,delay:i*0.08,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 88%',once:true}});});
 
-  // ── FLOATING GEOMETRIC ACCENTS ──
-  const accents=[];
-  const accentDefs=[
-    {g:new THREE.OctahedronGeometry(2.5,0),c:0xC8A96E,p:[30,15,-20]},
-    {g:new THREE.TetrahedronGeometry(2,0),c:0x00E5C8,p:[-25,-10,-15]},
-    {g:new THREE.IcosahedronGeometry(2,0),c:0x00B4FF,p:[20,-20,-25]},
-    {g:new THREE.OctahedronGeometry(1.5,0),c:0xF0D080,p:[-35,20,-30]},
-    {g:new THREE.IcosahedronGeometry(3,0),c:0xC8A96E,p:[40,-5,-40]},
-    {g:new THREE.TetrahedronGeometry(2.5,0),c:0x00E5C8,p:[-40,-25,-35]},
-  ];
-  accentDefs.forEach(d=>{
-    const m=new THREE.Mesh(d.g,new THREE.MeshBasicMaterial({color:d.c,wireframe:true,transparent:true,opacity:.15}));
-    m.position.set(...d.p);
-    m.userData={rx:(Math.random()-.5)*.004,ry:(Math.random()-.5)*.005,fl:Math.random()*Math.PI*2};
-    scene.add(m);accents.push(m);
-  });
-
-  // ── SHOOTING STARS ──
-  const shooters=[];
-  function shootStar(){
-    const g=new THREE.BufferGeometry();
-    const len=Math.random()*20+10;
-    const sx=(Math.random()-.5)*200,sy=(Math.random()-.5)*150;
-    g.setFromPoints([new THREE.Vector3(sx,sy,-50),new THREE.Vector3(sx+len,sy-len*.4,-50)]);
-    const m=new THREE.LineBasicMaterial({color:0xF0D080,transparent:true,opacity:.9});
-    const line=new THREE.Line(g,m);
-    scene.add(line);shooters.push({line,life:0,max:50});
-  }
-  setInterval(shootStar,2500);
-
-  // ── GRID (ground plane) ──
-  const grid=new THREE.GridHelper(300,50,0xC8A96E,0xC8A96E);
-  grid.material.opacity=.025;grid.material.transparent=true;
-  grid.position.y=-40;scene.add(grid);
-
-  // ── CAMERA ANIMATION PATH (Kubota-style scroll fly-through) ──
-  // Camera travels along a bezier-like path as user scrolls
-  const camPath=[
-    {pos:[0,0,60],  look:[0,0,0],   rot:0},       // 0%  - hero
-    {pos:[30,10,40], look:[0,0,0],   rot:.3},      // 15% - orbit right
-    {pos:[-20,20,30],look:[0,0,0],  rot:-.2},      // 30% - orbit left up
-    {pos:[0,40,20],  look:[0,0,0],   rot:0},       // 45% - look down
-    {pos:[0,0,25],   look:[0,0,0],   rot:.1},      // 60% - close zoom
-    {pos:[-30,-15,45],look:[0,0,0],  rot:-.15},    // 75% - pull back
-    {pos:[0,0,60],   look:[0,0,0],   rot:0},       // 90% - return
-    {pos:[0,5,80],   look:[0,0,0],   rot:0},       // 100%- far out
-  ];
-
-  // ── SECTION TITLES that fade in mid-scroll ──
-  const titles=[
-    {start:.08,end:.22,text:'Full Stack<br><em>Developer</em>',sub:'Building extraordinary digital experiences',col:'var(--gold)'},
-    {start:.28,end:.42,text:'3+ Years of<br><em>Excellence</em>',sub:'Clean code • Modern stack • 100% satisfaction',col:'var(--teal)'},
-    {start:.48,end:.62,text:'From Idea to<br><em>Reality</em>',sub:'React · Node.js · Python · AWS',col:'var(--cyan)'},
-    {start:.68,end:.82,text:'Available for<br><em>Projects</em>',sub:'Let\'s build something extraordinary together',col:'var(--gold)'},
-  ];
-
-  // Inject title overlays
-  titles.forEach((t,i)=>{
-    const div=document.createElement('div');
-    div.className='section-overlay';div.id='sov'+i;
-    div.innerHTML=`
-      <div>
-        <div class="sec-label" style="color:${t.col}">0${i+1} — Ahmed Shah</div>
-        <div class="sec-big-title" style="line-height:.95">${t.text}</div>
-        <p style="color:var(--muted);font-size:.9rem;max-width:400px;margin-top:1rem;line-height:1.7;font-weight:300">${t.sub}</p>
-      </div>`;
-    document.body.appendChild(div);
-  });
-
-  // ── MOUSE ──
-  let mx=0,my=0;
-  document.addEventListener('mousemove',e=>{mx=(e.clientX/innerWidth-.5)*2;my=(e.clientY/innerHeight-.5)*2});
-
-  // ── RESIZE ──
-  window.addEventListener('resize',()=>{
-    cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();
-    renderer.setSize(innerWidth,innerHeight);
-  });
-
-  // ── SCROLL DRIVER ──
-  const scrollWrap=document.getElementById('scroll-wrap');
-  let scrollProg=0;
-  window.addEventListener('scroll',()=>{
-    const wH=window.innerHeight;
-    const rect=document.getElementById('html-content').getBoundingClientRect();
-    const total=rect.top+window.scrollY-wH;
-    scrollProg=Math.max(0,Math.min(1,window.scrollY/total));
-
-    // show/hide fixed hero elements (only on desktop where they are position:fixed)
-    const heroAlpha=Math.max(0,1-scrollProg*8);
-    document.getElementById('hero-text').style.opacity=heroAlpha;
-    document.getElementById('hero-text').style.pointerEvents=heroAlpha<.1?'none':'auto';
-    if(window.innerWidth>1024){
-      document.getElementById('heroPhoto').style.opacity=heroAlpha;
-    }
-    document.getElementById('scrollInd').style.opacity=heroAlpha;
-
-    // section overlays
-    titles.forEach((t,i)=>{
-      const el=document.getElementById('sov'+i);
-      const inView=scrollProg>=t.start&&scrollProg<=t.end;
-      el.classList.toggle('visible',inView);
-    });
-  });
-
-  // ── RENDER LOOP ──
-  let t=0;
-  function tick(){
-    requestAnimationFrame(tick);t+=.008;
-
-    // Interpolate camera along path
-    const idx=scrollProg*(camPath.length-1);
-    const a=Math.floor(idx),b=Math.min(a+1,camPath.length-1);
-    const f=idx-a;
-    const pA=camPath[a],pB=camPath[b];
-    const lerp=(a,b,t)=>a+(b-a)*t;
-
-    const tx=lerp(pA.pos[0],pB.pos[0],f);
-    const ty=lerp(pA.pos[1],pB.pos[1],f);
-    const tz=lerp(pA.pos[2],pB.pos[2],f);
-
-    // Smooth camera to target + mouse parallax
-    cam.position.x+=(tx+mx*3-cam.position.x)*.04;
-    cam.position.y+=(ty-my*2-cam.position.y)*.04;
-    cam.position.z+=(tz-cam.position.z)*.04;
-    cam.lookAt(0,0,0);
-
-    // Cube rotation (slows when scrolled)
-    const cubeSpeed=1-scrollProg*.5;
-    cubeGroup.rotation.y+=.004*cubeSpeed;
-    cubeGroup.rotation.x+=.002*cubeSpeed;
-
-    // Rings orbit
-    ring1.rotation.z+=.003;ring1.rotation.x+=.001;
-    ring2.rotation.z-=.002;ring2.rotation.y+=.002;
-    ring3.rotation.z+=.0015;ring3.rotation.x-=.001;
-
-    // Nebula slow drift
-    nebula1.rotation.y+=.0004;nebula2.rotation.y-=.0003;nebula3.rotation.x+=.0002;
-
-    // Accents
-    accents.forEach(a=>{
-      a.rotation.x+=a.userData.rx;a.rotation.y+=a.userData.ry;
-      a.position.y+=Math.sin(t+a.userData.fl)*.01;
-    });
-
-    // Pulse lights
-    pL1.intensity=7+Math.sin(t*.8)*2;
-    pL2.intensity=4+Math.cos(t*.6)*1.5;
-
-    // Inner cube emissive pulse
-    innerMat.emissiveIntensity=.03+Math.sin(t*1.5)*.03;
-
-    // Shooting stars
-    for(let i=shooters.length-1;i>=0;i--){
-      const s=shooters[i];s.life++;
-      const p=s.line.geometry.attributes.position;
-      p.array[0]-=1.2;p.array[1]+=.5;p.array[3]-=1.2;p.array[4]+=.5;
-      p.needsUpdate=true;
-      s.line.material.opacity=.9*(1-s.life/s.max);
-      if(s.life>=s.max){scene.remove(s.line);s.line.geometry.dispose();shooters.splice(i,1);}
-    }
-
-    // Scale cube based on scroll (grows then shrinks)
-    const sc=1+Math.sin(scrollProg*Math.PI)*.15;
-    cubeGroup.scale.setScalar(sc);
-
-    renderer.render(scene,cam);
-  }
-  tick();
-
-  // ── GSAP HERO ENTRANCE ──
-  gsap.registerPlugin(ScrollTrigger);
-  const isMobile=window.innerWidth<=1024;
-  gsap.to('.hero-eyebrow',{opacity:1,y:0,duration:1,delay:.3,ease:'power3.out'});
-  gsap.to('.hero-title',{opacity:1,y:0,duration:1.3,delay:.5,ease:'power4.out'});
-  if(isMobile){
-    gsap.fromTo('#heroPhoto',{opacity:0,y:40},{opacity:1,y:0,duration:1.1,delay:.7,ease:'power3.out'});
-  } else {
-    gsap.fromTo('#heroPhoto',{opacity:0,x:60},{opacity:1,x:0,duration:1.3,delay:.7,ease:'power3.out'});
-  }
-  gsap.to('.hero-sub',{opacity:1,y:0,duration:1,delay:.9,ease:'power3.out'});
-  gsap.to('.hero-btns',{opacity:1,y:0,duration:.9,delay:1.1,ease:'power3.out'});
-  gsap.to('#scrollInd',{opacity:1,duration:1,delay:1.4,ease:'power2.out'});
-
-  // Scroll reveals for HTML content
-  gsap.utils.toArray('.srv').forEach((el,i)=>{
-    gsap.to(el,{opacity:1,y:0,duration:.8,delay:i*.07,ease:'power3.out',
-      scrollTrigger:{trigger:el,start:'top 88%',once:true}});
-  });
-  gsap.utils.toArray('.stat').forEach((el,i)=>{
-    gsap.to(el,{opacity:1,y:0,duration:.7,delay:i*.1,ease:'power2.out',
-      scrollTrigger:{trigger:el,start:'top 85%',once:true}});
-  });
-  gsap.utils.toArray('.feat').forEach((el,i)=>{
-    gsap.to(el,{opacity:1,x:0,duration:.7,delay:i*.06,ease:'power2.out',
-      scrollTrigger:{trigger:el,start:'top 90%',once:true}});
-  });
-  gsap.utils.toArray('.proj').forEach((el,i)=>{
-    gsap.to(el,{opacity:1,scale:1,duration:.7,delay:(i%3)*.1,ease:'power2.out',
-      scrollTrigger:{trigger:el,start:'top 88%',once:true}});
-  });
-  gsap.utils.toArray('.s-title').forEach(el=>{
-    gsap.from(el,{opacity:0,y:40,duration:1,ease:'power3.out',
-      scrollTrigger:{trigger:el,start:'top 88%',once:true}});
-  });
-}
-
-// ═══════════════════════════════════════════════════════
-//  PORTFOLIO FILTER
-// ═══════════════════════════════════════════════════════
-document.querySelectorAll('.f-btn').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    document.querySelectorAll('.f-btn').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    const f=btn.dataset.f;
-    document.querySelectorAll('.proj').forEach(p=>{
-      p.classList.toggle('hidden',f!=='all'&&p.dataset.c!==f);
-    });
-  });
+// SCROLL PROGRESS + NAV
+window.addEventListener('scroll',()=>{
+    const pct=(window.scrollY/(document.documentElement.scrollHeight-window.innerHeight))*100;
+    document.getElementById('scroll-progress').style.width=pct+'%';
+    document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>50);
 });
 
-// ═══════════════════════════════════════════════════════
-//  WHATSAPP FORM
-// ═══════════════════════════════════════════════════════
-document.getElementById('cForm').addEventListener('submit',function(e){
-  e.preventDefault();
-  const n=document.getElementById('fn').value;
-  const em=document.getElementById('fe').value;
-  const ph=document.getElementById('fp').value;
-  const msg=document.getElementById('fm').value;
-  const txt=`*New Contact*%0A%0A*Name:* ${n}%0A*Email:* ${em}%0A*Phone:* ${ph||'N/A'}%0A*Message:* ${msg}`;
-  window.open(`https://wa.me/923154901455?text=${txt}`,'_blank');
-  const t=document.getElementById('toast');
-  t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500);
-  this.reset();
+// MOBILE MENU
+const menuToggle=document.getElementById('menuToggle');
+const navLinks=document.getElementById('navLinks');
+menuToggle.addEventListener('click',()=>{navLinks.classList.toggle('active');const i=menuToggle.querySelector('i');i.classList.toggle('fa-bars');i.classList.toggle('fa-times');});
+document.querySelectorAll('.nav-links a').forEach(a=>{a.addEventListener('click',()=>{navLinks.classList.remove('active');menuToggle.querySelector('i').classList.replace('fa-times','fa-bars');});});
+document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth',block:'start'});});});
+
+// PORTFOLIO FILTER
+document.querySelectorAll('.filter-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+        document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter=btn.getAttribute('data-filter');
+        document.querySelectorAll('.project-card').forEach(card=>{card.classList.toggle('hidden',filter!=='all'&&card.getAttribute('data-category')!==filter);});
+    });
 });
 
-// Smooth scroll for anchors
-document.querySelectorAll('a[href^="#"]').forEach(a=>{
-  a.addEventListener('click',function(e){
+// FAQ ACCORDION
+document.querySelectorAll('.faq-item').forEach(item=>{
+    item.querySelector('.faq-question').addEventListener('click',()=>{
+        const isOpen=item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+        if(!isOpen)item.classList.add('open');
+    });
+});
+
+// WHATSAPP CONTACT FORM
+document.getElementById('contactForm').addEventListener('submit',function(e){
     e.preventDefault();
-    const t=document.querySelector(this.getAttribute('href'));
-    if(t)t.scrollIntoView({behavior:'smooth',block:'start'});
-  });
+    const name=document.getElementById('name').value;
+    const email=document.getElementById('email').value;
+    const phone=document.getElementById('phone').value;
+    const service=document.getElementById('service').value;
+    const budget=document.getElementById('budget').value;
+    const message=document.getElementById('message').value;
+    const text=`*New Project Inquiry*%0A%0A*Name:* ${name}%0A*Email:* ${email}%0A*Phone:* ${phone||'Not provided'}%0A*Service:* ${service||'Not specified'}%0A*Budget:* ${budget||'Not specified'}%0A*Message:* ${message}`;
+    window.open(`https://wa.me/923154901455?text=${text}`,'_blank');
+    const sm=document.getElementById('successMessage');
+    sm.classList.add('show');
+    setTimeout(()=>sm.classList.remove('show'),3500);
+    this.reset();
 });
 </script>
 </body>
