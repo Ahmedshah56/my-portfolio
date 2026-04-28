@@ -54,22 +54,11 @@
         .btn-secondary{background:transparent;border:2px solid rgba(255,255,255,0.2);color:var(--text);}
         .btn-secondary:hover{border-color:var(--primary);color:var(--primary);}
 
-        /* HERO IMAGE & PROFILE */
+        /* HERO IMAGE — 3D Canvas */
         .hero-image{position:relative;display:flex;justify-content:center;align-items:center;opacity:0;}
-        .profile-photo-wrapper{position:relative;width:360px;height:360px;z-index:2;}
-        .profile-photo-frame{width:100%;height:100%;border-radius:20px;overflow:hidden;border:2px solid rgba(0,255,135,0.25);position:relative;background:var(--card-bg);}
-        .profile-photo-frame img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block;}
-        .profile-photo-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#141824 0%,#0d1220 100%);color:var(--text-muted);gap:1rem;}
-        .profile-photo-placeholder .avatar-icon{width:100px;height:100px;border-radius:50%;background:rgba(0,255,135,0.08);border:2px dashed rgba(0,255,135,0.3);display:flex;align-items:center;justify-content:center;font-size:2.5rem;color:var(--primary);}
-        .profile-photo-placeholder p{font-size:0.85rem;font-family:'Space Mono',monospace;color:rgba(0,255,135,0.5);text-align:center;padding:0 1rem;}
-        .photo-upload-hint{position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);background:var(--primary);color:var(--dark);padding:0.4rem 1rem;border-radius:20px;font-size:0.75rem;font-weight:700;font-family:'Space Mono',monospace;white-space:nowrap;}
-        .profile-corner-accent{position:absolute;width:40px;height:40px;border-color:var(--primary);border-style:solid;border-width:0;}
-        .profile-corner-accent.tl{top:-8px;left:-8px;border-top-width:3px;border-left-width:3px;border-radius:4px 0 0 0;}
-        .profile-corner-accent.tr{top:-8px;right:-8px;border-top-width:3px;border-right-width:3px;border-radius:0 4px 0 0;}
-        .profile-corner-accent.bl{bottom:-8px;left:-8px;border-bottom-width:3px;border-left-width:3px;border-radius:0 0 0 4px;}
-        .profile-corner-accent.br{bottom:-8px;right:-8px;border-bottom-width:3px;border-right-width:3px;border-radius:0 0 4px 0;}
-        .hero-3d-ring{position:absolute;width:420px;height:420px;border:1px solid rgba(0,255,135,0.15);border-radius:50%;animation:spin 20s linear infinite;}
-        .hero-3d-ring:nth-child(2){width:480px;height:480px;border-color:rgba(0,217,255,0.1);animation-duration:30s;animation-direction:reverse;}
+        #hero-3d{width:380px;height:380px;border-radius:20px;position:relative;z-index:2;}
+        .hero-3d-ring{position:absolute;width:420px;height:420px;border:1px solid rgba(0,255,135,0.2);border-radius:50%;animation:spin 20s linear infinite;}
+        .hero-3d-ring:nth-child(2){width:480px;height:480px;border-color:rgba(0,217,255,0.15);animation-duration:30s;animation-direction:reverse;}
         @keyframes spin{to{transform:rotate(360deg);}}
         .satisfaction-badge{position:absolute;bottom:-20px;left:-20px;background:rgba(10,15,28,0.95);backdrop-filter:blur(10px);padding:1rem 1.2rem;border-radius:10px;border:1px solid rgba(0,255,135,0.3);z-index:3;}
         .satisfaction-badge h4{color:var(--text);font-size:0.85rem;margin-bottom:0.3rem;}
@@ -141,8 +130,10 @@
         .tech-cat-icon{width:44px;height:44px;background:rgba(0,255,135,0.08);border:1px solid rgba(0,255,135,0.2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:var(--primary);}
         .tech-cat-header h4{font-size:1rem;font-weight:800;}
         .tech-tags{display:flex;flex-wrap:wrap;gap:0.6rem;}
-        .tech-tag{padding:0.4rem 1rem;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;font-size:0.82rem;color:var(--text-muted);font-family:'Space Mono',monospace;transition:all 0.3s;cursor:default;}
+        .tech-tag{padding:0.5rem 1rem;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;font-size:0.82rem;color:var(--text-muted);font-family:'Space Mono',monospace;transition:all 0.3s;cursor:default;display:inline-flex;align-items:center;gap:0.5rem;}
         .tech-tag:hover{background:rgba(0,255,135,0.08);border-color:rgba(0,255,135,0.3);color:var(--primary);}
+        .tech-tag svg{width:16px;height:16px;flex-shrink:0;}
+        .tech-tag img{width:16px;height:16px;flex-shrink:0;object-fit:contain;}
 
         /* EXPERTISE */
         .expertise{background:rgba(5,8,16,0.8);}
@@ -317,7 +308,7 @@
             .hero-container,.contact-container,.expertise-content,.about-content{grid-template-columns:1fr;text-align:center;}
             .hero-image{order:-1;justify-content:center;}
             .cta-buttons{justify-content:center;}
-            .profile-photo-wrapper{width:280px;height:280px;}
+            #hero-3d{width:280px;height:280px;}
             .hero-3d-ring{display:none;}
             .about-content{text-align:left;}
             .pricing-grid{grid-template-columns:1fr;}
@@ -384,16 +375,7 @@
         <div class="hero-image">
             <div class="hero-3d-ring"></div>
             <div class="hero-3d-ring"></div>
-            <div class="profile-photo-wrapper">
-                <div class="profile-corner-accent tl"></div>
-                <div class="profile-corner-accent tr"></div>
-                <div class="profile-corner-accent bl"></div>
-                <div class="profile-corner-accent br"></div>
-                <div class="profile-photo-frame">
-                    <img src="./aly/img/pf.png" alt="Ahmed Shah">
-                </div>
-
-            </div>
+            <canvas id="hero-3d"></canvas>
             <div class="satisfaction-badge">
                 <h4>100% Client Satisfaction</h4>
                 <p><i class="fas fa-headset"></i>24/7 Tech Support</p>
@@ -538,27 +520,78 @@
         <div class="tech-categories">
             <div class="tech-category">
                 <div class="tech-cat-header"><div class="tech-cat-icon"><i class="fas fa-paint-brush"></i></div><h4>Frontend</h4></div>
-                <div class="tech-tags"><span class="tech-tag">HTML5</span><span class="tech-tag">CSS3</span><span class="tech-tag">JavaScript</span><span class="tech-tag">React.js</span><span class="tech-tag">Next.js</span><span class="tech-tag">Vue.js</span><span class="tech-tag">TypeScript</span><span class="tech-tag">Tailwind CSS</span><span class="tech-tag">Bootstrap</span><span class="tech-tag">GSAP</span></div>
+                <div class="tech-tags">
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg">HTML5</span>
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg">CSS3</span>
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg">JavaScript</span>
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg">React.js</span>
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" style="filter:invert(1);">Next.js</span>
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg">Vue.js</span>
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg">TypeScript</span>
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-plain.svg">Tailwind CSS</span>
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg">Bootstrap</span>
+                    <span class="tech-tag"><svg viewBox="0 0 24 24" fill="#00FF87"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>GSAP</span>
+                </div>
             </div>
             <div class="tech-category">
                 <div class="tech-cat-header"><div class="tech-cat-icon"><i class="fas fa-server"></i></div><h4>Backend</h4></div>
-                <div class="tech-tags"><span class="tech-tag">Node.js</span><span class="tech-tag">Express.js</span><span class="tech-tag">Python</span><span class="tech-tag">Django</span><span class="tech-tag">FastAPI</span><span class="tech-tag">REST API</span><span class="tech-tag">GraphQL</span><span class="tech-tag">JWT Auth</span></div>
+                <div class="tech-tags">
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg">Node.js</span>
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" style="filter:invert(1);">Express.js</span>
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg">Python</span>
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg" style="filter:invert(0.8) sepia(1) saturate(2) hue-rotate(80deg);">Django</span>
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg">FastAPI</span>
+                    <span class="tech-tag"><svg viewBox="0 0 24 24" fill="#00D9FF" width="16" height="16"><circle cx="12" cy="12" r="10" stroke="#00D9FF" stroke-width="2" fill="none"/><path d="M8 12h8M12 8v8" stroke="#00D9FF" stroke-width="2"/></svg>REST API</span>
+                    <span class="tech-tag"><svg viewBox="0 0 24 24" fill="#E535AB" width="16" height="16"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 1.5a8.5 8.5 0 110 17 8.5 8.5 0 010-17z"/><circle cx="12" cy="12" r="3" fill="#E535AB"/></svg>GraphQL</span>
+                    <span class="tech-tag"><svg viewBox="0 0 24 24" fill="#00FF87" width="16" height="16"><rect x="3" y="11" width="18" height="2" rx="1"/><path d="M12 3l9 9-9 9-9-9z" fill="none" stroke="#00FF87" stroke-width="1.5"/></svg>JWT Auth</span>
+                </div>
             </div>
             <div class="tech-category">
                 <div class="tech-cat-header"><div class="tech-cat-icon"><i class="fas fa-database"></i></div><h4>Databases</h4></div>
-                <div class="tech-tags"><span class="tech-tag">MongoDB</span><span class="tech-tag">MySQL</span><span class="tech-tag">PostgreSQL</span><span class="tech-tag">Firebase</span><span class="tech-tag">Supabase</span><span class="tech-tag">Redis</span></div>
+                <div class="tech-tags">
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg">MongoDB</span>
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg">MySQL</span>
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg">PostgreSQL</span>
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg">Firebase</span>
+                    <span class="tech-tag"><svg viewBox="0 0 24 24" fill="#3ECF8E" width="16" height="16"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/><path d="M8 12h8" stroke="#3ECF8E" stroke-width="2"/></svg>Supabase</span>
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg">Redis</span>
+                </div>
             </div>
             <div class="tech-category">
                 <div class="tech-cat-header"><div class="tech-cat-icon"><i class="fas fa-cloud"></i></div><h4>DevOps & Tools</h4></div>
-                <div class="tech-tags"><span class="tech-tag">Git</span><span class="tech-tag">GitHub</span><span class="tech-tag">Docker</span><span class="tech-tag">AWS</span><span class="tech-tag">Netlify</span><span class="tech-tag">Vercel</span><span class="tech-tag">Figma</span><span class="tech-tag">Linux</span><span class="tech-tag">CI/CD</span></div>
+                <div class="tech-tags">
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg">Git</span>
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" style="filter:invert(1);">GitHub</span>
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg">Docker</span>
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original.svg">AWS</span>
+                    <span class="tech-tag"><svg viewBox="0 0 24 24" width="16" height="16" fill="#00C7B7"><path d="M12 2L2 19h20L12 2zm0 3l7.5 13H4.5L12 5z"/></svg>Netlify</span>
+                    <span class="tech-tag"><svg viewBox="0 0 24 24" width="16" height="16" fill="#fff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>Vercel</span>
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg">Figma</span>
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg">Linux</span>
+                    <span class="tech-tag"><svg viewBox="0 0 24 24" fill="#00FF87" width="16" height="16"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>CI/CD</span>
+                </div>
             </div>
             <div class="tech-category">
                 <div class="tech-cat-header"><div class="tech-cat-icon"><i class="fab fa-wordpress"></i></div><h4>CMS & E-Commerce</h4></div>
-                <div class="tech-tags"><span class="tech-tag">WordPress</span><span class="tech-tag">WooCommerce</span><span class="tech-tag">Shopify</span><span class="tech-tag">Elementor</span><span class="tech-tag">ACF</span><span class="tech-tag">Strapi</span></div>
+                <div class="tech-tags">
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/wordpress/wordpress-original.svg">WordPress</span>
+                    <span class="tech-tag"><svg viewBox="0 0 24 24" width="16" height="16" fill="#96588A"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15H9V8h2v9zm4 0h-2V8h2v9z"/></svg>WooCommerce</span>
+                    <span class="tech-tag"><svg viewBox="0 0 24 24" width="16" height="16" fill="#96BF48"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>Shopify</span>
+                    <span class="tech-tag"><svg viewBox="0 0 24 24" width="16" height="16" fill="#FF6C2F"><rect x="2" y="2" width="9" height="9" rx="1"/><rect x="13" y="2" width="9" height="9" rx="1"/><rect x="2" y="13" width="9" height="9" rx="1"/><rect x="13" y="13" width="9" height="9" rx="1"/></svg>Elementor</span>
+                    <span class="tech-tag"><svg viewBox="0 0 24 24" width="16" height="16" fill="#00B5D8"><path d="M12 2L2 7v10l10 5 10-5V7L12 2z"/></svg>Strapi</span>
+                </div>
             </div>
             <div class="tech-category">
                 <div class="tech-cat-header"><div class="tech-cat-icon"><i class="fas fa-robot"></i></div><h4>AI & APIs</h4></div>
-                <div class="tech-tags"><span class="tech-tag">OpenAI API</span><span class="tech-tag">Gemini API</span><span class="tech-tag">Stripe</span><span class="tech-tag">PayPal</span><span class="tech-tag">Twilio</span><span class="tech-tag">SendGrid</span><span class="tech-tag">Google Maps</span></div>
+                <div class="tech-tags">
+                    <span class="tech-tag"><svg viewBox="0 0 24 24" width="16" height="16" fill="#74AA9C"><path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729z"/></svg>OpenAI API</span>
+                    <span class="tech-tag"><svg viewBox="0 0 24 24" width="16" height="16"><defs><linearGradient id="gm" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#4285F4"/><stop offset="50%" stop-color="#9B72CB"/><stop offset="100%" stop-color="#D96570"/></linearGradient></defs><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="url(#gm)"/></svg>Gemini API</span>
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/stripe/stripe-original.svg">Stripe</span>
+                    <span class="tech-tag"><svg viewBox="0 0 24 24" width="16" height="16" fill="#003087"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106z" fill="#003087"/></svg>PayPal</span>
+                    <span class="tech-tag"><svg viewBox="0 0 24 24" width="16" height="16" fill="#F22F46"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>Twilio</span>
+                    <span class="tech-tag"><svg viewBox="0 0 24 24" width="16" height="16" fill="#1A82E2"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>SendGrid</span>
+                    <span class="tech-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg">Google Maps</span>
+                </div>
             </div>
         </div>
     </div>
@@ -1077,6 +1110,54 @@
         camera.lookAt(scene.position);
         renderer.render(scene,camera);
     })();
+})();
+
+// THREE.JS — HERO 3D OBJECT
+(function(){
+    const canvas=document.getElementById('hero-3d');
+    if(!canvas)return;
+    const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+    const size=canvas.offsetWidth||380;
+    renderer.setSize(size,size);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+    renderer.setClearColor(0x000000,0);
+    const scene=new THREE.Scene();
+    const camera=new THREE.PerspectiveCamera(50,1,0.1,100);
+    camera.position.z=5;
+    scene.add(new THREE.AmbientLight(0xffffff,0.3));
+    const pl1=new THREE.PointLight(0x00FF87,3,20);pl1.position.set(3,3,3);scene.add(pl1);
+    const pl2=new THREE.PointLight(0x00D9FF,2,20);pl2.position.set(-3,-2,2);scene.add(pl2);
+    const coreGeo=new THREE.IcosahedronGeometry(1.2,0);
+    const coreMat=new THREE.MeshStandardMaterial({color:0x0A0F1C,emissive:0x00FF87,emissiveIntensity:0.15,roughness:0.2,metalness:0.9});
+    const core=new THREE.Mesh(coreGeo,coreMat);scene.add(core);
+    const wire=new THREE.Mesh(new THREE.IcosahedronGeometry(1.22,0),new THREE.MeshBasicMaterial({color:0x00FF87,wireframe:true,transparent:true,opacity:0.35}));
+    scene.add(wire);
+    const ring1=new THREE.Mesh(new THREE.TorusGeometry(1.9,0.02,16,100),new THREE.MeshBasicMaterial({color:0x00FF87,transparent:true,opacity:0.5}));
+    ring1.rotation.x=Math.PI/3;scene.add(ring1);
+    const ring2=new THREE.Mesh(new THREE.TorusGeometry(2.3,0.015,16,100),new THREE.MeshBasicMaterial({color:0x00D9FF,transparent:true,opacity:0.3}));
+    ring2.rotation.x=Math.PI/6;ring2.rotation.y=Math.PI/4;scene.add(ring2);
+    const orbitGroup=new THREE.Group();scene.add(orbitGroup);
+    [{r:1.9,angle:0,y:0.4},{r:1.9,angle:Math.PI,y:-0.4},{r:2.3,angle:1.5,y:0.2}].forEach((op,i)=>{
+        const s=new THREE.Mesh(new THREE.SphereGeometry(0.08,8,8),new THREE.MeshBasicMaterial({color:i===2?0x00D9FF:0x00FF87}));
+        s.userData={r:op.r,angle:op.angle,y:op.y,speed:0.01+i*0.005};orbitGroup.add(s);
+    });
+    const haloPos=new Float32Array(300*3);
+    for(let i=0;i<300;i++){const th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1),r=2.8+Math.random()*0.6;haloPos[i*3]=r*Math.sin(ph)*Math.cos(th);haloPos[i*3+1]=r*Math.sin(ph)*Math.sin(th);haloPos[i*3+2]=r*Math.cos(ph);}
+    const haloGeo=new THREE.BufferGeometry();haloGeo.setAttribute('position',new THREE.BufferAttribute(haloPos,3));
+    const halo=new THREE.Points(haloGeo,new THREE.PointsMaterial({color:0x00FF87,size:0.04,transparent:true,opacity:0.5}));
+    scene.add(halo);
+    let t=0;
+    (function animate(){
+        requestAnimationFrame(animate);t+=0.01;
+        core.rotation.y+=0.008;core.rotation.x+=0.003;
+        wire.rotation.y=core.rotation.y;wire.rotation.x=core.rotation.x;
+        ring1.rotation.z+=0.006;ring2.rotation.z-=0.004;
+        halo.rotation.y-=0.003;
+        orbitGroup.children.forEach(s=>{s.userData.angle+=s.userData.speed;s.position.x=Math.cos(s.userData.angle)*s.userData.r;s.position.z=Math.sin(s.userData.angle)*s.userData.r;s.position.y=s.userData.y+Math.sin(t)*0.1;});
+        coreMat.emissiveIntensity=0.1+Math.sin(t*2)*0.08;
+        renderer.render(scene,camera);
+    })();
+    window.addEventListener('resize',()=>{const s=canvas.offsetWidth;renderer.setSize(s,s);});
 })();
 
 // GSAP ANIMATIONS
