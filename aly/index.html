@@ -63,8 +63,9 @@ nav::after{content:'';position:absolute;bottom:0;left:5%;width:90%;height:1px;ba
 .hero-num{font-family:var(--mono);font-size:0.65rem;color:rgba(245,240,232,0.3);letter-spacing:2px;}
 .hero-headline{font-family:var(--display);font-size:clamp(7rem,16vw,18rem);line-height:0.88;letter-spacing:-2px;margin-bottom:3rem;position:relative;}
 .hero-headline .line1{display:block;color:var(--paper);}
-.hero-headline .line2{display:block;color:transparent;-webkit-text-stroke:1px rgba(245,240,232,0.25);}
-.hero-headline .line3{display:block;color:var(--acid);}
+.hero-headline .line2{display:block;color:var(--acid);}
+.hero-headline .line3{display:block;color:transparent;-webkit-text-stroke:1px rgba(245,240,232,0.25);}
+.hero-headline .line3-sub{font-size:clamp(1.8rem,4vw,4.5rem);letter-spacing:6px;-webkit-text-stroke:0;color:rgba(245,240,232,0.45);margin-top:1rem;font-family:var(--mono);font-weight:400;}
 .hero-bottom{display:flex;justify-content:space-between;align-items:flex-end;gap:3rem;}
 .hero-bio{max-width:420px;}
 .hero-bio p{color:rgba(245,240,232,0.55);font-size:0.95rem;line-height:1.8;margin-bottom:2rem;}
@@ -376,8 +377,8 @@ footer{padding:4rem 0 2rem;border-top:1px solid rgba(245,240,232,0.06);}
     </div>
     <h1 class="hero-headline">
       <span class="line1">AHMED</span>
-      <span class="line2">FULL STACK</span>
-      <span class="line3">SHAH</span>
+      <span class="line2">SHAH</span>
+      <span class="line3 line3-sub">Full Stack Developer</span>
     </h1>
     <div class="hero-bottom">
       <div class="hero-bio">
@@ -692,8 +693,22 @@ footer{padding:4rem 0 2rem;border-top:1px solid rgba(245,240,232,0.06);}
           <div class="proj-techs"><span class="proj-tech">HTML5</span><span class="proj-tech">CSS3</span><span class="proj-tech">JavaScript</span><span class="proj-tech">Bootstrap</span></div>
         </div>
       </div>
+      <div class="proj-card" data-category="wordpress">
+        <div class="proj-img"><img src="./img/st.jpg" alt="Chemista Academy" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=600'">
+          <div class="proj-overlay">
+            <a href="https://www.chemistaacademy.com/" target="_blank" class="proj-link live"><i class="fas fa-external-link-alt"></i> Live</a>
+            <a href="https://github.com/Ahmedshah56" target="_blank" class="proj-link code"><i class="fab fa-github"></i> Code</a>
+          </div>
+        </div>
+        <div class="proj-info">
+          <div class="proj-meta"><span class="proj-cat">Education Platform</span><span class="proj-year">2023</span></div>
+          <h3>Chemista Academy</h3>
+          <p>Comprehensive online learning platform with course management, video content, quizzes, and student progress tracking.</p>
+          <div class="proj-techs"><span class="proj-tech">WordPress</span><span class="proj-tech">PHP</span><span class="proj-tech">JavaScript</span><span class="proj-tech">MySQL</span></div>
+        </div>
+      </div>
       <div class="proj-card" data-category="ai">
-        <div class="proj-img"><img src="./alex-knight-2EJCSULRwC8-unsplash.jpg" alt="AI Chatbot" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=600'">
+        <div class="proj-img"><img src="./alex-knight-2EJCSULRwC8-unsplash.jpg" alt="Ask Ahmed AI" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=600'">
           <div class="proj-overlay">
             <a href="https://askahmedaigpt.netlify.app/" target="_blank" class="proj-link live"><i class="fas fa-external-link-alt"></i> Live</a>
             <a href="https://github.com/Ahmedshah56" target="_blank" class="proj-link code"><i class="fab fa-github"></i> Code</a>
@@ -706,18 +721,18 @@ footer{padding:4rem 0 2rem;border-top:1px solid rgba(245,240,232,0.06);}
           <div class="proj-techs"><span class="proj-tech">JavaScript</span><span class="proj-tech">OpenAI API</span><span class="proj-tech">CSS3</span><span class="proj-tech">REST API</span></div>
         </div>
       </div>
-      <div class="proj-card" data-category="wordpress">
-        <div class="proj-img"><img src="./img/st.jpg" alt="Academy" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=600'">
+      <div class="proj-card" data-category="web">
+        <div class="proj-img"><img src="./mail.jpg" alt="CatchMail Temp Email" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=600'">
           <div class="proj-overlay">
-            <a href="https://www.chemistaacademy.com/" target="_blank" class="proj-link live"><i class="fas fa-external-link-alt"></i> Live</a>
+            <a href="https://ahmedshahpotfolio.netlify.app/" target="_blank" class="proj-link live"><i class="fas fa-external-link-alt"></i> Live</a>
             <a href="https://github.com/Ahmedshah56" target="_blank" class="proj-link code"><i class="fab fa-github"></i> Code</a>
           </div>
         </div>
         <div class="proj-info">
-          <div class="proj-meta"><span class="proj-cat">Education Platform</span><span class="proj-year">2023</span></div>
-          <h3>Chemista Academy</h3>
-          <p>Comprehensive online learning platform with course management, video content, quizzes, and student progress tracking.</p>
-          <div class="proj-techs"><span class="proj-tech">WordPress</span><span class="proj-tech">PHP</span><span class="proj-tech">JavaScript</span><span class="proj-tech">MySQL</span></div>
+          <div class="proj-meta"><span class="proj-cat">Web Tool</span><span class="proj-year">2024</span></div>
+          <h3>CatchMail — Temp Email</h3>
+          <p>Temporary email service for instant disposable mailboxes with real-time message viewing and auto-expiry.</p>
+          <div class="proj-techs"><span class="proj-tech">HTML5</span><span class="proj-tech">CSS3</span><span class="proj-tech">JavaScript</span><span class="proj-tech">REST API</span></div>
         </div>
       </div>
       <div class="proj-card" data-category="web">
@@ -731,7 +746,49 @@ footer{padding:4rem 0 2rem;border-top:1px solid rgba(245,240,232,0.06);}
           <div class="proj-meta"><span class="proj-cat">Web App</span><span class="proj-year">2023</span></div>
           <h3>Weather Forecast App</h3>
           <p>Real-time weather conditions and 7-day forecasts for any global city, with a beautiful data visualization UI.</p>
-          <div class="proj-techs"><span class="proj-tech">JavaScript</span><span class="proj-tech">Weather API</span><span class="proj-tech">CSS3</span><span class="proj-tech">HTML5</span></div>
+          <div class="proj-techs"><span class="proj-tech">HTML5</span><span class="proj-tech">CSS3</span><span class="proj-tech">JavaScript</span><span class="proj-tech">Weather API</span></div>
+        </div>
+      </div>
+      <div class="proj-card" data-category="web">
+        <div class="proj-img"><img src="./CV.jpg" alt="Resume Generator" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=600'">
+          <div class="proj-overlay">
+            <a href="https://ahmedshahresumegenrator.netlify.app/" target="_blank" class="proj-link live"><i class="fas fa-external-link-alt"></i> Live</a>
+            <a href="https://github.com/Ahmedshah56" target="_blank" class="proj-link code"><i class="fab fa-github"></i> Code</a>
+          </div>
+        </div>
+        <div class="proj-info">
+          <div class="proj-meta"><span class="proj-cat">Web Tool</span><span class="proj-year">2023</span></div>
+          <h3>Resume Generator</h3>
+          <p>Professional resume builder with multiple templates, live preview, and instant PDF export functionality.</p>
+          <div class="proj-techs"><span class="proj-tech">HTML5</span><span class="proj-tech">CSS3</span><span class="proj-tech">JavaScript</span><span class="proj-tech">LocalStorage</span></div>
+        </div>
+      </div>
+      <div class="proj-card" data-category="web">
+        <div class="proj-img"><img src="player.webp" alt="Nova Music Player" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=600'">
+          <div class="proj-overlay">
+            <a href="https://musicplayersong2.netlify.app/" target="_blank" class="proj-link live"><i class="fas fa-external-link-alt"></i> Live</a>
+            <a href="https://github.com/Ahmedshah56" target="_blank" class="proj-link code"><i class="fab fa-github"></i> Code</a>
+          </div>
+        </div>
+        <div class="proj-info">
+          <div class="proj-meta"><span class="proj-cat">Entertainment</span><span class="proj-year">2023</span></div>
+          <h3>Nova Music Player</h3>
+          <p>Feature-rich music player with playlist management, visualizer, shuffle/repeat controls, and Audio API integration.</p>
+          <div class="proj-techs"><span class="proj-tech">HTML5</span><span class="proj-tech">CSS3</span><span class="proj-tech">JavaScript</span><span class="proj-tech">Audio API</span></div>
+        </div>
+      </div>
+      <div class="proj-card" data-category="web">
+        <div class="proj-img"><img src="./todo.jpg" alt="Task Manager" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=600'">
+          <div class="proj-overlay">
+            <a href="https://todolistahmed.netlify.app/" target="_blank" class="proj-link live"><i class="fas fa-external-link-alt"></i> Live</a>
+            <a href="https://github.com/Ahmedshah56" target="_blank" class="proj-link code"><i class="fab fa-github"></i> Code</a>
+          </div>
+        </div>
+        <div class="proj-info">
+          <div class="proj-meta"><span class="proj-cat">Productivity</span><span class="proj-year">2023</span></div>
+          <h3>Task Manager App</h3>
+          <p>Clean and effective task manager with add, complete, delete functionality and persistent data via LocalStorage.</p>
+          <div class="proj-techs"><span class="proj-tech">HTML5</span><span class="proj-tech">CSS3</span><span class="proj-tech">JavaScript</span><span class="proj-tech">LocalStorage</span></div>
         </div>
       </div>
     </div>
@@ -1148,8 +1205,8 @@ document.getElementById('contactForm').addEventListener('submit',function(e){
 
 // === HERO HEADLINE STAGGER ===
 (function(){
-  const lines=document.querySelectorAll('.hero-headline .line1, .hero-headline .line2, .hero-headline .line3');
-  lines.forEach((l,i)=>{l.style.opacity='0';l.style.transform='translateY(60px)';l.style.transition=`opacity 0.9s ease ${0.4+i*0.15}s, transform 0.9s ease ${0.4+i*0.15}s`;});
+  const lines=document.querySelectorAll('.hero-headline .line1, .hero-headline .line2, .hero-headline .line3-sub');
+  lines.forEach((l,i)=>{l.style.opacity='0';l.style.transform='translateY(60px)';l.style.transition=`opacity 0.9s ease ${0.4+i*0.18}s, transform 0.9s ease ${0.4+i*0.18}s`;});
   requestAnimationFrame(()=>requestAnimationFrame(()=>lines.forEach(l=>{l.style.opacity='1';l.style.transform='translateY(0)';})));
 })();
 (function(){
