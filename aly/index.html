@@ -10,13 +10,7 @@
 tailwind.config = {
   theme: {
     extend: {
-      colors: {
-        charcoal: '#1a1d21',
-        coal: '#0f1113',
-        gold: '#f7c948',
-        golddim: '#c9a227',
-        muted: '#9aa0a6',
-      },
+      colors: { charcoal: '#121518', coal: '#0a0c0e', gold: '#f7c948', golddim: '#c9a227', muted: '#9aa0a6' },
       fontFamily: {
         display: ['Space Grotesk', 'sans-serif'],
         body: ['Inter', 'sans-serif'],
@@ -29,351 +23,334 @@ tailwind.config = {
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
 <style>
-  body { background: #0f1113; }
-  ::selection { background: #f7c948; color: #0f1113; }
+  html { scrollbar-width: thin; scrollbar-color: #f7c948 #0a0c0e; }
+  body { background: #0a0c0e; cursor: none; }
+  @media (hover: none) { body { cursor: auto; } .cursor-dot, .cursor-ring { display: none; } }
+  ::selection { background: #f7c948; color: #0a0c0e; }
+  ::-webkit-scrollbar { width: 9px; }
+  ::-webkit-scrollbar-track { background: #0a0c0e; }
+  ::-webkit-scrollbar-thumb { background: #f7c948; border-radius: 99px; }
 
+  /* ---------- preloader ---------- */
+  #preloader {
+    position: fixed; inset: 0; z-index: 100;
+    background: #0a0c0e;
+    display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 22px;
+    transition: transform .8s cubic-bezier(.76,0,.24,1);
+  }
+  #preloader.done { transform: translateY(-100%); }
+  #preloader .bar { width: 220px; height: 2px; background: rgba(255,255,255,.1); overflow: hidden; border-radius: 99px; }
+  #preloader .bar i { display: block; height: 100%; width: 0; background: #f7c948; transition: width .2s; }
+
+  /* ---------- custom cursor ---------- */
+  .cursor-dot, .cursor-ring { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 99; border-radius: 50%; }
+  .cursor-dot { width: 8px; height: 8px; background: #f7c948; transform: translate(-50%,-50%); }
+  .cursor-ring {
+    width: 38px; height: 38px; border: 1.5px solid rgba(247,201,72,.55);
+    transform: translate(-50%,-50%);
+    transition: width .25s, height .25s, border-color .25s, background .25s;
+  }
+  .cursor-ring.grow { width: 64px; height: 64px; background: rgba(247,201,72,.08); border-color: #f7c948; }
+
+  /* ---------- type & fx ---------- */
   .gold-grad {
-    background: linear-gradient(120deg, #f7c948 20%, #ffe9a8 50%, #f7c948 80%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    background: linear-gradient(115deg, #f7c948 15%, #ffedb0 45%, #f7c948 75%);
+    background-size: 200% auto;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: shine 5s linear infinite;
   }
+  @keyframes shine { to { background-position: 200% center; } }
 
-  .hero-grid {
-    background-image:
-      linear-gradient(rgba(247,201,72,.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(247,201,72,.05) 1px, transparent 1px);
-    background-size: 44px 44px;
-    mask-image: radial-gradient(ellipse 90% 70% at 50% 30%, black 30%, transparent 75%);
-  }
+  .display-xl { font-size: clamp(3.2rem, 9vw, 7.5rem); line-height: .98; letter-spacing: -0.03em; }
 
-  .glow-orb {
-    position: absolute;
-    border-radius: 9999px;
-    filter: blur(90px);
-    opacity: .35;
-    animation: drift 9s ease-in-out infinite alternate;
-    pointer-events: none;
-  }
-  @keyframes drift {
-    from { transform: translate(0,0) scale(1); }
-    to { transform: translate(40px,-30px) scale(1.15); }
-  }
+  .line-mask { overflow: hidden; display: block; }
+  .line-mask > span { display: block; transform: translateY(110%); animation: riseUp 1s cubic-bezier(.22,1,.36,1) forwards; }
+  .line-mask.d1 > span { animation-delay: .15s; }
+  .line-mask.d2 > span { animation-delay: .3s; }
+  .line-mask.d3 > span { animation-delay: .45s; }
+  @keyframes riseUp { to { transform: translateY(0); } }
 
-  .float-chip {
-    animation: floaty 5s ease-in-out infinite;
-  }
-  .float-chip.d2 { animation-delay: -1.6s; }
-  .float-chip.d3 { animation-delay: -3.2s; }
-  @keyframes floaty {
-    0%,100% { transform: translateY(0); }
-    50% { transform: translateY(-14px); }
-  }
-
-  .typing-caret::after {
-    content: '▍';
-    color: #f7c948;
-    animation: blink 1s steps(1) infinite;
-  }
+  .typing-caret::after { content: '▍'; color: #f7c948; animation: blink 1s steps(1) infinite; }
   @keyframes blink { 50% { opacity: 0; } }
 
-  .reveal {
-    opacity: 0;
-    transform: translateY(28px);
-    transition: opacity .7s ease, transform .7s ease;
-  }
+  .reveal { opacity: 0; transform: translateY(34px); transition: opacity .8s ease, transform .8s cubic-bezier(.22,1,.36,1); }
   .reveal.visible { opacity: 1; transform: none; }
-  .reveal.r1 { transition-delay: .08s; }
-  .reveal.r2 { transition-delay: .16s; }
-  .reveal.r3 { transition-delay: .24s; }
+  .reveal.r1 { transition-delay: .1s; } .reveal.r2 { transition-delay: .2s; } .reveal.r3 { transition-delay: .3s; }
 
-  .card-lift { transition: transform .35s ease, border-color .35s ease, box-shadow .35s ease; }
-  .card-lift:hover {
-    transform: translateY(-8px);
-    border-color: rgba(247,201,72,.5);
-    box-shadow: 0 24px 48px -20px rgba(247,201,72,.25);
-  }
+  .glow-orb { position: absolute; border-radius: 9999px; filter: blur(100px); opacity: .3; pointer-events: none; animation: drift 10s ease-in-out infinite alternate; }
+  @keyframes drift { from { transform: translate(0,0) scale(1); } to { transform: translate(50px,-36px) scale(1.18); } }
 
-  .marquee-track {
-    display: flex;
-    width: max-content;
-    animation: marquee 28s linear infinite;
-  }
-  @keyframes marquee {
-    to { transform: translateX(-50%); }
-  }
+  /* ---------- cards ---------- */
+  .tilt { transform-style: preserve-3d; transition: transform .25s ease, border-color .3s, box-shadow .3s; will-change: transform; }
+  .tilt:hover { border-color: rgba(247,201,72,.55); box-shadow: 0 30px 60px -24px rgba(247,201,72,.28); }
+  .tilt .tilt-inner { transform: translateZ(30px); }
 
-  .skill-bar { transition: width 1.2s cubic-bezier(.22,1,.36,1); }
+  .card-sheen { position: relative; overflow: hidden; }
+  .card-sheen::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,.09) 50%, transparent 60%);
+    transform: translateX(-120%); transition: transform .8s ease;
+  }
+  .card-sheen:hover::before { transform: translateX(120%); }
 
-  .btn-gold {
-    background: #f7c948;
-    color: #0f1113;
-    transition: transform .25s ease, box-shadow .25s ease;
-  }
-  .btn-gold:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 32px -8px rgba(247,201,72,.5);
-  }
-  .btn-ghost {
-    border: 1px solid #333;
-    transition: border-color .25s ease, transform .25s ease;
-  }
-  .btn-ghost:hover { border-color: #f7c948; transform: translateY(-2px); }
+  /* ---------- buttons ---------- */
+  .btn-gold { background: #f7c948; color: #0a0c0e; transition: box-shadow .3s ease; display: inline-block; }
+  .btn-gold:hover { box-shadow: 0 14px 38px -8px rgba(247,201,72,.55); }
+  .btn-ghost { border: 1px solid #2c3138; transition: border-color .3s ease; display: inline-block; }
+  .btn-ghost:hover { border-color: #f7c948; }
+  .magnetic { transition: transform .2s cubic-bezier(.22,1,.36,1); will-change: transform; }
 
-  .scroll-hint { animation: hint 2s ease-in-out infinite; }
-  @keyframes hint {
-    0%,100% { transform: translateY(0); opacity: .9; }
-    50% { transform: translateY(10px); opacity: .4; }
+  /* ---------- marquee ---------- */
+  .marquee-track { display: flex; width: max-content; animation: marquee 30s linear infinite; }
+  .marquee-track:hover { animation-play-state: paused; }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+
+  .skill-bar { transition: width 1.4s cubic-bezier(.22,1,.36,1); }
+
+  .sec-label { position: relative; display: inline-block; }
+  .sec-label::after {
+    content: ''; position: absolute; left: 0; bottom: -6px; height: 2px; width: 100%;
+    background: #f7c948; transform: scaleX(0); transform-origin: left;
+    transition: transform .8s cubic-bezier(.22,1,.36,1);
   }
+  .reveal.visible .sec-label::after, .sec-label.on::after { transform: scaleX(1); }
+
+  #progressBar { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg,#f7c948,#ffedb0); width: 0; z-index: 60; }
+
+  #toTop {
+    position: fixed; bottom: 28px; right: 28px; z-index: 50;
+    width: 48px; height: 48px; border-radius: 50%;
+    background: #f7c948; color: #0a0c0e; font-size: 20px;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transform: translateY(16px);
+    transition: opacity .3s, transform .3s;
+  }
+  #toTop.show { opacity: 1; pointer-events: auto; transform: none; }
+
+  .float-chip { animation: floaty 5.5s ease-in-out infinite; }
+  .float-chip.d2 { animation-delay: -1.8s; } .float-chip.d3 { animation-delay: -3.6s; }
+  @keyframes floaty { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-16px); } }
+
+  .pulse-dot { animation: pulsedot 2s ease-in-out infinite; }
+  @keyframes pulsedot { 0%,100% { box-shadow: 0 0 0 0 rgba(247,201,72,.5); } 50% { box-shadow: 0 0 0 8px rgba(247,201,72,0); } }
 </style>
 </head>
 <body class="bg-coal text-white font-body antialiased overflow-x-hidden">
 
+<!-- PRELOADER -->
+<div id="preloader">
+  <div class="font-display font-bold text-4xl"><span class="text-gold">AS</span><span class="text-white/50">.</span></div>
+  <div class="bar"><i id="preBar"></i></div>
+  <div class="font-mono text-white/40 text-sm"><span id="preNum">0</span>%</div>
+</div>
+
+<div class="cursor-dot" id="cDot"></div>
+<div class="cursor-ring" id="cRing"></div>
+<div id="progressBar"></div>
+
 <!-- NAV -->
 <nav id="nav" class="fixed top-0 inset-x-0 z-50 transition-all duration-300">
   <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-    <a href="#home" class="font-display font-700 text-xl tracking-tight">
+    <a href="#home" class="font-display text-xl tracking-tight hoverable">
       <span class="text-gold font-bold">AS</span><span class="text-white/60">.</span>
     </a>
     <div class="hidden md:flex items-center gap-8 text-sm text-white/70">
-      <a href="#about" class="hover:text-gold transition">About</a>
-      <a href="#skills" class="hover:text-gold transition">Skills</a>
-      <a href="#projects" class="hover:text-gold transition">Projects</a>
-      <a href="#opensource" class="hover:text-gold transition">Open Source</a>
-      <a href="#contact" class="hover:text-gold transition">Contact</a>
+      <a href="#about" class="hover:text-gold transition hoverable">About</a>
+      <a href="#skills" class="hover:text-gold transition hoverable">Skills</a>
+      <a href="#projects" class="hover:text-gold transition hoverable">Projects</a>
+      <a href="#opensource" class="hover:text-gold transition hoverable">Open Source</a>
+      <a href="#contact" class="hover:text-gold transition hoverable">Contact</a>
     </div>
-    <a href="#contact" class="btn-gold hidden md:inline-block font-semibold text-sm px-5 py-2.5 rounded-full">Hire Me</a>
-    <button id="menuBtn" class="md:hidden text-white/80 text-2xl leading-none">☰</button>
+    <a href="#contact" class="btn-gold magnetic hoverable hidden md:inline-block font-semibold text-sm px-5 py-2.5 rounded-full">Hire Me</a>
+    <button id="menuBtn" class="md:hidden text-white/80 text-2xl leading-none hoverable">☰</button>
   </div>
   <div id="mobileMenu" class="hidden md:hidden bg-charcoal/95 backdrop-blur border-t border-white/10 px-6 py-4 flex flex-col gap-4 text-white/80">
-    <a href="#about">About</a>
-    <a href="#skills">Skills</a>
-    <a href="#projects">Projects</a>
-    <a href="#opensource">Open Source</a>
-    <a href="#contact">Contact</a>
+    <a href="#about">About</a><a href="#skills">Skills</a><a href="#projects">Projects</a><a href="#opensource">Open Source</a><a href="#contact">Contact</a>
   </div>
 </nav>
 
 <!-- HERO -->
-<header id="home" class="relative min-h-screen flex items-center pt-24 pb-16 overflow-hidden">
-  <div class="hero-grid absolute inset-0"></div>
-  <div class="glow-orb w-96 h-96 bg-gold/60 -top-20 -left-20"></div>
-  <div class="glow-orb w-80 h-80 bg-blue-600/50 bottom-0 right-0" style="animation-delay:-4s"></div>
+<header id="home" class="relative min-h-screen flex items-center pt-28 pb-20 overflow-hidden">
+  <canvas id="particles" class="absolute inset-0 w-full h-full"></canvas>
+  <div class="glow-orb w-[28rem] h-[28rem] bg-gold/50 -top-24 -left-24"></div>
+  <div class="glow-orb w-96 h-96 bg-indigo-600/40 bottom-0 right-0" style="animation-delay:-5s"></div>
 
-  <div class="relative max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-14 items-center w-full">
-    <div>
-      <div class="reveal inline-flex items-center gap-2 border border-gold/40 text-gold text-xs font-mono px-4 py-1.5 rounded-full mb-7">
-        <span class="w-2 h-2 rounded-full bg-gold animate-pulse"></span>
-        Open to work
-      </div>
-      <p class="reveal r1 text-white/60 font-mono text-sm mb-4">Hello world, I am</p>
-      <h1 class="reveal r1 font-display font-bold text-5xl md:text-7xl leading-[1.05] tracking-tight mb-6">
-        Ahmed Shah<br />
-        <span class="gold-grad typing-caret" id="typed"></span>
-      </h1>
-      <p class="reveal r2 text-white/60 text-lg max-w-xl leading-relaxed mb-9">
-        I build full-stack web applications with the MERN stack. REST API design,
-        JWT auth, real-time features, clean data modeling. Real products, shipped.
-      </p>
-      <div class="reveal r3 flex flex-wrap gap-4 mb-12">
-        <a href="#projects" class="btn-gold font-semibold px-7 py-3.5 rounded-full">View Projects</a>
-        <a href="#contact" class="btn-ghost font-semibold px-7 py-3.5 rounded-full text-white/90">Get In Touch</a>
-      </div>
-      <div class="reveal r3 grid grid-cols-3 gap-6 max-w-md">
-        <div>
-          <div class="font-display font-bold text-3xl text-gold"><span class="counter" data-target="9">0</span>+</div>
-          <div class="text-white/50 text-sm mt-1">Projects built</div>
-        </div>
-        <div>
-          <div class="font-display font-bold text-3xl text-gold"><span class="counter" data-target="10">0</span>+</div>
-          <div class="text-white/50 text-sm mt-1">Technologies</div>
-        </div>
-        <div>
-          <div class="font-display font-bold text-3xl text-gold"><span class="counter" data-target="30">0</span>+</div>
-          <div class="text-white/50 text-sm mt-1">GitHub repos</div>
-        </div>
-      </div>
+  <div class="relative max-w-7xl mx-auto px-6 w-full">
+    <div class="inline-flex items-center gap-2.5 border border-gold/40 text-gold text-xs font-mono px-4 py-2 rounded-full mb-8 bg-gold/5">
+      <span class="w-2 h-2 rounded-full bg-gold pulse-dot"></span>
+      Open to work — junior roles, internships, freelance
     </div>
 
-    <div class="relative hidden lg:block reveal r2">
-      <div class="bg-charcoal/80 backdrop-blur border border-white/10 rounded-2xl p-6 font-mono text-sm shadow-2xl">
-        <div class="flex gap-2 mb-5">
-          <span class="w-3 h-3 rounded-full bg-red-500/80"></span>
-          <span class="w-3 h-3 rounded-full bg-yellow-500/80"></span>
-          <span class="w-3 h-3 rounded-full bg-green-500/80"></span>
-        </div>
-<pre class="text-white/75 leading-7 overflow-x-auto"><code><span class="text-gold">const</span> developer = {
-  name: <span class="text-green-400">'Ahmed Shah'</span>,
-  stack: [<span class="text-green-400">'React'</span>, <span class="text-green-400">'Node'</span>,
-          <span class="text-green-400">'Express'</span>, <span class="text-green-400">'MongoDB'</span>],
-  focus: <span class="text-green-400">'Full-stack products'</span>,
-  openToWork: <span class="text-gold">true</span>,
-};
+    <h1 class="font-display font-bold display-xl mb-7">
+      <span class="line-mask"><span>Ahmed Shah</span></span>
+      <span class="line-mask d1"><span class="gold-grad typing-caret" id="typed"></span></span>
+    </h1>
 
-<span class="text-gold">await</span> developer.<span class="text-blue-400">ship</span>(nextProject);</code></pre>
+    <p class="text-white/60 text-lg md:text-xl max-w-2xl leading-relaxed mb-10">
+      I build full-stack web applications with the MERN stack. REST API design,
+      JWT auth, real-time features, clean data modeling. Real products, shipped.
+    </p>
+
+    <div class="flex flex-wrap gap-4 mb-16">
+      <a href="#projects" class="btn-gold magnetic hoverable font-semibold px-8 py-4 rounded-full">View Projects</a>
+      <a href="#contact" class="btn-ghost magnetic hoverable font-semibold px-8 py-4 rounded-full text-white/90">Get In Touch</a>
+    </div>
+
+    <div class="grid grid-cols-3 gap-6 max-w-lg">
+      <div class="border-l-2 border-gold/60 pl-5">
+        <div class="font-display font-bold text-4xl text-white"><span class="counter" data-target="9">0</span>+</div>
+        <div class="text-white/45 text-sm mt-1">Projects built</div>
       </div>
-      <div class="float-chip absolute -top-6 -right-4 bg-charcoal border border-gold/40 text-gold font-mono text-xs px-4 py-2 rounded-full shadow-lg">JWT Auth ✓</div>
-      <div class="float-chip d2 absolute top-1/2 -left-8 bg-charcoal border border-white/15 text-white/80 font-mono text-xs px-4 py-2 rounded-full shadow-lg">Socket.io live</div>
-      <div class="float-chip d3 absolute -bottom-6 right-10 bg-charcoal border border-white/15 text-white/80 font-mono text-xs px-4 py-2 rounded-full shadow-lg">REST APIs</div>
+      <div class="border-l-2 border-gold/60 pl-5">
+        <div class="font-display font-bold text-4xl text-white"><span class="counter" data-target="17">0</span>+</div>
+        <div class="text-white/45 text-sm mt-1">Technologies</div>
+      </div>
+      <div class="border-l-2 border-gold/60 pl-5">
+        <div class="font-display font-bold text-4xl text-white"><span class="counter" data-target="30">0</span>+</div>
+        <div class="text-white/45 text-sm mt-1">GitHub repos</div>
+      </div>
     </div>
   </div>
 
-  <a href="#about" class="scroll-hint absolute bottom-8 left-1/2 -translate-x-1/2 text-gold text-2xl">↓</a>
+  <div class="absolute bottom-24 right-10 hidden xl:block">
+    <div class="float-chip bg-charcoal/80 backdrop-blur border border-gold/40 text-gold font-mono text-xs px-4 py-2.5 rounded-full shadow-xl mb-4">JWT Auth ✓</div>
+    <div class="float-chip d2 bg-charcoal/80 backdrop-blur border border-white/15 text-white/80 font-mono text-xs px-4 py-2.5 rounded-full shadow-xl mb-4 ml-10">Socket.io live</div>
+    <div class="float-chip d3 bg-charcoal/80 backdrop-blur border border-white/15 text-white/80 font-mono text-xs px-4 py-2.5 rounded-full shadow-xl ml-4">REST APIs</div>
+  </div>
 </header>
 
-<!-- TECH MARQUEE -->
-<div class="border-y border-white/10 bg-charcoal/60 py-5 overflow-hidden">
-  <div class="marquee-track gap-10 text-white/50 font-mono text-sm">
-    <span>React</span><span class="text-gold">•</span><span>Node.js</span><span class="text-gold">•</span><span>Express</span><span class="text-gold">•</span><span>MongoDB</span><span class="text-gold">•</span><span>Mongoose</span><span class="text-gold">•</span><span>JavaScript</span><span class="text-gold">•</span><span>TypeScript</span><span class="text-gold">•</span><span>Tailwind CSS</span><span class="text-gold">•</span><span>Supabase</span><span class="text-gold">•</span><span>Socket.io</span><span class="text-gold">•</span><span>EJS</span><span class="text-gold">•</span><span>Cloudinary</span><span class="text-gold">•</span><span>JWT Auth</span><span class="text-gold">•</span><span>REST APIs</span><span class="text-gold">•</span><span>Vite</span><span class="text-gold">•</span><span>Git</span><span class="text-gold">•</span>
-    <span>React</span><span class="text-gold">•</span><span>Node.js</span><span class="text-gold">•</span><span>Express</span><span class="text-gold">•</span><span>MongoDB</span><span class="text-gold">•</span><span>Mongoose</span><span class="text-gold">•</span><span>JavaScript</span><span class="text-gold">•</span><span>TypeScript</span><span class="text-gold">•</span><span>Tailwind CSS</span><span class="text-gold">•</span><span>Supabase</span><span class="text-gold">•</span><span>Socket.io</span><span class="text-gold">•</span><span>EJS</span><span class="text-gold">•</span><span>Cloudinary</span><span class="text-gold">•</span><span>JWT Auth</span><span class="text-gold">•</span><span>REST APIs</span><span class="text-gold">•</span><span>Vite</span><span class="text-gold">•</span><span>Git</span><span class="text-gold">•</span>
+<!-- MARQUEE -->
+<div class="border-y border-white/10 bg-charcoal/70 py-6 overflow-hidden relative">
+  <div class="marquee-track gap-12 font-display font-semibold text-lg">
+    <span class="text-white/80">React</span><span class="text-gold">✦</span><span class="text-white/80">Node.js</span><span class="text-gold">✦</span><span class="text-white/80">Express</span><span class="text-gold">✦</span><span class="text-white/80">MongoDB</span><span class="text-gold">✦</span><span class="text-white/80">Mongoose</span><span class="text-gold">✦</span><span class="text-white/80">TypeScript</span><span class="text-gold">✦</span><span class="text-white/80">Tailwind CSS</span><span class="text-gold">✦</span><span class="text-white/80">Supabase</span><span class="text-gold">✦</span><span class="text-white/80">Socket.io</span><span class="text-gold">✦</span><span class="text-white/80">Cloudinary</span><span class="text-gold">✦</span><span class="text-white/80">JWT Auth</span><span class="text-gold">✦</span><span class="text-white/80">REST APIs</span><span class="text-gold">✦</span>
+    <span class="text-white/80">React</span><span class="text-gold">✦</span><span class="text-white/80">Node.js</span><span class="text-gold">✦</span><span class="text-white/80">Express</span><span class="text-gold">✦</span><span class="text-white/80">MongoDB</span><span class="text-gold">✦</span><span class="text-white/80">Mongoose</span><span class="text-gold">✦</span><span class="text-white/80">TypeScript</span><span class="text-gold">✦</span><span class="text-white/80">Tailwind CSS</span><span class="text-gold">✦</span><span class="text-white/80">Supabase</span><span class="text-gold">✦</span><span class="text-white/80">Socket.io</span><span class="text-gold">✦</span><span class="text-white/80">Cloudinary</span><span class="text-gold">✦</span><span class="text-white/80">JWT Auth</span><span class="text-gold">✦</span><span class="text-white/80">REST APIs</span><span class="text-gold">✦</span>
   </div>
 </div>
 
 <!-- ABOUT -->
-<section id="about" class="py-24 md:py-32">
-  <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-14 items-center">
+<section id="about" class="py-28 md:py-36 relative">
+  <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
     <div class="reveal">
-      <p class="font-mono text-gold text-sm mb-4">// about me</p>
-      <h2 class="font-display font-bold text-4xl md:text-5xl tracking-tight mb-6">
+      <p class="font-mono text-gold text-sm mb-5"><span class="sec-label">// about me</span></p>
+      <h2 class="font-display font-bold text-4xl md:text-6xl tracking-tight mb-7 leading-[1.05]">
         Developer who ships<br /><span class="gold-grad">real software</span>
       </h2>
-      <p class="text-white/60 leading-relaxed mb-5">
+      <p class="text-white/60 text-lg leading-relaxed mb-5">
         I am a BSCS undergraduate and full-stack developer working with the MERN
         stack. I design REST APIs, implement JWT based authentication, build
         real-time features with Socket.io, and model data in MongoDB with care.
       </p>
-      <p class="text-white/60 leading-relaxed mb-8">
+      <p class="text-white/60 leading-relaxed mb-10">
         My projects solve concrete problems. A point of sale system for
         restaurants. A learning management platform. An SEO auditor for Amazon
         listings. I also contribute to open source projects maintained by
         developers I respect.
       </p>
       <div class="grid grid-cols-2 gap-4">
-        <div class="bg-charcoal border border-white/10 rounded-xl p-5 card-lift">
-          <div class="text-gold font-display font-bold text-xl mb-1">Backend</div>
+        <div class="tilt card-sheen bg-charcoal border border-white/10 rounded-2xl p-6"><div class="tilt-inner">
+          <div class="text-gold font-display font-bold text-lg mb-1">Backend</div>
           <div class="text-white/50 text-sm">Express APIs, JWT auth, MongoDB modeling</div>
-        </div>
-        <div class="bg-charcoal border border-white/10 rounded-xl p-5 card-lift">
-          <div class="text-gold font-display font-bold text-xl mb-1">Frontend</div>
+        </div></div>
+        <div class="tilt card-sheen bg-charcoal border border-white/10 rounded-2xl p-6"><div class="tilt-inner">
+          <div class="text-gold font-display font-bold text-lg mb-1">Frontend</div>
           <div class="text-white/50 text-sm">React, hooks, Tailwind, responsive UI</div>
-        </div>
-        <div class="bg-charcoal border border-white/10 rounded-xl p-5 card-lift">
-          <div class="text-gold font-display font-bold text-xl mb-1">Real-time</div>
+        </div></div>
+        <div class="tilt card-sheen bg-charcoal border border-white/10 rounded-2xl p-6"><div class="tilt-inner">
+          <div class="text-gold font-display font-bold text-lg mb-1">Real-time</div>
           <div class="text-white/50 text-sm">Socket.io dashboards and live updates</div>
-        </div>
-        <div class="bg-charcoal border border-white/10 rounded-xl p-5 card-lift">
-          <div class="text-gold font-display font-bold text-xl mb-1">Integrations</div>
+        </div></div>
+        <div class="tilt card-sheen bg-charcoal border border-white/10 rounded-2xl p-6"><div class="tilt-inner">
+          <div class="text-gold font-display font-bold text-lg mb-1">Integrations</div>
           <div class="text-white/50 text-sm">Supabase, Cloudinary, third party APIs</div>
-        </div>
+        </div></div>
       </div>
     </div>
     <div class="reveal r1">
-      <div class="bg-charcoal border border-white/10 rounded-2xl p-8">
-        <p class="font-mono text-gold text-sm mb-6">$ whoami</p>
-        <ul class="space-y-5 text-white/70">
-          <li class="flex gap-4"><span class="text-gold">▸</span><span><strong class="text-white">Education</strong> — BSCS, Shah Abdul Latif University Khairpur (ongoing)</span></li>
-          <li class="flex gap-4"><span class="text-gold">▸</span><span><strong class="text-white">Focus</strong> — Full-stack MERN applications and business software</span></li>
-          <li class="flex gap-4"><span class="text-gold">▸</span><span><strong class="text-white">Open source</strong> — Contributing to projects by international maintainers</span></li>
-          <li class="flex gap-4"><span class="text-gold">▸</span><span><strong class="text-white">Currently</strong> — Building, contributing, and looking for a developer role</span></li>
-        </ul>
-        <a href="#contact" class="btn-gold inline-block font-semibold px-6 py-3 rounded-full mt-8 text-sm">Let's Work Together</a>
+      <div class="tilt bg-charcoal border border-white/10 rounded-3xl p-9 relative overflow-hidden">
+        <div class="glow-orb w-64 h-64 bg-gold/30 -top-10 -right-10"></div>
+        <div class="tilt-inner relative">
+          <p class="font-mono text-gold text-sm mb-7">$ whoami</p>
+          <ul class="space-y-6 text-white/70">
+            <li class="flex gap-4"><span class="text-gold">▸</span><span><strong class="text-white">Education</strong> — BSCS, Shah Abdul Latif University Khairpur (ongoing)</span></li>
+            <li class="flex gap-4"><span class="text-gold">▸</span><span><strong class="text-white">Focus</strong> — Full-stack MERN applications and business software</span></li>
+            <li class="flex gap-4"><span class="text-gold">▸</span><span><strong class="text-white">Open source</strong> — Contributing to projects by international maintainers</span></li>
+            <li class="flex gap-4"><span class="text-gold">▸</span><span><strong class="text-white">Currently</strong> — Building, contributing, and looking for a developer role</span></li>
+          </ul>
+          <a href="#contact" class="btn-gold magnetic hoverable inline-block font-semibold px-7 py-3.5 rounded-full mt-9 text-sm">Let's Work Together</a>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- SKILLS -->
-<section id="skills" class="py-24 md:py-32 bg-charcoal/40 border-y border-white/10">
-  <div class="max-w-7xl mx-auto px-6">
-    <p class="reveal font-mono text-gold text-sm mb-4 text-center">// technical skills</p>
-    <h2 class="reveal r1 font-display font-bold text-4xl md:text-5xl tracking-tight text-center mb-4">
+<section id="skills" class="py-28 md:py-36 bg-charcoal/40 border-y border-white/10 relative overflow-hidden">
+  <div class="glow-orb w-96 h-96 bg-gold/20 top-20 left-1/3"></div>
+  <div class="max-w-7xl mx-auto px-6 relative">
+    <p class="reveal font-mono text-gold text-sm mb-5 text-center"><span class="sec-label">// technical skills</span></p>
+    <h2 class="reveal r1 font-display font-bold text-4xl md:text-6xl tracking-tight text-center mb-5">
       Stack I <span class="gold-grad">build with</span>
     </h2>
-    <p class="reveal r2 text-white/50 text-center max-w-2xl mx-auto mb-14">The tools I reach for when turning an idea into a working product.</p>
+    <p class="reveal r2 text-white/50 text-center max-w-2xl mx-auto mb-16 text-lg">The tools I reach for when turning an idea into a working product.</p>
 
-    <div class="grid md:grid-cols-2 gap-x-12 gap-y-8 max-w-4xl mx-auto" id="skillBars">
-      <div class="reveal">
-        <div class="flex justify-between text-sm mb-2"><span class="font-medium">React</span><span class="text-gold font-mono">90%</span></div>
-        <div class="h-2 bg-white/10 rounded-full overflow-hidden"><div class="skill-bar h-full bg-gold rounded-full" data-w="90%" style="width:0"></div></div>
-      </div>
-      <div class="reveal r1">
-        <div class="flex justify-between text-sm mb-2"><span class="font-medium">Node.js + Express</span><span class="text-gold font-mono">85%</span></div>
-        <div class="h-2 bg-white/10 rounded-full overflow-hidden"><div class="skill-bar h-full bg-gold rounded-full" data-w="85%" style="width:0"></div></div>
-      </div>
-      <div class="reveal">
-        <div class="flex justify-between text-sm mb-2"><span class="font-medium">MongoDB</span><span class="text-gold font-mono">85%</span></div>
-        <div class="h-2 bg-white/10 rounded-full overflow-hidden"><div class="skill-bar h-full bg-gold rounded-full" data-w="85%" style="width:0"></div></div>
-      </div>
-      <div class="reveal r1">
-        <div class="flex justify-between text-sm mb-2"><span class="font-medium">JavaScript (ES6+)</span><span class="text-gold font-mono">90%</span></div>
-        <div class="h-2 bg-white/10 rounded-full overflow-hidden"><div class="skill-bar h-full bg-gold rounded-full" data-w="90%" style="width:0"></div></div>
-      </div>
-      <div class="reveal">
-        <div class="flex justify-between text-sm mb-2"><span class="font-medium">Tailwind CSS</span><span class="text-gold font-mono">88%</span></div>
-        <div class="h-2 bg-white/10 rounded-full overflow-hidden"><div class="skill-bar h-full bg-gold rounded-full" data-w="88%" style="width:0"></div></div>
-      </div>
-      <div class="reveal r1">
-        <div class="flex justify-between text-sm mb-2"><span class="font-medium">TypeScript</span><span class="text-gold font-mono">70%</span></div>
-        <div class="h-2 bg-white/10 rounded-full overflow-hidden"><div class="skill-bar h-full bg-gold rounded-full" data-w="70%" style="width:0"></div></div>
-      </div>
-      <div class="reveal">
-        <div class="flex justify-between text-sm mb-2"><span class="font-medium">Socket.io (real-time)</span><span class="text-gold font-mono">78%</span></div>
-        <div class="h-2 bg-white/10 rounded-full overflow-hidden"><div class="skill-bar h-full bg-gold rounded-full" data-w="78%" style="width:0"></div></div>
-      </div>
-      <div class="reveal r1">
-        <div class="flex justify-between text-sm mb-2"><span class="font-medium">Supabase + Git</span><span class="text-gold font-mono">80%</span></div>
-        <div class="h-2 bg-white/10 rounded-full overflow-hidden"><div class="skill-bar h-full bg-gold rounded-full" data-w="80%" style="width:0"></div></div>
-      </div>
+    <div class="grid md:grid-cols-2 gap-x-14 gap-y-9 max-w-4xl mx-auto" id="skillBars">
+      <div class="reveal"><div class="flex justify-between text-sm mb-2.5"><span class="font-medium">React</span><span class="text-gold font-mono">90%</span></div><div class="h-2 bg-white/10 rounded-full overflow-hidden"><div class="skill-bar h-full rounded-full bg-gradient-to-r from-golddim to-gold" data-w="90%" style="width:0"></div></div></div>
+      <div class="reveal r1"><div class="flex justify-between text-sm mb-2.5"><span class="font-medium">Node.js + Express</span><span class="text-gold font-mono">85%</span></div><div class="h-2 bg-white/10 rounded-full overflow-hidden"><div class="skill-bar h-full rounded-full bg-gradient-to-r from-golddim to-gold" data-w="85%" style="width:0"></div></div></div>
+      <div class="reveal"><div class="flex justify-between text-sm mb-2.5"><span class="font-medium">MongoDB + Mongoose</span><span class="text-gold font-mono">85%</span></div><div class="h-2 bg-white/10 rounded-full overflow-hidden"><div class="skill-bar h-full rounded-full bg-gradient-to-r from-golddim to-gold" data-w="85%" style="width:0"></div></div></div>
+      <div class="reveal r1"><div class="flex justify-between text-sm mb-2.5"><span class="font-medium">JavaScript (ES6+)</span><span class="text-gold font-mono">90%</span></div><div class="h-2 bg-white/10 rounded-full overflow-hidden"><div class="skill-bar h-full rounded-full bg-gradient-to-r from-golddim to-gold" data-w="90%" style="width:0"></div></div></div>
+      <div class="reveal"><div class="flex justify-between text-sm mb-2.5"><span class="font-medium">Tailwind CSS</span><span class="text-gold font-mono">88%</span></div><div class="h-2 bg-white/10 rounded-full overflow-hidden"><div class="skill-bar h-full rounded-full bg-gradient-to-r from-golddim to-gold" data-w="88%" style="width:0"></div></div></div>
+      <div class="reveal r1"><div class="flex justify-between text-sm mb-2.5"><span class="font-medium">TypeScript</span><span class="text-gold font-mono">70%</span></div><div class="h-2 bg-white/10 rounded-full overflow-hidden"><div class="skill-bar h-full rounded-full bg-gradient-to-r from-golddim to-gold" data-w="70%" style="width:0"></div></div></div>
+      <div class="reveal"><div class="flex justify-between text-sm mb-2.5"><span class="font-medium">Socket.io (real-time)</span><span class="text-gold font-mono">78%</span></div><div class="h-2 bg-white/10 rounded-full overflow-hidden"><div class="skill-bar h-full rounded-full bg-gradient-to-r from-golddim to-gold" data-w="78%" style="width:0"></div></div></div>
+      <div class="reveal r1"><div class="flex justify-between text-sm mb-2.5"><span class="font-medium">Supabase + Git</span><span class="text-gold font-mono">80%</span></div><div class="h-2 bg-white/10 rounded-full overflow-hidden"><div class="skill-bar h-full rounded-full bg-gradient-to-r from-golddim to-gold" data-w="80%" style="width:0"></div></div></div>
     </div>
 
-    <div class="reveal max-w-4xl mx-auto mt-12">
-      <p class="text-white/40 text-sm text-center mb-5 font-mono">// also in the toolbox</p>
+    <div class="reveal max-w-4xl mx-auto mt-14">
+      <p class="text-white/40 text-sm text-center mb-6 font-mono">// also in the toolbox</p>
       <div class="flex flex-wrap justify-center gap-3">
-        <span class="border border-white/15 text-white/70 text-sm px-5 py-2.5 rounded-full hover:border-gold/60 hover:text-gold transition">Express</span>
-        <span class="border border-white/15 text-white/70 text-sm px-5 py-2.5 rounded-full hover:border-gold/60 hover:text-gold transition">Mongoose</span>
-        <span class="border border-white/15 text-white/70 text-sm px-5 py-2.5 rounded-full hover:border-gold/60 hover:text-gold transition">EJS</span>
-        <span class="border border-white/15 text-white/70 text-sm px-5 py-2.5 rounded-full hover:border-gold/60 hover:text-gold transition">Cloudinary</span>
-        <span class="border border-white/15 text-white/70 text-sm px-5 py-2.5 rounded-full hover:border-gold/60 hover:text-gold transition">JWT Auth</span>
-        <span class="border border-white/15 text-white/70 text-sm px-5 py-2.5 rounded-full hover:border-gold/60 hover:text-gold transition">REST APIs</span>
-        <span class="border border-white/15 text-white/70 text-sm px-5 py-2.5 rounded-full hover:border-gold/60 hover:text-gold transition">Supabase</span>
-        <span class="border border-white/15 text-white/70 text-sm px-5 py-2.5 rounded-full hover:border-gold/60 hover:text-gold transition">MongoDB</span>
-        <span class="border border-white/15 text-white/70 text-sm px-5 py-2.5 rounded-full hover:border-gold/60 hover:text-gold transition">React</span>
+        <span class="hoverable border border-white/15 text-white/70 text-sm px-5 py-2.5 rounded-full hover:border-gold/60 hover:text-gold hover:-translate-y-1 transition">Express</span>
+        <span class="hoverable border border-white/15 text-white/70 text-sm px-5 py-2.5 rounded-full hover:border-gold/60 hover:text-gold hover:-translate-y-1 transition">Mongoose</span>
+        <span class="hoverable border border-white/15 text-white/70 text-sm px-5 py-2.5 rounded-full hover:border-gold/60 hover:text-gold hover:-translate-y-1 transition">EJS</span>
+        <span class="hoverable border border-white/15 text-white/70 text-sm px-5 py-2.5 rounded-full hover:border-gold/60 hover:text-gold hover:-translate-y-1 transition">Cloudinary</span>
+        <span class="hoverable border border-white/15 text-white/70 text-sm px-5 py-2.5 rounded-full hover:border-gold/60 hover:text-gold hover:-translate-y-1 transition">JWT Auth</span>
+        <span class="hoverable border border-white/15 text-white/70 text-sm px-5 py-2.5 rounded-full hover:border-gold/60 hover:text-gold hover:-translate-y-1 transition">REST APIs</span>
+        <span class="hoverable border border-white/15 text-white/70 text-sm px-5 py-2.5 rounded-full hover:border-gold/60 hover:text-gold hover:-translate-y-1 transition">Supabase</span>
+        <span class="hoverable border border-white/15 text-white/70 text-sm px-5 py-2.5 rounded-full hover:border-gold/60 hover:text-gold hover:-translate-y-1 transition">MongoDB</span>
+        <span class="hoverable border border-white/15 text-white/70 text-sm px-5 py-2.5 rounded-full hover:border-gold/60 hover:text-gold hover:-translate-y-1 transition">React</span>
       </div>
     </div>
   </div>
 </section>
 
 <!-- PROJECTS -->
-<section id="projects" class="py-24 md:py-32">
+<section id="projects" class="py-28 md:py-36">
   <div class="max-w-7xl mx-auto px-6">
-    <p class="reveal font-mono text-gold text-sm mb-4 text-center">// selected work</p>
-    <h2 class="reveal r1 font-display font-bold text-4xl md:text-5xl tracking-tight text-center mb-4">
+    <p class="reveal font-mono text-gold text-sm mb-5 text-center"><span class="sec-label">// selected work</span></p>
+    <h2 class="reveal r1 font-display font-bold text-4xl md:text-6xl tracking-tight text-center mb-5">
       Projects with <span class="gold-grad">real users</span> in mind
     </h2>
-    <p class="reveal r2 text-white/50 text-center max-w-2xl mx-auto mb-14">Business software, platforms, and tools. Each one designed, built, and shipped by me.</p>
+    <p class="reveal r2 text-white/50 text-center max-w-2xl mx-auto mb-16 text-lg">Business software, platforms, and tools. Each one designed, built, and shipped by me.</p>
 
-    <!-- FEATURED: Lazeez POS -->
-    <div class="reveal bg-gradient-to-br from-charcoal to-coal border border-gold/30 rounded-3xl p-8 md:p-12 mb-8 card-lift relative overflow-hidden">
+    <div class="reveal tilt card-sheen bg-gradient-to-br from-charcoal to-coal border border-gold/30 rounded-3xl p-8 md:p-12 mb-8 relative overflow-hidden">
       <div class="glow-orb w-72 h-72 bg-gold/40 -top-10 -right-10"></div>
-      <div class="relative grid lg:grid-cols-2 gap-10 items-center">
+      <div class="tilt-inner relative grid lg:grid-cols-2 gap-10 items-center">
         <div>
-          <span class="inline-block bg-gold text-coal text-xs font-bold px-3 py-1 rounded-full mb-5">FEATURED</span>
-          <h3 class="font-display font-bold text-3xl md:text-4xl mb-4">Lazeez POS — Restaurant Point of Sale</h3>
-          <p class="text-white/60 leading-relaxed mb-6">
+          <span class="inline-block bg-gold text-coal text-xs font-bold px-4 py-1.5 rounded-full mb-6 tracking-wide">FEATURED</span>
+          <h3 class="font-display font-bold text-3xl md:text-[2.75rem] leading-tight mb-5">Lazeez POS — Restaurant Point of Sale</h3>
+          <p class="text-white/60 leading-relaxed mb-7 text-lg">
             A complete point of sale system built for Pakistani restaurants. Order screen with
             dine-in, takeaway, and delivery flows. A 12-table floor view. A kitchen display
             system. Menu management with Urdu names. PKR pricing with Cash, Card, JazzCash,
             Easypaisa, and Bank Transfer. Printable receipts, sales reports, and settings.
           </p>
-          <div class="flex flex-wrap gap-2 mb-7">
-            <span class="font-mono text-xs bg-white/10 px-3 py-1.5 rounded-full text-white/70">React</span>
-            <span class="font-mono text-xs bg-white/10 px-3 py-1.5 rounded-full text-white/70">Vite</span>
-            <span class="font-mono text-xs bg-white/10 px-3 py-1.5 rounded-full text-white/70">Tailwind</span>
-            <span class="font-mono text-xs bg-white/10 px-3 py-1.5 rounded-full text-white/70">KDS</span>
+          <div class="flex flex-wrap gap-2 mb-8">
+            <span class="font-mono text-xs bg-gold/10 text-gold border border-gold/30 px-3.5 py-1.5 rounded-full">React</span>
+            <span class="font-mono text-xs bg-gold/10 text-gold border border-gold/30 px-3.5 py-1.5 rounded-full">Vite</span>
+            <span class="font-mono text-xs bg-gold/10 text-gold border border-gold/30 px-3.5 py-1.5 rounded-full">Tailwind</span>
+            <span class="font-mono text-xs bg-gold/10 text-gold border border-gold/30 px-3.5 py-1.5 rounded-full">KDS</span>
           </div>
-          <a href="https://github.com/Ahmedshah56/restaurant-pos" target="_blank" rel="noopener" class="btn-gold inline-block font-semibold px-6 py-3 rounded-full text-sm">View on GitHub →</a>
+          <a href="https://github.com/Ahmedshah56/restaurant-pos" target="_blank" rel="noopener" class="btn-gold magnetic hoverable inline-block font-semibold px-7 py-3.5 rounded-full text-sm">View on GitHub →</a>
         </div>
-        <div class="bg-coal/70 border border-white/10 rounded-2xl p-6 font-mono text-xs text-white/60 leading-6">
+        <div class="bg-coal/80 border border-white/10 rounded-2xl p-7 font-mono text-sm text-white/60 leading-8">
 <pre><code><span class="text-gold">▸</span> Dashboard with live sales stats
 <span class="text-gold">▸</span> POS order screen (dine-in / takeaway)
 <span class="text-gold">▸</span> 12-table interactive floor view
@@ -386,201 +363,251 @@ tailwind.config = {
       </div>
     </div>
 
-    <!-- PROJECT GRID -->
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-      <div class="reveal bg-charcoal border border-white/10 rounded-2xl p-7 card-lift flex flex-col">
-        <h3 class="font-display font-bold text-xl mb-3">Titan LMS</h3>
-        <p class="text-white/55 text-sm leading-relaxed mb-5 flex-1">Full-stack Learning Management System. JWT authentication, role based dashboards, course management, and real-time updates.</p>
-        <div class="flex flex-wrap gap-2 mb-6">
-          <span class="font-mono text-xs bg-white/10 px-3 py-1 rounded-full text-white/60">React</span>
-          <span class="font-mono text-xs bg-white/10 px-3 py-1 rounded-full text-white/60">Express</span>
-          <span class="font-mono text-xs bg-white/10 px-3 py-1 rounded-full text-white/60">MongoDB</span>
-          <span class="font-mono text-xs bg-white/10 px-3 py-1 rounded-full text-white/60">Socket.io</span>
-        </div>
-        <a href="https://github.com/Ahmedshah56/titan-lms" target="_blank" rel="noopener" class="text-gold text-sm font-semibold hover:underline">View on GitHub →</a>
-      </div>
-
-      <div class="reveal r1 bg-charcoal border border-white/10 rounded-2xl p-7 card-lift flex flex-col">
-        <h3 class="font-display font-bold text-xl mb-3">Listing Audit Tool</h3>
-        <p class="text-white/55 text-sm leading-relaxed mb-5 flex-1">Amazon listing SEO auditor. Scores titles, bullets, descriptions, and search terms with expert rules. A to F grading, prioritized fixes, and one-click audit reports.</p>
-        <div class="flex flex-wrap gap-2 mb-6">
-          <span class="font-mono text-xs bg-white/10 px-3 py-1 rounded-full text-white/60">React</span>
-          <span class="font-mono text-xs bg-white/10 px-3 py-1 rounded-full text-white/60">Vite</span>
-          <span class="font-mono text-xs bg-white/10 px-3 py-1 rounded-full text-white/60">Tailwind</span>
-        </div>
-        <a href="https://github.com/Ahmedshah56/listing-audit-tool" target="_blank" rel="noopener" class="text-gold text-sm font-semibold hover:underline">View on GitHub →</a>
-      </div>
-
-      <div class="reveal r2 bg-charcoal border border-white/10 rounded-2xl p-7 card-lift flex flex-col">
-        <h3 class="font-display font-bold text-xl mb-3">Titan Found Board</h3>
-        <p class="text-white/55 text-sm leading-relaxed mb-5 flex-1">Campus Lost and Found board. Post lost items with photos, browse found listings, and claim through a clean workflow.</p>
-        <div class="flex flex-wrap gap-2 mb-6">
-          <span class="font-mono text-xs bg-white/10 px-3 py-1 rounded-full text-white/60">Express</span>
-          <span class="font-mono text-xs bg-white/10 px-3 py-1 rounded-full text-white/60">Mongoose</span>
-          <span class="font-mono text-xs bg-white/10 px-3 py-1 rounded-full text-white/60">EJS</span>
-          <span class="font-mono text-xs bg-white/10 px-3 py-1 rounded-full text-white/60">Cloudinary</span>
-        </div>
-        <a href="https://github.com/Ahmedshah56/titan-found-board" target="_blank" rel="noopener" class="text-gold text-sm font-semibold hover:underline">View on GitHub →</a>
-      </div>
-
-      <div class="reveal bg-charcoal border border-white/10 rounded-2xl p-7 card-lift flex flex-col">
-        <h3 class="font-display font-bold text-xl mb-3">Syed Collection</h3>
-        <p class="text-white/55 text-sm leading-relaxed mb-5 flex-1">E-commerce storefront with an admin dashboard, product management, and WhatsApp checkout for a clothing brand.</p>
-        <div class="flex flex-wrap gap-2 mb-6">
-          <span class="font-mono text-xs bg-white/10 px-3 py-1 rounded-full text-white/60">React</span>
-          <span class="font-mono text-xs bg-white/10 px-3 py-1 rounded-full text-white/60">Supabase</span>
-        </div>
-        <a href="https://github.com/Ahmedshah56/syed-collection" target="_blank" rel="noopener" class="text-gold text-sm font-semibold hover:underline">View on GitHub →</a>
-      </div>
-
-      <div class="reveal r1 bg-charcoal border border-white/10 rounded-2xl p-7 card-lift flex flex-col">
-        <h3 class="font-display font-bold text-xl mb-3">TaskFlow</h3>
-        <p class="text-white/55 text-sm leading-relaxed mb-5 flex-1">Task manager built on custom React hooks and Context API. Clean state architecture with localStorage persistence.</p>
-        <div class="flex flex-wrap gap-2 mb-6">
-          <span class="font-mono text-xs bg-white/10 px-3 py-1 rounded-full text-white/60">React 18</span>
-          <span class="font-mono text-xs bg-white/10 px-3 py-1 rounded-full text-white/60">Context API</span>
-          <span class="font-mono text-xs bg-white/10 px-3 py-1 rounded-full text-white/60">Vite</span>
-        </div>
-        <div class="flex gap-5">
-          <a href="https://github.com/Ahmedshah56/taskflow" target="_blank" rel="noopener" class="text-gold text-sm font-semibold hover:underline">GitHub →</a>
-          <a href="https://taskflow54.netlify.app" target="_blank" rel="noopener" class="text-gold text-sm font-semibold hover:underline">Live Demo →</a>
-        </div>
-      </div>
-
-      <div class="reveal r2 bg-charcoal border border-white/10 rounded-2xl p-7 card-lift flex flex-col">
-        <h3 class="font-display font-bold text-xl mb-3">Ahmed AI</h3>
-        <p class="text-white/55 text-sm leading-relaxed mb-5 flex-1">AI chat web application powered by the OpenAI API. Conversational interface with a polished chat experience.</p>
-        <div class="flex flex-wrap gap-2 mb-6">
-          <span class="font-mono text-xs bg-white/10 px-3 py-1 rounded-full text-white/60">JavaScript</span>
-          <span class="font-mono text-xs bg-white/10 px-3 py-1 rounded-full text-white/60">OpenAI API</span>
-        </div>
-        <a href="https://github.com/Ahmedshah56/Ahmed-AI" target="_blank" rel="noopener" class="text-gold text-sm font-semibold hover:underline">View on GitHub →</a>
-      </div>
-
+      <div class="reveal tilt card-sheen bg-charcoal border border-white/10 rounded-2xl p-8 flex flex-col"><div class="tilt-inner flex flex-col h-full">
+        <h3 class="font-display font-bold text-2xl mb-3">Titan LMS</h3>
+        <p class="text-white/55 text-sm leading-relaxed mb-6 flex-1">Full-stack Learning Management System. JWT authentication, role based dashboards, course management, and real-time updates.</p>
+        <div class="flex flex-wrap gap-2 mb-7"><span class="font-mono text-xs bg-white/10 px-3 py-1.5 rounded-full text-white/60">React</span><span class="font-mono text-xs bg-white/10 px-3 py-1.5 rounded-full text-white/60">Express</span><span class="font-mono text-xs bg-white/10 px-3 py-1.5 rounded-full text-white/60">MongoDB</span><span class="font-mono text-xs bg-white/10 px-3 py-1.5 rounded-full text-white/60">Socket.io</span></div>
+        <a href="https://github.com/Ahmedshah56/titan-lms" target="_blank" rel="noopener" class="hoverable text-gold text-sm font-semibold hover:underline">View on GitHub →</a>
+      </div></div>
+      <div class="reveal r1 tilt card-sheen bg-charcoal border border-white/10 rounded-2xl p-8 flex flex-col"><div class="tilt-inner flex flex-col h-full">
+        <h3 class="font-display font-bold text-2xl mb-3">Listing Audit Tool</h3>
+        <p class="text-white/55 text-sm leading-relaxed mb-6 flex-1">Amazon listing SEO auditor. Scores titles, bullets, descriptions, and search terms with expert rules. A to F grading, prioritized fixes, and one-click audit reports.</p>
+        <div class="flex flex-wrap gap-2 mb-7"><span class="font-mono text-xs bg-white/10 px-3 py-1.5 rounded-full text-white/60">React</span><span class="font-mono text-xs bg-white/10 px-3 py-1.5 rounded-full text-white/60">Vite</span><span class="font-mono text-xs bg-white/10 px-3 py-1.5 rounded-full text-white/60">Tailwind</span></div>
+        <a href="https://github.com/Ahmedshah56/listing-audit-tool" target="_blank" rel="noopener" class="hoverable text-gold text-sm font-semibold hover:underline">View on GitHub →</a>
+      </div></div>
+      <div class="reveal r2 tilt card-sheen bg-charcoal border border-white/10 rounded-2xl p-8 flex flex-col"><div class="tilt-inner flex flex-col h-full">
+        <h3 class="font-display font-bold text-2xl mb-3">Titan Found Board</h3>
+        <p class="text-white/55 text-sm leading-relaxed mb-6 flex-1">Campus Lost and Found board. Post lost items with photos, browse found listings, and claim through a clean workflow.</p>
+        <div class="flex flex-wrap gap-2 mb-7"><span class="font-mono text-xs bg-white/10 px-3 py-1.5 rounded-full text-white/60">Express</span><span class="font-mono text-xs bg-white/10 px-3 py-1.5 rounded-full text-white/60">Mongoose</span><span class="font-mono text-xs bg-white/10 px-3 py-1.5 rounded-full text-white/60">EJS</span><span class="font-mono text-xs bg-white/10 px-3 py-1.5 rounded-full text-white/60">Cloudinary</span></div>
+        <a href="https://github.com/Ahmedshah56/titan-found-board" target="_blank" rel="noopener" class="hoverable text-gold text-sm font-semibold hover:underline">View on GitHub →</a>
+      </div></div>
+      <div class="reveal tilt card-sheen bg-charcoal border border-white/10 rounded-2xl p-8 flex flex-col"><div class="tilt-inner flex flex-col h-full">
+        <h3 class="font-display font-bold text-2xl mb-3">Syed Collection</h3>
+        <p class="text-white/55 text-sm leading-relaxed mb-6 flex-1">E-commerce storefront with an admin dashboard, product management, and WhatsApp checkout for a clothing brand.</p>
+        <div class="flex flex-wrap gap-2 mb-7"><span class="font-mono text-xs bg-white/10 px-3 py-1.5 rounded-full text-white/60">React</span><span class="font-mono text-xs bg-white/10 px-3 py-1.5 rounded-full text-white/60">Supabase</span></div>
+        <a href="https://github.com/Ahmedshah56/syed-collection" target="_blank" rel="noopener" class="hoverable text-gold text-sm font-semibold hover:underline">View on GitHub →</a>
+      </div></div>
+      <div class="reveal r1 tilt card-sheen bg-charcoal border border-white/10 rounded-2xl p-8 flex flex-col"><div class="tilt-inner flex flex-col h-full">
+        <h3 class="font-display font-bold text-2xl mb-3">TaskFlow</h3>
+        <p class="text-white/55 text-sm leading-relaxed mb-6 flex-1">Task manager built on custom React hooks and Context API. Clean state architecture with localStorage persistence.</p>
+        <div class="flex flex-wrap gap-2 mb-7"><span class="font-mono text-xs bg-white/10 px-3 py-1.5 rounded-full text-white/60">React 18</span><span class="font-mono text-xs bg-white/10 px-3 py-1.5 rounded-full text-white/60">Context API</span><span class="font-mono text-xs bg-white/10 px-3 py-1.5 rounded-full text-white/60">Vite</span></div>
+        <div class="flex gap-6"><a href="https://github.com/Ahmedshah56/taskflow" target="_blank" rel="noopener" class="hoverable text-gold text-sm font-semibold hover:underline">GitHub →</a><a href="https://taskflow54.netlify.app" target="_blank" rel="noopener" class="hoverable text-gold text-sm font-semibold hover:underline">Live Demo →</a></div>
+      </div></div>
+      <div class="reveal r2 tilt card-sheen bg-charcoal border border-white/10 rounded-2xl p-8 flex flex-col"><div class="tilt-inner flex flex-col h-full">
+        <h3 class="font-display font-bold text-2xl mb-3">Ahmed AI</h3>
+        <p class="text-white/55 text-sm leading-relaxed mb-6 flex-1">AI chat web application powered by the OpenAI API. Conversational interface with a polished chat experience.</p>
+        <div class="flex flex-wrap gap-2 mb-7"><span class="font-mono text-xs bg-white/10 px-3 py-1.5 rounded-full text-white/60">JavaScript</span><span class="font-mono text-xs bg-white/10 px-3 py-1.5 rounded-full text-white/60">OpenAI API</span></div>
+        <a href="https://github.com/Ahmedshah56/Ahmed-AI" target="_blank" rel="noopener" class="hoverable text-gold text-sm font-semibold hover:underline">View on GitHub →</a>
+      </div></div>
     </div>
   </div>
 </section>
 
 <!-- OPEN SOURCE -->
-<section id="opensource" class="py-24 md:py-32 bg-charcoal/40 border-y border-white/10">
-  <div class="max-w-7xl mx-auto px-6">
-    <p class="reveal font-mono text-gold text-sm mb-4 text-center">// open source</p>
-    <h2 class="reveal r1 font-display font-bold text-4xl md:text-5xl tracking-tight text-center mb-4">
+<section id="opensource" class="py-28 md:py-36 bg-charcoal/40 border-y border-white/10 relative overflow-hidden">
+  <div class="glow-orb w-80 h-80 bg-gold/20 bottom-10 right-1/4"></div>
+  <div class="max-w-7xl mx-auto px-6 relative">
+    <p class="reveal font-mono text-gold text-sm mb-5 text-center"><span class="sec-label">// open source</span></p>
+    <h2 class="reveal r1 font-display font-bold text-4xl md:text-6xl tracking-tight text-center mb-5">
       Contributing <span class="gold-grad">upstream</span>
     </h2>
-    <p class="reveal r2 text-white/50 text-center max-w-2xl mx-auto mb-14">Active contributions to projects maintained by developers I respect.</p>
-
+    <p class="reveal r2 text-white/50 text-center max-w-2xl mx-auto mb-16 text-lg">Active contributions to projects maintained by developers I respect.</p>
     <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-      <div class="reveal bg-coal border border-white/10 rounded-2xl p-7 card-lift">
-        <div class="flex items-center gap-3 mb-4">
-          <div class="w-10 h-10 rounded-full bg-gold/15 flex items-center justify-center font-display font-bold text-gold">G</div>
-          <div>
-            <div class="font-semibold">getify / TNG-Hooks</div>
-            <div class="text-white/40 text-xs font-mono">useDebounce + useThrottle</div>
-          </div>
+      <div class="reveal tilt card-sheen bg-coal border border-white/10 rounded-2xl p-8"><div class="tilt-inner">
+        <div class="flex items-center gap-4 mb-5">
+          <div class="w-12 h-12 rounded-2xl bg-gold/15 flex items-center justify-center font-display font-bold text-gold text-xl">G</div>
+          <div><div class="font-semibold text-lg">getify / TNG-Hooks</div><div class="text-white/40 text-xs font-mono mt-0.5">useDebounce + useThrottle</div></div>
         </div>
         <p class="text-white/55 text-sm leading-relaxed">Implementing two missing hooks for Kyle Simpson's hooks library, with QUnit tests. Currently in progress.</p>
-      </div>
-      <div class="reveal r1 bg-coal border border-white/10 rounded-2xl p-7 card-lift">
-        <div class="flex items-center gap-3 mb-4">
-          <div class="w-10 h-10 rounded-full bg-gold/15 flex items-center justify-center font-display font-bold text-gold">W</div>
-          <div>
-            <div class="font-semibold">wesbos / cobalt2-vscode</div>
-            <div class="text-white/40 text-xs font-mono">sticky scroll theming</div>
-          </div>
+      </div></div>
+      <div class="reveal r1 tilt card-sheen bg-coal border border-white/10 rounded-2xl p-8"><div class="tilt-inner">
+        <div class="flex items-center gap-4 mb-5">
+          <div class="w-12 h-12 rounded-2xl bg-gold/15 flex items-center justify-center font-display font-bold text-gold text-xl">W</div>
+          <div><div class="font-semibold text-lg">wesbos / cobalt2-vscode</div><div class="text-white/40 text-xs font-mono mt-0.5">sticky scroll theming</div></div>
         </div>
         <p class="text-white/55 text-sm leading-relaxed">Adding the missing sticky scroll shadow and colors to Wes Bos's Cobalt2 theme. Currently in progress.</p>
-      </div>
+      </div></div>
     </div>
   </div>
 </section>
 
 <!-- CONTACT -->
-<section id="contact" class="py-24 md:py-32">
-  <div class="max-w-4xl mx-auto px-6 text-center">
-    <p class="reveal font-mono text-gold text-sm mb-4">// contact</p>
-    <h2 class="reveal r1 font-display font-bold text-4xl md:text-6xl tracking-tight mb-6">
+<section id="contact" class="py-28 md:py-36 relative overflow-hidden">
+  <div class="glow-orb w-[30rem] h-[30rem] bg-gold/25 top-10 left-1/2 -translate-x-1/2"></div>
+  <div class="max-w-4xl mx-auto px-6 text-center relative">
+    <p class="reveal font-mono text-gold text-sm mb-5"><span class="sec-label">// contact</span></p>
+    <h2 class="reveal r1 font-display font-bold text-4xl md:text-6xl tracking-tight mb-7 leading-[1.05]">
       Have a project in mind?<br /><span class="gold-grad">Let's build it.</span>
     </h2>
-    <p class="reveal r2 text-white/55 max-w-xl mx-auto mb-12">I am open to junior developer roles, internships, and freelance projects. My inbox is always open.</p>
-
-    <div class="reveal r3 grid sm:grid-cols-3 gap-4 mb-12 text-left">
-      <a href="mailto:syedahmedshah590a@gmail.com" class="bg-charcoal border border-white/10 rounded-2xl p-6 card-lift block">
-        <div class="text-gold text-2xl mb-3">✉</div>
-        <div class="font-semibold mb-1">Email</div>
-        <div class="text-white/45 text-sm break-all">syedahmedshah590a@gmail.com</div>
-      </a>
-      <a href="https://www.linkedin.com/in/ahmed-shah-web-developer-designer/" target="_blank" rel="noopener" class="bg-charcoal border border-white/10 rounded-2xl p-6 card-lift block">
-        <div class="text-gold text-2xl mb-3">in</div>
-        <div class="font-semibold mb-1">LinkedIn</div>
-        <div class="text-white/45 text-sm">Connect with me</div>
-      </a>
-      <a href="https://github.com/Ahmedshah56" target="_blank" rel="noopener" class="bg-charcoal border border-white/10 rounded-2xl p-6 card-lift block">
-        <div class="text-gold text-2xl mb-3">⌨</div>
-        <div class="font-semibold mb-1">GitHub</div>
-        <div class="text-white/45 text-sm">See the code</div>
-      </a>
+    <p class="reveal r2 text-white/55 max-w-xl mx-auto mb-14 text-lg">I am open to junior developer roles, internships, and freelance projects. My inbox is always open.</p>
+    <div class="reveal r3 grid sm:grid-cols-3 gap-4 mb-14 text-left">
+      <a href="mailto:syedahmedshah590a@gmail.com" class="hoverable tilt bg-charcoal border border-white/10 rounded-2xl p-7 block"><div class="tilt-inner">
+        <div class="text-gold text-3xl mb-4">✉</div><div class="font-semibold mb-1.5">Email</div><div class="text-white/45 text-sm break-all">syedahmedshah590a@gmail.com</div>
+      </div></a>
+      <a href="https://www.linkedin.com/in/ahmed-shah-web-developer-designer/" target="_blank" rel="noopener" class="hoverable tilt bg-charcoal border border-white/10 rounded-2xl p-7 block"><div class="tilt-inner">
+        <div class="text-gold text-3xl mb-4 font-display font-bold">in</div><div class="font-semibold mb-1.5">LinkedIn</div><div class="text-white/45 text-sm">Connect with me</div>
+      </div></a>
+      <a href="https://github.com/Ahmedshah56" target="_blank" rel="noopener" class="hoverable tilt bg-charcoal border border-white/10 rounded-2xl p-7 block"><div class="tilt-inner">
+        <div class="text-gold text-3xl mb-4">⌨</div><div class="font-semibold mb-1.5">GitHub</div><div class="text-white/45 text-sm">See the code</div>
+      </div></a>
     </div>
-
-    <a href="mailto:syedahmedshah590a@gmail.com?subject=Project%20Inquiry" class="reveal r3 btn-gold inline-block font-semibold px-10 py-4 rounded-full text-lg">Say Hello</a>
+    <a href="mailto:syedahmedshah590a@gmail.com?subject=Project%20Inquiry" class="reveal r3 btn-gold magnetic hoverable inline-block font-semibold px-12 py-5 rounded-full text-lg">Say Hello</a>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer class="border-t border-white/10 py-10">
   <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
-    <div class="font-display font-bold text-lg"><span class="text-gold">AS</span><span class="text-white/60">.</span></div>
+    <div class="font-display font-bold text-xl"><span class="text-gold">AS</span><span class="text-white/60">.</span></div>
     <p class="text-white/40 text-sm">Designed and built by Ahmed Shah. All rights reserved.</p>
     <div class="flex gap-6 text-sm text-white/50">
-      <a href="https://github.com/Ahmedshah56" target="_blank" rel="noopener" class="hover:text-gold transition">GitHub</a>
-      <a href="https://www.linkedin.com/in/ahmed-shah-web-developer-designer/" target="_blank" rel="noopener" class="hover:text-gold transition">LinkedIn</a>
+      <a href="https://github.com/Ahmedshah56" target="_blank" rel="noopener" class="hoverable hover:text-gold transition">GitHub</a>
+      <a href="https://www.linkedin.com/in/ahmed-shah-web-developer-designer/" target="_blank" rel="noopener" class="hoverable hover:text-gold transition">LinkedIn</a>
     </div>
   </div>
 </footer>
 
+<button id="toTop" class="hoverable" aria-label="Back to top">↑</button>
+
 <script>
-// Typing animation
+// ---------- preloader ----------
+(function () {
+  const pre = document.getElementById('preloader');
+  const bar = document.getElementById('preBar');
+  const num = document.getElementById('preNum');
+  let p = 0;
+  const t = setInterval(() => {
+    p = Math.min(p + Math.random() * 22, 100);
+    bar.style.width = p + '%';
+    num.textContent = Math.round(p);
+    if (p >= 100) {
+      clearInterval(t);
+      setTimeout(() => {
+        pre.classList.add('done');
+        document.querySelectorAll('.line-mask > span').forEach((s) => { s.style.animationPlayState = 'running'; });
+        setTimeout(() => pre.remove(), 900);
+      }, 350);
+    }
+  }, 160);
+  document.querySelectorAll('.line-mask > span').forEach((s) => { s.style.animationPlayState = 'paused'; });
+})();
+
+// ---------- custom cursor ----------
+(function () {
+  if (matchMedia('(hover: none)').matches) return;
+  const dot = document.getElementById('cDot'), ring = document.getElementById('cRing');
+  let mx = -100, my = -100, rx = -100, ry = -100;
+  addEventListener('mousemove', (e) => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+  });
+  (function follow() {
+    rx += (mx - rx) * 0.16; ry += (my - ry) * 0.16;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(follow);
+  })();
+  document.querySelectorAll('a, button, .hoverable').forEach((el) => {
+    el.addEventListener('mouseenter', () => ring.classList.add('grow'));
+    el.addEventListener('mouseleave', () => ring.classList.remove('grow'));
+  });
+})();
+
+// ---------- particle network ----------
+(function () {
+  const cv = document.getElementById('particles'), ctx = cv.getContext('2d');
+  let W, H, pts = [];
+  function resize() {
+    W = cv.width = cv.offsetWidth; H = cv.height = cv.offsetHeight;
+    const n = Math.min(90, Math.floor(W * H / 22000));
+    pts = Array.from({ length: n }, () => ({
+      x: Math.random() * W, y: Math.random() * H,
+      vx: (Math.random() - 0.5) * 0.45, vy: (Math.random() - 0.5) * 0.45,
+    }));
+  }
+  resize(); addEventListener('resize', resize);
+  (function draw() {
+    ctx.clearRect(0, 0, W, H);
+    pts.forEach((p) => {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0 || p.x > W) p.vx *= -1;
+      if (p.y < 0 || p.y > H) p.vy *= -1;
+      ctx.beginPath(); ctx.arc(p.x, p.y, 1.6, 0, 7);
+      ctx.fillStyle = 'rgba(247,201,72,.55)'; ctx.fill();
+    });
+    for (let i = 0; i < pts.length; i++) for (let j = i + 1; j < pts.length; j++) {
+      const a = pts[i], b = pts[j], d = Math.hypot(a.x - b.x, a.y - b.y);
+      if (d < 130) {
+        ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
+        ctx.strokeStyle = 'rgba(247,201,72,' + (0.14 * (1 - d / 130)).toFixed(3) + ')';
+        ctx.lineWidth = 1; ctx.stroke();
+      }
+    }
+    requestAnimationFrame(draw);
+  })();
+})();
+
+// ---------- typing ----------
 (function () {
   const words = ['Full-Stack Developer', 'MERN Specialist', 'Problem Solver', 'Open Source Contributor'];
   const el = document.getElementById('typed');
-  let wi = 0, ci = 0, deleting = false;
-  function tick() {
-    const word = words[wi];
-    el.textContent = word.slice(0, ci);
-    let delay = deleting ? 45 : 90;
-    if (!deleting && ci === word.length) { delay = 1600; deleting = true; }
-    else if (deleting && ci === 0) { deleting = false; wi = (wi + 1) % words.length; delay = 350; }
-    else ci += deleting ? -1 : 1;
-    setTimeout(tick, delay);
-  }
-  tick();
+  let wi = 0, ci = 0, del = false;
+  (function tick() {
+    const w = words[wi];
+    el.textContent = w.slice(0, ci);
+    let d = del ? 40 : 85;
+    if (!del && ci === w.length) { d = 1700; del = true; }
+    else if (del && ci === 0) { del = false; wi = (wi + 1) % words.length; d = 400; }
+    else ci += del ? -1 : 1;
+    setTimeout(tick, d);
+  })();
 })();
 
-// Scroll reveals
-(function () {
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        if (e.target.id === 'skillBars' || e.target.querySelector('.skill-bar')) {
-          e.target.querySelectorAll('.skill-bar').forEach((b) => { b.style.width = b.dataset.w; });
-        }
-        io.unobserve(e.target);
-      }
+// ---------- 3D tilt ----------
+document.querySelectorAll('.tilt').forEach((card) => {
+  card.addEventListener('mousemove', (e) => {
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    card.style.transform = 'perspective(900px) rotateY(' + (x * 10) + 'deg) rotateX(' + (-y * 10) + 'deg) translateY(-6px)';
+  });
+  card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+});
+
+// ---------- magnetic buttons ----------
+if (!matchMedia('(hover: none)').matches) {
+  document.querySelectorAll('.magnetic').forEach((el) => {
+    el.addEventListener('mousemove', (e) => {
+      const r = el.getBoundingClientRect();
+      const x = e.clientX - r.left - r.width / 2, y = e.clientY - r.top - r.height / 2;
+      el.style.transform = 'translate(' + x * 0.22 + 'px,' + y * 0.22 + 'px)';
     });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
-  const bars = document.getElementById('skillBars');
-  if (bars) io.observe(bars);
-})();
+    el.addEventListener('mouseleave', () => { el.style.transform = ''; });
+  });
+}
 
-// Animated counters
+// ---------- reveals + counters + skill bars ----------
 (function () {
   const io = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
       if (!e.isIntersecting) return;
-      const el = e.target, target = +el.dataset.target, dur = 1200, t0 = performance.now();
+      e.target.classList.add('visible');
+      e.target.querySelectorAll('.skill-bar').forEach((b) => { b.style.width = b.dataset.w; });
+      io.unobserve(e.target);
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+  const bars = document.getElementById('skillBars');
+  if (bars) new IntersectionObserver((es, o) => {
+    es.forEach((e) => { if (e.isIntersecting) { bars.querySelectorAll('.skill-bar').forEach((b) => { b.style.width = b.dataset.w; }); o.disconnect(); } });
+  }, { threshold: 0.2 }).observe(bars);
+})();
+
+(function () {
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      const el = e.target, target = +el.dataset.target, dur = 1300, t0 = performance.now();
       (function step(t) {
         const p = Math.min((t - t0) / dur, 1);
         el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
@@ -592,13 +619,18 @@ tailwind.config = {
   document.querySelectorAll('.counter').forEach((el) => io.observe(el));
 })();
 
-// Nav background on scroll + mobile menu
+// ---------- nav / progress / to-top / menu ----------
 (function () {
-  const nav = document.getElementById('nav');
+  const nav = document.getElementById('nav'), bar = document.getElementById('progressBar'), toTop = document.getElementById('toTop');
   addEventListener('scroll', () => {
-    if (scrollY > 40) nav.classList.add('bg-coal/85', 'backdrop-blur', 'border-b', 'border-white/10', 'shadow-lg');
-    else nav.classList.remove('bg-coal/85', 'backdrop-blur', 'border-b', 'border-white/10', 'shadow-lg');
+    const y = scrollY;
+    nav.classList.toggle('bg-coal/85', y > 40); nav.classList.toggle('backdrop-blur', y > 40);
+    nav.classList.toggle('border-b', y > 40); nav.classList.toggle('border-white/10', y > 40);
+    const h = document.documentElement.scrollHeight - innerHeight;
+    bar.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
+    toTop.classList.toggle('show', y > 600);
   }, { passive: true });
+  toTop.addEventListener('click', () => scrollTo({ top: 0, behavior: 'smooth' }));
   const btn = document.getElementById('menuBtn'), menu = document.getElementById('mobileMenu');
   btn.addEventListener('click', () => menu.classList.toggle('hidden'));
   menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => menu.classList.add('hidden')));
