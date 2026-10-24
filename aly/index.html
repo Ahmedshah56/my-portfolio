@@ -327,6 +327,25 @@ footer{padding:4rem 0 2rem;border-top:1px solid rgba(245,240,232,0.06);}
   .about-facts{grid-template-columns:1fr;}
   .footer-main{grid-template-columns:1fr;}
 }
+
+/* ===== Language selector ===== */
+.lang-box{position:relative;}
+.lang-btn{display:flex;align-items:center;gap:0.45rem;background:transparent;border:1px solid rgba(245,240,232,0.25);color:rgba(245,240,232,0.85);font-family:var(--mono);font-size:0.72rem;letter-spacing:1.5px;text-transform:uppercase;padding:0.45rem 0.7rem;border-radius:999px;cursor:pointer;transition:border-color 0.3s,color 0.3s;}
+.lang-btn:hover{border-color:var(--acid);color:var(--acid);}
+.lang-btn i{font-size:0.85rem;}
+.lang-menu{position:absolute;top:calc(100% + 10px);right:0;width:230px;max-height:320px;overflow-y:auto;background:#101010;border:1px solid rgba(245,240,232,0.14);border-radius:12px;padding:6px;display:none;z-index:999;box-shadow:0 18px 50px rgba(0,0,0,0.55);}
+.lang-menu.open{display:block;}
+.lang-menu button{display:flex;justify-content:space-between;align-items:center;width:100%;background:transparent;border:0;color:rgba(245,240,232,0.82);font-size:0.85rem;padding:0.5rem 0.6rem;border-radius:8px;cursor:pointer;text-align:left;}
+.lang-menu button:hover{background:rgba(200,255,0,0.10);color:#fff;}
+.lang-menu button.active{color:var(--acid);}
+.lang-menu .lang-en{font-family:var(--mono);font-size:0.62rem;letter-spacing:1px;text-transform:uppercase;opacity:0.55;}
+.lang-menu::-webkit-scrollbar{width:6px;}
+.lang-menu::-webkit-scrollbar-thumb{background:rgba(245,240,232,0.2);border-radius:3px;}
+.goog-te-banner-frame{display:none!important;}
+body{top:0!important;}
+#google_translate_element{display:none!important;}
+.goog-te-gadget{display:none!important;}
+.skiptranslate iframe{display:none!important;}
 </style>
 </head>
 <body>
@@ -361,6 +380,10 @@ footer{padding:4rem 0 2rem;border-top:1px solid rgba(245,240,232,0.06);}
         <li><a href="#contact">Contact</a></li>
       </ul>
       <a class="nav-cta" href="#contact"><span>Hire Me</span></a>
+      <div class="lang-box notranslate">
+        <button class="lang-btn" id="langBtn" aria-haspopup="true" aria-expanded="false"><i class="fas fa-globe"></i><span id="langCur">EN</span><i class="fas fa-chevron-down" style="font-size:0.55rem"></i></button>
+        <div class="lang-menu" id="langMenu" role="menu"></div>
+      </div>
       <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
     </div>
   </div>
@@ -1211,5 +1234,63 @@ document.getElementById('contactForm').addEventListener('submit',function(e){
   });
 })();
 </script>
+
+<!-- Language selector: Google Translate engine, custom UI -->
+<div id="google_translate_element"></div>
+<script>
+var PF_LANGS=[
+["en","English","English"],["ur","اردو","Urdu"],["ar","العربية","Arabic"],["hi","हिन्दी","Hindi"],
+["bn","বাংলা","Bengali"],["pa","ਪੰਜਾਬੀ","Punjabi"],["ta","தமிழ்","Tamil"],["te","తెలుగు","Telugu"],
+["mr","मराठी","Marathi"],["es","Español","Spanish"],["fr","Français","French"],["de","Deutsch","German"],
+["pt","Português","Portuguese"],["ru","Русский","Russian"],["zh-CN","中文 (简体)","Chinese Simplified"],
+["zh-TW","中文 (繁體)","Chinese Traditional"],["ja","日本語","Japanese"],["ko","한국어","Korean"],
+["it","Italiano","Italian"],["nl","Nederlands","Dutch"],["tr","Türkçe","Turkish"],["fa","فارسی","Persian"],
+["id","Bahasa Indonesia","Indonesian"],["ms","Bahasa Melayu","Malay"],["vi","Tiếng Việt","Vietnamese"],
+["th","ไทย","Thai"],["pl","Polski","Polish"],["uk","Українська","Ukrainian"],["sw","Kiswahili","Swahili"],["ha","Hausa","Hausa"]
+];
+var PF_RTL=["ar","ur","fa","he"];
+var langMenu=document.getElementById("langMenu"),langBtn=document.getElementById("langBtn"),langCur=document.getElementById("langCur");
+PF_LANGS.forEach(function(L){
+  var b=document.createElement("button");
+  b.type="button";b.dataset.lang=L[0];
+  b.innerHTML="<span></span><span class='lang-en'></span>";
+  b.children[0].textContent=L[1];b.children[1].textContent=L[2];
+  b.addEventListener("click",function(){pfSetLang(L[0]);});
+  langMenu.appendChild(b);
+});
+function pfMarkActive(code){
+  langMenu.querySelectorAll("button").forEach(function(b){b.classList.toggle("active",b.dataset.lang===code);});
+  var hit=PF_LANGS.filter(function(L){return L[0]===code;})[0];
+  langCur.textContent=code==="en"?"EN":(hit?hit[2].slice(0,2).toUpperCase():"EN");
+}
+langBtn.addEventListener("click",function(e){e.stopPropagation();var open=langMenu.classList.toggle("open");langBtn.setAttribute("aria-expanded",open);});
+document.addEventListener("click",function(e){if(!e.target.closest(".lang-box")){langMenu.classList.remove("open");}});
+function pfSetCookie(code){
+  var val="/en/"+code;
+  document.cookie="googtrans="+val+";path=/";
+  document.cookie="googtrans="+val+";path=/;domain="+location.hostname;
+}
+function pfApplyCombo(code){
+  var sel=document.querySelector(".goog-te-combo");
+  if(sel){sel.value=code;sel.dispatchEvent(new Event("change"));return true;}
+  return false;
+}
+function pfSetLang(code){
+  langMenu.classList.remove("open");
+  localStorage.setItem("pf_lang",code);
+  document.documentElement.dir=PF_RTL.indexOf(code)>=0?"rtl":"ltr";
+  pfMarkActive(code);
+  if(code==="en"){document.cookie="googtrans=/en/en;path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT";document.cookie="googtrans=/en/en;path=/;domain="+location.hostname+";expires=Thu, 01 Jan 1970 00:00:00 GMT";location.reload();return;}
+  pfSetCookie(code);
+  if(!pfApplyCombo(code)){setTimeout(function(){if(!pfApplyCombo(code)){location.reload();}},700);}
+}
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({pageLanguage:"en",autoDisplay:false},"google_translate_element");
+  var saved=localStorage.getItem("pf_lang");
+  if(saved&&saved!=="en"){pfMarkActive(saved);document.documentElement.dir=PF_RTL.indexOf(saved)>=0?"rtl":"ltr";pfSetCookie(saved);setTimeout(function(){pfApplyCombo(saved);},800);}
+  else{pfMarkActive("en");}
+}
+</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
